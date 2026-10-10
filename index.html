@@ -7,155 +7,188 @@
 <meta name="description" content="Lucas Calaza: um planeta onde robôs trabalham nos meus projetos reais. Arraste o globo e clique numa área para abrir o projeto.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Inter+Tight:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=Martian+Mono:wght@300;400&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --ink: #1f1b2e;
-    --ink-2: #645e78;
-    --paper: #fff8ec;
-    --paper-2: #f3e8d4;
-    --line: #e6d7bb;
-    --cream: #fff3dd;
-    --sun: #ffd27a;
-    --display: "Bricolage Grotesque", system-ui, sans-serif;
-    --sans: "Inter Tight", system-ui, sans-serif;
-    --mono: "IBM Plex Mono", ui-monospace, monospace;
+    --night: #0a0f24;
+    --panel: rgba(13, 19, 46, .92);
+    --panel-2: #141c42;
+    --ivory: #f4eee2;
+    --muted: #a3a8c3;
+    --dim: #6f7598;
+    --gold: #e8c37e;
+    --gold-2: #b99357;
+    --line: rgba(232, 195, 126, .22);
+    --line-2: rgba(244, 238, 226, .1);
+    --serif: "Gloock", "Didot", Georgia, serif;
+    --sans: "Schibsted Grotesk", system-ui, sans-serif;
+    --mono: "Martian Mono", ui-monospace, monospace;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; overflow: hidden; background: #191b45; }
-  body { font-family: var(--sans); color: var(--cream); -webkit-font-smoothing: antialiased; }
+  html, body { height: 100%; overflow: hidden; background: var(--night); }
+  body { font-family: var(--sans); color: var(--ivory); -webkit-font-smoothing: antialiased; }
   button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
   a { color: inherit; }
+  ::selection { background: var(--gold); color: var(--night); }
 
   #sky {
     position: fixed; inset: 0;
     background:
-      radial-gradient(90% 60% at 50% 115%, #ffb38a 0%, #e5808a 18%, #8e5a92 38%, #3b3474 60%, #1d1f4f 80%, #14163a 100%);
+      radial-gradient(70% 45% at 50% 112%, rgba(255, 170, 120, .55) 0%, rgba(200, 110, 140, .32) 30%, transparent 70%),
+      radial-gradient(60% 50% at 85% 10%, rgba(80, 90, 190, .25), transparent 70%),
+      linear-gradient(180deg, #070b1d 0%, #0d1434 55%, #2a2350 100%);
+  }
+  /* celestial grid */
+  #sky::after {
+    content: ""; position: absolute; inset: 0; opacity: .5;
+    background:
+      radial-gradient(circle at 50% 50%, transparent 0 34vmin, rgba(232, 195, 126, .09) 34vmin calc(34vmin + 1px), transparent calc(34vmin + 1px) 47vmin, rgba(232, 195, 126, .06) 47vmin calc(47vmin + 1px), transparent calc(47vmin + 1px));
   }
   #world { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; outline: none; }
   #world.dragging { cursor: grabbing; }
   #world.hovering { cursor: pointer; }
 
+  .eyebrow { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+
   /* ---------- HUD ---------- */
-  .hud { position: fixed; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: max(20px, env(safe-area-inset-top)) clamp(16px, 3vw, 36px) 0; pointer-events: none; z-index: 3; }
-  .hud h1 { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 4.6vw, 60px); line-height: .95; letter-spacing: -0.03em; color: var(--cream); text-shadow: 0 2px 24px rgba(20, 16, 60, .45); }
-  .hud h1 span { color: var(--sun); }
-  .hud p { margin-top: 10px; max-width: 34ch; font-size: clamp(14px, 1.2vw, 16px); line-height: 1.45; color: #e9dcef; }
-  .hud p b { color: #fff; font-weight: 600; }
-  .stats { font-family: var(--mono); font-size: 12.5px; text-align: right; color: #e2d6ee; line-height: 1.7; }
-  .stats b { color: var(--sun); font-weight: 500; }
+  .hud { position: fixed; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: max(26px, env(safe-area-inset-top)) clamp(18px, 3.2vw, 44px) 0; pointer-events: none; z-index: 3; }
+  .hud h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(40px, 5.6vw, 80px); line-height: .92; letter-spacing: -0.015em; color: var(--ivory); margin-top: 12px; }
+  .hud h1 em { font-style: normal; color: var(--gold); }
+  .hud .rule { width: 72px; height: 1px; background: var(--gold); margin: 18px 0 14px; position: relative; }
+  .hud .rule::after { content: ""; position: absolute; right: -4px; top: -3px; width: 7px; height: 7px; border: 1px solid var(--gold); transform: rotate(45deg); background: var(--night); }
+  .hud p { max-width: 36ch; font-size: clamp(14px, 1.15vw, 16px); line-height: 1.55; color: var(--muted); }
+  .hud p b { color: var(--ivory); font-weight: 500; }
+  .readout { font-family: var(--mono); font-size: 10.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); text-align: right; display: grid; gap: 8px; }
+  .readout div { display: flex; justify-content: flex-end; gap: 12px; align-items: baseline; }
+  .readout b { color: var(--ivory); font-weight: 400; font-size: 12.5px; letter-spacing: .02em; }
+  .readout .coord b { color: var(--gold); }
 
   /* ---------- labels over the globe ---------- */
   #labels { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
   .lbl {
     position: absolute; left: 0; top: 0; transform-origin: 50% 100%;
     pointer-events: auto; cursor: pointer;
-    background: var(--paper); color: var(--ink); border-radius: 12px; padding: 6px 10px 7px;
-    box-shadow: 0 6px 18px -6px rgba(20, 10, 50, .5); white-space: nowrap;
-    transition: opacity .25s;
+    background: var(--panel); color: var(--ivory);
+    border: 1px solid var(--line); border-radius: 3px;
+    padding: 7px 11px 8px; white-space: nowrap;
+    box-shadow: 0 10px 24px -12px rgba(0, 0, 0, .7);
+    transition: opacity .25s, border-color .2s;
     will-change: transform, opacity;
   }
-  .lbl::after { content: ""; position: absolute; left: 50%; bottom: -5px; width: 10px; height: 10px; background: var(--paper); transform: translateX(-50%) rotate(45deg); border-radius: 2px; }
-  .lbl .t { display: flex; align-items: center; gap: 6px; font-family: var(--display); font-weight: 700; font-size: 14px; letter-spacing: -0.01em; }
-  .lbl .t i { width: 9px; height: 9px; border-radius: 50%; background: var(--c); flex: none; }
-  .lbl .s { font-family: var(--mono); font-size: 11px; color: var(--ink-2); max-width: 210px; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
-  .lbl.hot { box-shadow: 0 0 0 3px var(--c), 0 10px 24px -6px rgba(20, 10, 50, .6); }
+  .lbl::after { content: ""; position: absolute; left: 50%; bottom: -14px; width: 1px; height: 13px; background: linear-gradient(var(--gold), transparent); }
+  .lbl .m { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); display: flex; gap: 6px; align-items: center; }
+  .lbl .m i { width: 6px; height: 6px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); }
+  .lbl .t { font-family: var(--serif); font-size: 16px; line-height: 1.15; margin-top: 3px; }
+  .lbl .s { font-family: var(--mono); font-size: 9.5px; color: var(--muted); max-width: 220px; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
+  .lbl.hot { border-color: var(--gold); }
   .lbl.off { opacity: 0; pointer-events: none; }
 
   .tip {
     position: fixed; z-index: 4; pointer-events: none; left: 0; top: 0;
-    background: var(--ink); color: var(--cream); border-radius: 10px; padding: 7px 10px;
-    font-family: var(--mono); font-size: 12px; line-height: 1.4; box-shadow: 0 8px 20px -8px rgba(0,0,0,.6);
+    background: var(--panel); border: 1px solid var(--line); border-radius: 3px; padding: 8px 11px;
+    font-family: var(--mono); font-size: 10.5px; line-height: 1.55; color: var(--muted);
     opacity: 0; transition: opacity .12s;
   }
-  .tip b { font-family: var(--display); font-size: 14px; color: var(--c, var(--sun)); }
+  .tip b { font-family: var(--serif); font-weight: 400; font-size: 17px; color: var(--ivory); letter-spacing: .01em; }
+  .tip b::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--c); margin-right: 7px; vertical-align: 3px; }
   .tip.on { opacity: 1; }
 
-  /* ---------- dock ---------- */
+  /* ---------- dock (index) ---------- */
   .dock {
-    position: fixed; left: 50%; bottom: max(16px, env(safe-area-inset-bottom)); transform: translateX(-50%);
-    z-index: 3; display: flex; gap: 6px; padding: 6px; max-width: calc(100vw - 24px); overflow-x: auto;
-    background: rgba(255, 248, 236, .14); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 248, 236, .22); border-radius: 16px; scrollbar-width: none;
-    transition: transform .4s, opacity .3s;
+    position: fixed; left: 50%; bottom: max(18px, env(safe-area-inset-bottom)); transform: translateX(-50%);
+    z-index: 3; display: flex; max-width: calc(100vw - 24px); overflow-x: auto;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 3px; scrollbar-width: none;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    transition: opacity .3s;
   }
   .dock::-webkit-scrollbar { display: none; }
-  .dock button { display: flex; align-items: center; gap: 7px; padding: 8px 12px; border-radius: 11px; font-size: 13.5px; font-weight: 500; white-space: nowrap; color: var(--cream); }
-  .dock button i { width: 9px; height: 9px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
-  .dock button:hover, .dock button:focus-visible, .dock button[aria-current="true"] { background: var(--paper); color: var(--ink); outline: none; }
-  .hint { position: fixed; left: 50%; bottom: calc(max(16px, env(safe-area-inset-bottom)) + 62px); transform: translateX(-50%); z-index: 3; font-family: var(--mono); font-size: 12px; color: #e9dcef; opacity: .85; pointer-events: none; transition: opacity .4s; white-space: nowrap; }
+  .dock button { display: flex; align-items: baseline; gap: 8px; padding: 11px 14px 10px; font-size: 13.5px; white-space: nowrap; color: var(--muted); position: relative; }
+  .dock button + button { border-left: 1px solid var(--line-2); }
+  .dock button .no { font-family: var(--mono); font-size: 9.5px; color: var(--gold-2); letter-spacing: .05em; }
+  .dock button::after { content: ""; position: absolute; left: 14px; right: 14px; bottom: 5px; height: 1px; background: var(--c); transform: scaleX(0); transition: transform .25s; transform-origin: left; }
+  .dock button:hover, .dock button:focus-visible, .dock button[aria-current="true"] { color: var(--ivory); outline: none; }
+  .dock button:hover::after, .dock button:focus-visible::after, .dock button[aria-current="true"]::after { transform: scaleX(1); }
+  .hint { position: fixed; left: 50%; bottom: calc(max(18px, env(safe-area-inset-bottom)) + 58px); transform: translateX(-50%); z-index: 3; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); pointer-events: none; transition: opacity .4s; white-space: nowrap; }
 
   /* ---------- project panel ---------- */
   .panel {
-    position: fixed; z-index: 5; top: 16px; right: 16px; bottom: 16px; width: min(470px, calc(100vw - 32px));
-    background: var(--paper); color: var(--ink); border-radius: 22px;
-    box-shadow: 0 30px 60px -20px rgba(10, 5, 40, .6);
+    position: fixed; z-index: 5; top: 18px; right: 18px; bottom: 18px; width: min(480px, calc(100vw - 36px));
+    background: var(--panel); color: var(--ivory);
+    border: 1px solid var(--line); border-radius: 4px;
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, .8);
     display: flex; flex-direction: column; overflow: hidden;
-    transform: translateX(calc(100% + 40px)); transition: transform .55s cubic-bezier(.2, .8, .2, 1), visibility 0s .55s;
+    transform: translateX(calc(100% + 40px)); transition: transform .6s cubic-bezier(.2, .8, .2, 1), visibility 0s .6s;
     visibility: hidden;
   }
-  .panel.open { transform: none; visibility: visible; transition: transform .55s cubic-bezier(.2, .8, .2, 1); }
-  .p-bar { display: flex; align-items: center; gap: 6px; padding: 12px 12px 10px; border-bottom: 1px solid var(--line); }
-  .p-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 10px; font-size: 14px; font-weight: 600; background: var(--paper-2); }
-  .p-btn:hover, .p-btn:focus-visible { background: var(--ink); color: var(--paper); outline: none; }
-  .p-btn.icon { width: 36px; justify-content: center; padding: 8px 0; }
+  .panel.open { transform: none; visibility: visible; transition: transform .6s cubic-bezier(.2, .8, .2, 1); }
+  .p-bar { display: flex; align-items: center; gap: 4px; padding: 10px 10px; border-bottom: 1px solid var(--line); }
+  .p-btn { display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ivory); border: 1px solid transparent; border-radius: 2px; }
+  .p-btn:hover, .p-btn:focus-visible { border-color: var(--gold); color: var(--gold); outline: none; }
+  .p-btn.icon { width: 36px; justify-content: center; padding: 8px 0; font-family: var(--serif); font-size: 18px; letter-spacing: 0; }
   .p-bar .sp { flex: 1; }
-  .p-scroll { flex: 1; overflow-y: auto; padding: 18px 20px 24px; }
-  .p-hero { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
-  .tag { font-family: var(--mono); font-size: 11.5px; padding: 3px 8px; border-radius: 7px; background: color-mix(in srgb, var(--c) 18%, white); color: color-mix(in srgb, var(--c) 50%, black); }
-  .tag.warn { background: #f6e6c7; color: #8a5a00; }
-  .tag.place { background: transparent; color: var(--ink-2); padding-left: 2px; }
-  .p-scroll h2 { font-family: var(--display); font-weight: 800; font-size: clamp(28px, 3vw, 36px); line-height: 1.02; letter-spacing: -0.025em; margin: 6px 0 12px; }
-  .p-scroll h2 i { display: inline-block; width: 14px; height: 14px; border-radius: 50%; background: var(--c); margin-right: 10px; vertical-align: 4px; }
-  .lede { font-size: 16.5px; line-height: 1.55; color: var(--ink); }
-  .shot { margin: 16px 0; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--paper-2); aspect-ratio: 16 / 10; }
+  .p-scroll { flex: 1; overflow-y: auto; padding: 26px 28px 30px; scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+  .p-scroll h2 { font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 3.2vw, 46px); line-height: 1; letter-spacing: -0.01em; margin: 14px 0 10px; }
+  .p-meta { display: flex; flex-wrap: wrap; gap: 6px 14px; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-bottom: 18px; border-bottom: 1px solid var(--line-2); }
+  .p-meta .c { color: var(--gold); }
+  .p-meta .warn { color: #f0a46b; }
+  .p-meta i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--c); margin-right: 6px; box-shadow: 0 0 8px var(--c); }
+  .lede { font-size: 17px; line-height: 1.6; color: var(--ivory); margin-top: 18px; }
+  .lede b { color: var(--gold); font-weight: 500; }
+  .shot { margin: 22px 0 8px; padding: 6px; border: 1px solid var(--line); border-radius: 2px; }
+  .shot > div { aspect-ratio: 16 / 10; overflow: hidden; background: #0a0e22; }
   .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
-  .shot pre { height: 100%; display: grid; place-items: center; font-family: var(--mono); font-size: 13px; line-height: 1.6; color: var(--ink-2); white-space: pre; padding: 14px; overflow: hidden; }
-  ul.pts { list-style: none; display: flex; flex-direction: column; gap: 9px; margin: 14px 0; }
-  ul.pts li { position: relative; padding-left: 20px; color: var(--ink-2); line-height: 1.5; font-size: 15px; }
-  ul.pts li::before { content: ""; position: absolute; left: 3px; top: .55em; width: 8px; height: 8px; border-radius: 3px; background: var(--c); }
-  ul.pts b { color: var(--ink); font-weight: 600; }
-  .stack { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 16px; }
-  .stack span { font-size: 12.5px; padding: 3px 9px; border-radius: 7px; border: 1px solid var(--line); color: var(--ink-2); }
-  .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
-  .act { text-decoration: none; font-weight: 600; font-size: 14.5px; padding: 10px 16px; border-radius: 12px; border: 1.5px solid var(--ink); }
-  .act.go { background: var(--ink); color: var(--paper); }
-  .act:hover { transform: translateY(-1px); }
-  .crew { border-top: 1px dashed var(--line); padding-top: 14px; }
-  .crew h3 { font-family: var(--display); font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-  .crew ul { list-style: none; display: flex; flex-direction: column; gap: 6px; }
-  .crew li { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
-  .crew li b { font-family: var(--mono); font-weight: 500; }
-  .crew li span { color: var(--ink-2); font-size: 13px; text-align: right; }
-  .log { margin-top: 12px; background: var(--ink); color: #cfe9d9; border-radius: 12px; padding: 10px 12px; font-family: var(--mono); font-size: 12.5px; line-height: 1.6; min-height: 112px; }
-  .log li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: .6; }
-  .log li:last-child { opacity: 1; color: var(--c); }
-  .timeline { list-style: none; border-left: 2px solid var(--line); margin: 14px 0 16px 4px; }
-  .timeline li { position: relative; padding: 0 0 10px 16px; font-size: 14.5px; }
-  .timeline li::before { content: ""; position: absolute; left: -6px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: var(--paper); border: 2px solid var(--c); }
-  .timeline .when { font-family: var(--mono); font-size: 12px; color: var(--ink-2); }
+  .shot pre { height: 100%; display: grid; place-items: center; font-family: var(--mono); font-size: 11.5px; line-height: 1.7; color: var(--gold); white-space: pre; padding: 14px; overflow: hidden; }
+  .cap { font-family: var(--mono); font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); text-align: right; }
+  ol.pts { list-style: none; counter-reset: p; display: flex; flex-direction: column; gap: 14px; margin: 22px 0; }
+  ol.pts li { counter-increment: p; display: grid; grid-template-columns: 34px 1fr; color: var(--muted); line-height: 1.55; font-size: 15px; }
+  ol.pts li::before { content: counter(p, upper-roman) "."; font-family: var(--serif); color: var(--gold); font-size: 16px; line-height: 1.4; }
+  ol.pts b { color: var(--ivory); font-weight: 500; }
+  .sec { font-family: var(--mono); font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin: 22px 0 10px; display: flex; align-items: center; gap: 10px; }
+  .sec::after { content: ""; flex: 1; height: 1px; background: var(--line-2); }
+  .stack { font-family: var(--mono); font-size: 11px; line-height: 1.9; color: var(--muted); }
+  .stack span + span::before { content: " · "; color: var(--gold-2); }
+  .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .act { text-decoration: none; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; padding: 13px 18px 12px; border: 1px solid var(--gold); color: var(--gold); border-radius: 2px; transition: background .2s, color .2s; }
+  .act.go { background: var(--gold); color: var(--night); }
+  .act:hover { background: var(--ivory); border-color: var(--ivory); color: var(--night); }
+  .crew ul { list-style: none; }
+  .crew .log li { border: 0; padding: 0; }
+  .crew li { display: flex; justify-content: space-between; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line-2); font-size: 13.5px; }
+  .crew li b { font-family: var(--mono); font-weight: 400; font-size: 11.5px; letter-spacing: .06em; }
+  .crew li b::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--rc); margin-right: 8px; vertical-align: 1px; }
+  .crew li span { color: var(--muted); text-align: right; }
+  .log { margin-top: 16px; background: #080c1f; border-left: 2px solid var(--c); padding: 10px 14px; font-family: var(--mono); font-size: 11px; line-height: 1.85; min-height: 118px; }
+  .log li { list-style: none; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--dim); }
+  .log li:last-child { color: var(--ivory); }
+  .timeline { list-style: none; margin: 4px 0 0; }
+  .timeline li { display: grid; grid-template-columns: 82px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--line-2); font-size: 14.5px; }
+  .timeline .when { font-family: var(--mono); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--gold); padding-top: 3px; }
+
+  .loading { position: fixed; inset: 0; display: grid; place-items: center; z-index: 6; font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); pointer-events: none; transition: opacity .6s; }
+  .loading.done { opacity: 0; }
+  .nogl { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 2; max-width: 360px; text-align: center; color: var(--muted); line-height: 1.6; }
 
   .hud > div:first-child, .hint { transition: opacity .4s; }
   body.focused .hud > div:first-child, body.focused .hint { opacity: 0; }
-  @media (max-width: 760px) { body.focused .hud { opacity: 0; } }
-  .loading { position: fixed; inset: 0; display: grid; place-items: center; z-index: 6; font-family: var(--mono); font-size: 13px; color: #e9dcef; pointer-events: none; transition: opacity .6s; }
-  .loading.done { opacity: 0; }
-  .nogl { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 2; max-width: 360px; text-align: center; color: #e9dcef; line-height: 1.5; }
 
   @media (max-width: 760px) {
-    .hud { flex-direction: column; gap: 6px; }
-    .stats { text-align: left; }
-    .hud p { max-width: 30ch; }
-    .panel { top: auto; left: 8px; right: 8px; bottom: 8px; width: auto; height: 62vh; border-radius: 22px 22px 18px 18px; transform: translateY(calc(100% + 30px)); }
+    .hud { flex-direction: column; gap: 14px; }
+    .readout { text-align: left; }
+    .readout div { justify-content: flex-start; }
+    .hud .rule { margin: 12px 0 10px; }
+    .panel { top: auto; left: 8px; right: 8px; bottom: 8px; width: auto; height: 62vh; transform: translateY(calc(100% + 30px)); }
+    .p-scroll { padding: 20px 20px 26px; }
     .panel.open ~ .dock { opacity: 0; pointer-events: none; }
+    body.focused .hud { opacity: 0; }
     .lbl .s { display: none; }
-    .lbl .t { font-size: 12.5px; }
-    .lbl { padding: 5px 8px; }
+    .lbl .t { font-size: 14px; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .panel, .lbl, .dock { transition: none; }
+    .panel, .lbl, .dock, .dock button::after { transition: none; }
   }
 </style>
+
 </head>
 <body>
 <div id="sky"></div>
@@ -165,18 +198,22 @@
 
 <header class="hud">
   <div>
-    <h1>Lucas <span>Calaza</span></h1>
-    <p>Um pequeno planeta onde meus <b>robôs</b> tocam os <b>meus projetos reais</b>. Arraste o globo, dê zoom e clique numa área para entrar.</p>
+    <div class="eyebrow">Atlas de projetos · 2026</div>
+    <h1>Lucas <em>Calaza</em></h1>
+    <div class="rule"></div>
+    <p>Um pequeno planeta onde meus <b>robôs</b> tocam os <b>meus projetos reais</b>. Gire o globo, aproxime e escolha um destino.</p>
   </div>
-  <div class="stats">
-    <div><b id="clock">--:--</b> · hora local</div>
-    <div><b>7</b> projetos · <b>12</b> robôs · <b>1</b> humano</div>
-    <div><b id="s-rest">0</b> na pausa agora</div>
+  <div class="readout">
+    <div class="coord"><span>Centro da vista</span><b id="coord">—</b></div>
+    <div><span>Hora local</span><b id="clock">--:--</b></div>
+    <div><span>Projetos · Robôs</span><b>07 · 12</b></div>
+    <div><span>Na pausa agora</span><b id="s-rest">0</b></div>
   </div>
 </header>
 
-<div class="loading" id="loading">montando o planeta…</div>
-<div class="hint" id="hint">arraste para girar · role ou pince para zoom</div>
+
+<div class="loading" id="loading">traçando o mapa…</div>
+<div class="hint" id="hint">Arraste para girar · role ou pince para aproximar</div>
 
 <aside class="panel" id="panel" aria-labelledby="p-title">
   <div class="p-bar">
@@ -365,24 +402,32 @@ function tickLogs(dt) {
    ========================================================================= */
 const panel = $("#panel"), pScroll = $("#p-scroll");
 
+const pad2 = (n) => String(n).padStart(2, "0");
+function fmtCoord(lat, lon) {
+  const la = Math.round(Math.abs(lat)), lo = Math.round(Math.abs(lon));
+  return `${pad2(la)}°${lat >= 0 ? "N" : "S"} · ${String(lo).padStart(3, "0")}°${lon >= 0 ? "L" : "O"}`;
+}
 function fillPanel(a) {
+  const no = pad2(AREAS.indexOf(a) + 1);
   panel.style.setProperty("--c", a.color);
-  const tags = a.tags.map(([t, k]) => `<span class="tag ${k || ""}">${esc(t)}</span>`).join("");
-  const shot = a.img ? `<div class="shot"><img src="${a.img}" alt="${esc(a.alt)}" style="object-position:${a.imgPos || "top center"}"></div>`
-    : a.glyph ? `<div class="shot"><pre aria-hidden="true">${esc(a.glyph)}</pre></div>` : "";
-  const pts = a.points.map((t) => `<li>${t}</li>`).join("");
-  const tl = a.timeline ? `<ol class="timeline">${a.timeline.map(([w, t]) => `<li><div class="when">${w}</div>${t}</li>`).join("")}</ol>` : "";
-  const stack = a.stack.length ? `<div class="stack">${a.stack.map((t) => `<span>${esc(t)}</span>`).join("")}</div>` : "";
+  const tags = a.tags.map(([t, k]) => `<span class="${k || ""}">${esc(t)}</span>`).join("");
+  const shotInner = a.img ? `<img src="${a.img}" alt="${esc(a.alt)}" style="object-position:${a.imgPos || "top center"}">`
+    : a.glyph ? `<pre aria-hidden="true">${esc(a.glyph)}</pre>` : "";
+  const shot = shotInner ? `<figure class="shot"><div>${shotInner}</div></figure><div class="cap">Prancha ${no} · ${a.img ? "captura de tela" : "esquema"}</div>` : "";
+  const pts = a.points.map((t) => `<li><span>${t}</span></li>`).join("");
+  const tl = a.timeline ? `<div class="sec">Cronologia</div><ol class="timeline">${a.timeline.map(([w, t]) => `<li><span class="when">${w}</span><span>${t}</span></li>`).join("")}</ol>` : "";
+  const stack = a.stack.length ? `<div class="sec">Ferramentas</div><div class="stack">${a.stack.map((t) => `<span>${esc(t)}</span>`).join("")}</div>` : "";
   const links = a.links.length ? `<div class="actions">${a.links.map(([t, u, go]) => `<a class="act ${go ? "go" : ""}" href="${u}" target="_blank" rel="noopener">${t} ↗</a>`).join("")}</div>` : "";
-  const crewTitle = a.rest ? "Na pausa agora" : a.about ? "No QG agora" : "Robôs desta área";
+  const crewTitle = a.rest ? "Na pausa agora" : a.about ? "No QG agora" : "Tripulação";
   pScroll.innerHTML = `
-    <div class="p-hero">${tags}<span class="tag place">${esc(a.place)}</span></div>
-    <h2 id="p-title"><i></i>${esc(a.title)}</h2>
+    <div class="eyebrow">Nº ${no} — ${esc(a.place)}</div>
+    <h2 id="p-title">${esc(a.title)}</h2>
+    <div class="p-meta"><span class="c"><i></i>${fmtCoord(a.lat, a.lon)}</span>${tags}</div>
     <p class="lede">${a.lede}</p>
     ${shot}
-    <ul class="pts">${pts}</ul>
+    <ol class="pts">${pts}</ol>
     ${tl}${stack}${links}
-    <div class="crew"><h3>${crewTitle}</h3><ul id="crew"></ul><ul class="log" id="plog"></ul></div>`;
+    <div class="crew"><div class="sec">${crewTitle}</div><ul id="crew"></ul><ul class="log" id="plog"></ul></div>`;
   pScroll.scrollTop = 0;
   current = a;
   renderCrew(); renderLog();
@@ -393,17 +438,17 @@ function renderCrew() {
   const list = current.rest
     ? allRobots.filter((r) => r.state === "rest" || (r.state === "walk" && r.dest === "rest"))
     : allRobots.filter((r) => r.area === current);
-  const rows = list.map((r) => `<li><b style="color:${r.color}">${r.name}</b><span>${esc(r.status())}</span></li>`);
-  if (current.about) rows.push(`<li><b>LUCAS</b><span>revisando o trabalho dos robôs</span></li>`);
+  const rows = list.map((r) => `<li style="--rc:${r.color}"><b>${r.name}</b><span>${esc(r.status())}</span></li>`);
+  if (current.about) rows.push(`<li style="--rc:${current.color}"><b>LUCAS</b><span>revisando o trabalho dos robôs</span></li>`);
   el.innerHTML = rows.join("") || `<li><span>ninguém na pausa: todo mundo trabalhando</span></li>`;
 }
 
 /* dock */
 const dock = $("#dock");
-AREAS.forEach((a) => {
+AREAS.forEach((a, i) => {
   const b = document.createElement("button");
   b.type = "button"; b.style.setProperty("--c", a.color);
-  b.innerHTML = `<i></i>${esc(a.short || a.title)}`;
+  b.innerHTML = `<span class="no">${String(i + 1).padStart(2, "0")}</span>${esc(a.short || a.title)}`;
   b.addEventListener("click", () => open(a.id));
   a.dockBtn = b; dock.appendChild(b);
 });
@@ -585,8 +630,9 @@ function buildWorld() {
     globe.add(trunk, crown, crown2);
   }
   const clouds = new T.Group(); stage.add(clouds);
+  const cloudMat = new T.MeshStandardMaterial({ color: 0xffffff, flatShading: true, roughness: 1, transparent: true, opacity: .92 });
   {
-    const cr = rng(5), cm = mat(0xffffff, { roughness: 1, transparent: true, opacity: .92 });
+    const cr = rng(5), cm = cloudMat;
     for (let i = 0; i < 9; i++) {
       const g = new T.Group();
       const u = cr() * 1.6 - 0.8, th = cr() * Math.PI * 2, s = Math.sqrt(1 - u * u);
@@ -769,7 +815,7 @@ function buildWorld() {
         add(g, Cyl(0.38, 0.4, 0.06, 12), mat(0x3d4256), x, 0.06, z);
         const ring = add(g, new T.TorusGeometry(0.32, 0.035, 6, 18), new T.MeshBasicMaterial({ color: 0x7dff9c }), x, 0.1, z); ring.rotation.x = Math.PI / 2;
         a.pads.push(ring);
-        a.slots.push({ local: new T.Vector3(x, 0, z), face: new T.Vector3(-x, 0, -z).normalize(), pad: true });
+        a.slots.push({ local: new T.Vector3(x, 0, z), face: new T.Vector3(-x * 0.3, 0, 1).normalize(), pad: true });
       });
       // string lights
       const bulbs = [];
@@ -801,9 +847,9 @@ function buildWorld() {
     g.updateMatrix();
     const n = Math.max(1, a.robots.length);
     a.workSlots = Array.from({ length: n }, (_, k) => {
-      const ang = (k - (n - 1) / 2) * 0.75;
-      const p = new T.Vector3(Math.sin(ang) * 1.55, 0, Math.cos(ang) * 1.55 + 0.1);
-      return { local: p, face: p.clone().multiplyScalar(-1).normalize() };
+      const ang = n === 1 ? 0.7 : (k - (n - 1) / 2) * 1.15 + 0.12;
+      const p = new T.Vector3(Math.sin(ang) * 1.6, 0, Math.cos(ang) * 1.6 + 0.1);
+      return { local: p, face: new T.Vector3(-Math.sin(ang) * 0.75, 0, 0.66).normalize() };
     });
   });
   const rest = byId.pausa;
@@ -827,28 +873,56 @@ function buildWorld() {
   });
 
   /* ---- robots ---- */
-  const zzTex = (() => { const c = document.createElement("canvas"); c.width = 128; c.height = 64; const x = c.getContext("2d"); x.fillStyle = "#fff8ec"; x.font = "700 40px sans-serif"; x.fillText("z", 10, 56); x.font = "700 28px sans-serif"; x.fillText("z", 50, 34); x.font = "700 20px sans-serif"; x.fillText("z", 82, 18); return new T.CanvasTexture(c); })();
-  const workAnims = ["type", "hammer", "carry", "scan"];
+  const zzTex = (() => { const c = document.createElement("canvas"); c.width = 128; c.height = 64; const x = c.getContext("2d"); x.fillStyle = "#f4eee2"; x.font = "40px Georgia, serif"; x.fillText("z", 10, 56); x.font = "28px Georgia, serif"; x.fillText("z", 50, 34); x.font = "20px Georgia, serif"; x.fillText("z", 82, 18); return new T.CanvasTexture(c); })();
+  const workAnims = ["type", "wave", "carry", "scan"];
+  const SG = (r, w = 22, h = 16) => new T.SphereGeometry(r, w, h);
+  const gloss = (c) => mats["s" + c] || (mats["s" + c] = new T.MeshStandardMaterial({ color: c, roughness: .32, metalness: .05 }));
 
   function makeRobot(color, helmet) {
     const root = new T.Group(), body = new T.Group(); root.add(body);
     const c = new T.Color(color).getHex();
-    const legs = [-0.12, 0.12].map((x) => { const p = new T.Group(); p.position.set(x, 0.3, 0); body.add(p); add(p, Box(0.13, 0.3, 0.15), mat(0x4a5068), 0, -0.15, 0); add(p, Box(0.15, 0.06, 0.2), mat(0x2f3346), 0, -0.29, 0.03); return p; });
-    add(body, Box(0.52, 0.46, 0.38), mat(c), 0, 0.54, 0);
-    add(body, Box(0.28, 0.16, 0.02), glow(0xfff4c2), 0, 0.58, 0.2);
-    const arms = [-1, 1].map((s) => { const p = new T.Group(); p.position.set(s * 0.32, 0.72, 0); body.add(p); add(p, Box(0.11, 0.36, 0.13), mat(c), 0, -0.17, 0); add(p, Box(0.13, 0.1, 0.15), mat(0xf4efe6), 0, -0.37, 0); return p; });
-    const head = new T.Group(); head.position.set(0, 0.98, 0); body.add(head);
-    add(head, Box(0.5, 0.38, 0.42), mat(helmet ? 0x3b4466 : 0xf4efe6));
-    add(head, Box(0.4, 0.2, 0.02), mat(0x20243a), 0, 0, 0.215);
-    const eyes = helmet ? [add(head, Box(0.34, 0.06, 0.02), glow(c), 0, 0.01, 0.228)]
-      : [-0.09, 0.09].map((x) => add(head, Box(0.07, 0.09, 0.02), glow(0x9ff7ff), x, 0.01, 0.228));
-    add(head, Box(0.06, 0.14, 0.14), mat(c), -0.27, 0, 0); add(head, Box(0.06, 0.14, 0.14), mat(c), 0.27, 0, 0);
-    add(head, Cyl(0.02, 0.02, 0.2, 4), mat(0x888888), 0, 0.28, 0);
-    const bulb = add(head, Ball(0.06, 1), new T.MeshBasicMaterial({ color: c }), 0, 0.4, 0);
-    const prop = add(body, Box(0.26, 0.16, 0.14), mat(0xfffaf0), 0, 0.5, 0.34); prop.visible = false;
-    const zz = new T.Sprite(new T.SpriteMaterial({ map: zzTex, transparent: true, depthWrite: false })); zz.scale.set(0.8, 0.4, 1); zz.position.set(0.35, 1.6, 0); zz.visible = false; root.add(zz);
-    root.scale.setScalar(0.8);
-    return { root, body, legs, arms, head, eyes, bulb, prop, zz };
+    const shell = gloss(c), white = gloss(helmet ? 0x343b66 : 0xfbf6ec);
+    const screen = mats.screen || (mats.screen = new T.MeshStandardMaterial({ color: 0x121735, roughness: .15, metalness: .4 }));
+    const eyeCol = helmet ? c : new T.Color(color).lerp(new T.Color(0xffffff), 0.6).getHex();
+    // soft shadow on the ground
+    const shadow = add(root, new T.CircleGeometry(0.3, 20), new T.MeshBasicMaterial({ color: 0x0b0f24, transparent: true, opacity: .28, depthWrite: false }), 0, 0.03, 0);
+    shadow.rotation.x = -Math.PI / 2;
+    // little thruster
+    const jet = add(body, new T.ConeGeometry(0.08, 0.2, 14), new T.MeshBasicMaterial({ color: c, transparent: true, opacity: .75 }), 0, 0.17, 0);
+    jet.rotation.x = Math.PI;
+    // egg body + belly
+    const torso = add(body, SG(0.25), shell, 0, 0.48, 0); torso.scale.set(1, 1.08, .92);
+    const belly = add(body, SG(0.16), white, 0, 0.45, 0.115); belly.scale.set(1, 1.05, .55);
+    add(body, SG(0.032, 10, 8), glow(0xffe9a8), 0, 0.5, 0.2);
+    // stubby arms
+    const arms = [-1, 1].map((s) => {
+      const p = new T.Group(); p.position.set(s * 0.25, 0.56, 0); body.add(p);
+      const a = add(p, SG(0.07, 14, 10), shell, s * 0.02, -0.1, 0); a.scale.set(1, 1.55, 1);
+      add(p, SG(0.058, 14, 10), white, s * 0.02, -0.22, 0.01);
+      return p;
+    });
+    // big round head with a screen face
+    const head = new T.Group(); head.position.set(0, 0.92, 0); body.add(head);
+    const skull = add(head, SG(0.3, 28, 20), white); skull.scale.set(1.12, .92, 1);
+    const face = add(head, SG(0.25, 28, 20), screen, 0, -0.01, 0.13); face.scale.set(1.04, .72, .66);
+    let eyes, smile = null;
+    if (helmet) {
+      const v = add(head, SG(0.05, 16, 10), glow(c), 0, 0.0, 0.28); v.scale.set(3.4, .8, .5); eyes = [v];
+    } else {
+      eyes = [-0.085, 0.085].map((x) => { const e = add(head, SG(0.04, 14, 10), glow(eyeCol), x, 0.015, 0.285); e.scale.set(1, 1.35, .5); return e; });
+      smile = add(head, new T.TorusGeometry(0.035, 0.009, 6, 14, Math.PI), glow(eyeCol), 0, -0.05, 0.292); smile.rotation.z = Math.PI;
+      const blush = mats.blush || (mats.blush = new T.MeshBasicMaterial({ color: 0xff8fae, transparent: true, opacity: .75 }));
+      [-1, 1].forEach((s) => { const k = add(head, SG(0.03, 10, 8), blush, s * 0.165, -0.06, 0.255); k.scale.set(1.2, .7, .4); });
+    }
+    // ears + antenna
+    [-1, 1].forEach((s) => { const ear = add(head, new T.CylinderGeometry(0.07, 0.07, 0.07, 18), shell, s * 0.335, 0, 0); ear.rotation.z = Math.PI / 2; });
+    add(head, new T.CylinderGeometry(0.012, 0.012, 0.16, 6), screen, 0, 0.33, 0);
+    const bulb = add(head, SG(0.045, 12, 10), new T.MeshBasicMaterial({ color: c }), 0, 0.43, 0);
+    // something to carry
+    const prop = add(body, Box(0.2, 0.15, 0.12), gloss(0xfffaf0), 0, 0.4, 0.28); prop.visible = false;
+    const zz = new T.Sprite(new T.SpriteMaterial({ map: zzTex, transparent: true, depthWrite: false })); zz.scale.set(0.7, 0.35, 1); zz.position.set(0.32, 1.45, 0); zz.visible = false; root.add(zz);
+    root.scale.setScalar(1.0);
+    return { root, body, arms, head, eyes, smile, bulb, prop, zz, jet, shadow };
   }
 
   AREAS.forEach((a) => a.robots.forEach(([name, job, col], k) => {
@@ -878,7 +952,7 @@ function buildWorld() {
     return free.length ? free[Math.floor(Math.random() * free.length)] : null;
   }
   function updateRobot(r, dt, t) {
-    const P = r.parts;
+    const P = r.parts, s = r.seed;
     r.timer -= dt;
     if (r.state === "work" && r.timer <= 0) {
       const slot = freeRestSlot();
@@ -890,48 +964,48 @@ function buildWorld() {
     } else if (r.state === "rest" && r.timer <= 0) {
       r.state = "walk"; r.dest = "work"; r.from = r.dir.clone(); r.to = toGlobeDir(r.area, r.slot.local); r.prog = 0; r.len = Math.max(0.05, r.from.angleTo(r.to));
     }
-    let face, lift = 0;
+    let face, lift = 0, hover = 0.06 + Math.sin(t * 2.2 + s) * 0.035;
+    P.prop.visible = false; P.zz.visible = false; P.jet.visible = true;
+    P.arms[0].rotation.set(0, 0, 0.15); P.arms[1].rotation.set(0, 0, -0.15);
+    P.body.rotation.set(0, 0, 0); P.head.rotation.set(0, 0, 0);
     if (r.state === "walk") {
       r.prog += (dt * 0.22) / r.len;
       const prev = r.dir.clone();
       slerpDir(r.from, r.to, Math.min(1, r.prog), r.dir);
       face = r.dir.clone().sub(prev);
       if (face.lengthSq() < 1e-10) face = r.to.clone().sub(r.from);
-      const over = terrain(r.dir).h <= WATER;
-      lift = over ? 0.14 + Math.sin(t * 4) * 0.04 : Math.abs(Math.sin(t * 9 + r.seed)) * 0.05;
-      const sw = Math.sin(t * 9 + r.seed) * 0.7;
-      P.legs[0].rotation.x = sw; P.legs[1].rotation.x = -sw;
-      P.arms[0].rotation.x = -sw * 0.8; P.arms[1].rotation.x = sw * 0.8; P.arms[1].rotation.z = 0;
-      P.body.position.y = 0; P.zz.visible = false; P.prop.visible = false; P.head.rotation.set(0, 0, 0);
+      lift = terrain(r.dir).h <= WATER ? 0.12 : 0;
+      hover = 0.16 + Math.sin(t * 6 + s) * 0.04;
+      P.body.rotation.x = 0.28;
+      P.arms[0].rotation.x = 0.7 + Math.sin(t * 6 + s) * 0.25; P.arms[1].rotation.x = 0.7 - Math.sin(t * 6 + s) * 0.25;
+      P.head.rotation.x = -0.15;
       if (r.prog >= 1) {
         if (r.dest === "rest") { r.state = "rest"; r.timer = 9 + Math.random() * 10; }
         else { r.state = "work"; r.timer = 18 + Math.random() * 30; r.restSlot = null; }
       }
-    }
-    if (r.state === "work") {
+    } else if (r.state === "work") {
       face = toGlobeVec(r.area, r.slot.face);
-      const s = r.seed;
-      P.legs.forEach((l) => (l.rotation.x = 0)); P.zz.visible = false;
-      P.body.position.y = Math.abs(Math.sin(t * 3 + s)) * 0.04;
-      P.head.rotation.set(0, Math.sin(t * 0.7 + s) * 0.35, 0);
-      P.arms[1].rotation.z = 0;
-      if (r.style === "type") { P.arms[0].rotation.x = -1.2 + Math.sin(t * 14 + s) * 0.2; P.arms[1].rotation.x = -1.2 + Math.cos(t * 14 + s) * 0.2; P.prop.visible = false; }
-      else if (r.style === "hammer") { P.arms[1].rotation.x = -1.5 + Math.abs(Math.sin(t * 6 + s)) * 1.2; P.arms[0].rotation.x = -0.2; P.prop.visible = false; }
-      else if (r.style === "carry") { P.arms[0].rotation.x = P.arms[1].rotation.x = -1.3; P.prop.visible = true; P.body.position.y = Math.abs(Math.sin(t * 2 + s)) * 0.1; }
-      else { P.arms[1].rotation.x = -1.6; P.arms[1].rotation.z = Math.sin(t * 2 + s) * 0.5; P.arms[0].rotation.x = 0; P.prop.visible = false; }
-    }
-    if (r.state === "rest") {
+      P.head.rotation.set(Math.sin(t * 0.9 + s) * 0.08, Math.sin(t * 0.6 + s) * 0.3, Math.sin(t * 0.8 + s) * 0.14);
+      if (r.style === "type") { P.arms[0].rotation.x = -1.1 + Math.sin(t * 14 + s) * 0.22; P.arms[1].rotation.x = -1.1 + Math.cos(t * 14 + s) * 0.22; }
+      else if (r.style === "wave") { P.arms[1].rotation.set(0, 0, -2.3 + Math.sin(t * 5 + s) * 0.45); P.arms[0].rotation.x = -0.6; }
+      else if (r.style === "carry") { P.arms[0].rotation.x = P.arms[1].rotation.x = -1.25; P.prop.visible = true; hover += Math.sin(t * 1.4 + s) * 0.05; }
+      else { P.arms[1].rotation.x = -1.7; P.arms[1].rotation.z = Math.sin(t * 2 + s) * 0.4; P.head.rotation.y = Math.sin(t * 1.2 + s) * 0.6; }
+    } else {
       face = toGlobeVec(rest, r.restSlot.face);
-      P.prop.visible = false;
-      P.arms.forEach((a) => { a.rotation.x = -0.2; a.rotation.z = 0; });
-      if (r.restSlot.sit) { P.legs.forEach((l) => (l.rotation.x = -1.5)); P.body.position.y = 0.22; }
-      else { P.legs.forEach((l) => (l.rotation.x = 0)); P.body.position.y = Math.sin(t * 1.5 + r.seed) * 0.03; lift = 0.08; }
-      const k = (t * 0.4 + r.seed) % 1;
-      P.zz.visible = true; P.zz.position.y = 1.6 + k * 0.4; P.zz.material.opacity = 1 - k;
-      P.head.rotation.set(0.25, 0, 0);
+      P.jet.visible = false;
+      P.arms[0].rotation.set(-0.3, 0, 0.35); P.arms[1].rotation.set(-0.3, 0, -0.35);
+      P.head.rotation.set(0.22, 0, Math.sin(t * 0.7 + s) * 0.12);
+      hover = r.restSlot.sit ? 0.2 : 0.1 + Math.sin(t * 1.2 + s) * 0.02;
+      const k = (t * 0.4 + s) % 1;
+      P.zz.visible = true; P.zz.position.y = 1.45 + k * 0.4; P.zz.material.opacity = 1 - k;
     }
-    const blink = Math.sin(t * 1.3 + r.seed * 3) > 0.985;
-    P.eyes.forEach((e) => (e.scale.y = blink ? 0.1 : r.state === "rest" ? 0.25 : 1));
+    P.body.position.y = hover;
+    P.jet.scale.set(1, 0.8 + Math.sin(t * 20 + s) * 0.2 + (r.state === "walk" ? 0.5 : 0), 1);
+    P.shadow.material.opacity = 0.32 - hover * 0.5;
+    const blink = Math.sin(t * 1.3 + s * 3) > 0.985;
+    const sleepy = r.state === "rest";
+    P.eyes.forEach((e) => (e.scale.y = blink ? 0.12 : sleepy ? 0.25 : (P.smile ? 1.35 : 0.8)));
+    if (P.smile) P.smile.scale.setScalar(sleepy ? 0.7 : r.state === "walk" ? 1.25 : 1);
     const charge = r.state === "rest" && r.restSlot.pad;
     P.bulb.material.color.set(charge ? (Math.sin(t * 5) > 0 ? 0x7dff9c : 0x2e8a4a) : r.color);
     orient(P.root, r.dir, face, lift);
@@ -939,10 +1013,10 @@ function buildWorld() {
 
   /* ---- labels ---- */
   const labels = $("#labels");
-  AREAS.forEach((a) => {
+  AREAS.forEach((a, i) => {
     const el = document.createElement("div");
     el.className = "lbl"; el.style.setProperty("--c", a.color);
-    el.innerHTML = `<div class="t"><i></i>${esc(a.place)}</div><div class="s"></div>`;
+    el.innerHTML = `<div class="m"><i></i>Nº ${String(i + 1).padStart(2, "0")} · ${fmtCoord(a.lat, a.lon)}</div><div class="t">${esc(a.place)}</div><div class="s"></div>`;
     el.addEventListener("click", () => open(a.id));
     el.addEventListener("pointerenter", () => setHover(a, null));
     el.addEventListener("pointerleave", () => setHover(null, null));
@@ -1024,23 +1098,29 @@ function buildWorld() {
     canvas.classList.toggle("hovering", !!area);
     if (robot) {
       tip.style.setProperty("--c", robot.color);
-      tip.innerHTML = `<b>${robot.name}</b><br>${esc(robot.status())}<br><span style="opacity:.7">clique para abrir ${esc(robot.area.short || robot.area.title)}</span>`;
+      tip.innerHTML = `<b>${robot.name}</b><br>${esc(robot.status())}<br><span style="color:var(--gold)">clique para abrir ${esc(robot.area.short || robot.area.title)}</span>`;
       tip.classList.add("on");
     } else tip.classList.remove("on");
   }
 
   function focusArea(a) {
-    const n = a.dir.clone().applyQuaternion(globe.quaternion).normalize();
-    const want = new T.Vector3(0, 0.12, 1).normalize();
-    const q1 = new T.Quaternion().setFromUnitVectors(n, want).multiply(globe.quaternion);
+    // turn the globe so the area tilts up toward the camera with its front (local +z) facing us
+    const n = a.dir.clone();
+    const south = new T.Vector3(0, 0, 1).applyQuaternion(a.group.quaternion);
+    const W = new T.Vector3(0, 1.5, 1).normalize();
+    const S = new T.Vector3(0, 0, 1).sub(W.clone().multiplyScalar(W.z)).normalize();
+    const from = new T.Matrix4().makeBasis(n, south, new T.Vector3().crossVectors(n, south));
+    const to = new T.Matrix4().makeBasis(W, S, new T.Vector3().crossVectors(W, S));
+    const q1 = new T.Quaternion().setFromRotationMatrix(to.multiply(from.transpose()));
     const wide = innerWidth > 760;
-    tween = { q0: globe.quaternion.clone(), q1, d0: view.dist, d1: wide ? 31 : 40, x0: view.offX, x1: wide ? -5.8 : 0, y0: view.offY, y1: wide ? -0.6 : 4.8, t: 0, dur: reduce ? 0.01 : 1.3 };
+    tween = { q0: globe.quaternion.clone(), q1, d0: view.dist, d1: wide ? 20 : 27, x0: view.offX, x1: wide ? -2.2 : 0, y0: view.offY, y1: wide ? -7.7 : -5.6, t: 0, dur: reduce ? 0.01 : 1.4 };
   }
   function unfocus() { tween = { q0: globe.quaternion.clone(), q1: globe.quaternion.clone(), d0: view.dist, d1: baseDist, x0: view.offX, x1: 0, y0: view.offY, y1: 0, t: 0, dur: reduce ? 0.01 : 1.0 }; }
 
   /* ---- loop ---- */
   const wp = new T.Vector3(), nrm = new T.Vector3(), toCam = new T.Vector3();
-  let last = performance.now(), time = 0, crewT = 0;
+  let last = performance.now(), time = 0, crewT = 0, coordT = 0;
+  const cdir = new T.Vector3(), qinv = new T.Quaternion();
   function frame(now) {
     const dt = Math.min(0.05, (now - last) / 1000); last = now;
     time += reduce ? dt * 0.4 : dt;
@@ -1057,6 +1137,7 @@ function buildWorld() {
       else if (!current && !reduce && now - lastInteract > 2500) { qx.setFromAxisAngle(AY, dt * 0.06); globe.quaternion.premultiply(qx); }
     }
     camera.position.set(-view.offX, -view.offY, view.dist); camera.lookAt(-view.offX, -view.offY, 0);
+    cloudMat.opacity += ((current ? 0 : 0.92) - cloudMat.opacity) * Math.min(1, dt * 4); clouds.visible = cloudMat.opacity > 0.02;
     clouds.rotation.y += dt * 0.025; clouds.rotation.x = 0.2;
     sat.rotation.y += dt * 0.18; satBody.rotation.x += dt * 0.3; satBlink.visible = Math.sin(time * 6) > 0;
     anim.forEach((f) => f(time));
@@ -1076,6 +1157,8 @@ function buildWorld() {
       a.lbl.style.zIndex = Math.round(facing * 100);
     });
     if (hoverRobot) tip.style.transform = `translate(${hoverPos.x + 16}px, ${hoverPos.y + 14}px)`;
+    coordT -= dt;
+    if (coordT < 0) { coordT = 0.15; cdir.set(0, 0, 1).applyQuaternion(qinv.copy(globe.quaternion).invert()); $("#coord").textContent = fmtCoord(Math.asin(clamp(cdir.y, -1, 1)) * 180 / Math.PI, Math.atan2(cdir.x, cdir.z) * 180 / Math.PI); }
     crewT -= dt;
     if (crewT < 0) { crewT = 0.5; if (current) renderCrew(); $("#s-rest").textContent = allRobots.filter((r) => r.state === "rest").length; }
     renderer.render(scene, camera);

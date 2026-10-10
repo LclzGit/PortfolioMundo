@@ -2,6 +2,8 @@
 
 Capa interativa do portfólio. É um pequeno planeta 3D em low-poly onde robôs trabalham nos **meus projetos reais**.
 
+- **Visual:** tema de atlas celeste, com azul-noite e detalhes dourados. Os títulos usam **Gloock** (serifada clássica), o texto usa **Schibsted Grotesk** e as coordenadas e etiquetas usam **Martian Mono**. Cada área tem número e coordenadas, e o canto da tela mostra a coordenada do centro da vista enquanto você gira.
+- **Robôs:** são redondinhos e flutuam com um jatinho. Têm rosto de tela, olhos que piscam, bochechas e sorriso, e os do Daemon Bar usam capacete com visor.
 - **Arraste** o globo para girar (com inércia). Use a **roda do mouse** ou **pinça** para dar zoom.
 - Cada projeto é uma área com o seu prédio e os seus robôs trabalhando. Por exemplo, a biblioteca do ReformaPro tem um livro girando, a fábrica da Calculadora da Reforma solta fumaça e moedas, e a torre do SNNFSe emite sinais.
 - Na **sala de descanso** os robôs recarregam a bateria nos pads ou sentam nos bancos (com "zzz"). De tempos em tempos, um robô larga o trabalho e atravessa o planeta a pé até lá. Quando passa por cima da água, ele flutua.
