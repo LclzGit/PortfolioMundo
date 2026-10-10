@@ -410,13 +410,13 @@ const AREAS = [
     tags: [["Agentes de IA"], ["Conhecimento travado"]],
     lede: "Dois agentes de IA que respondem dúvidas de temas específicos usando só uma base de conhecimento fechada, sempre com a fonte.",
     points: [
-      "<b>Consultor Reforma Tributária:</b> responde sobre CBS, IBS e Imposto Seletivo com base na legislação e nas notas técnicas, e analisa contratos com fornecedores: valida o valor líquido, estima o preço a partir de 2027 e redige pareceres",
+      "<b>Consultor Reforma Tributária:</b> responde sobre CBS, IBS e Imposto Seletivo com base na LC 214/2025 e nas notas técnicas, e analisa contratos com fornecedores: valida o valor líquido, calcula o preço a partir de 2027 e redige pareceres",
       "<b>Consultor de Doações:</b> faz a análise de primeiro nível dos contratos de doação e encaminha cada caso para o agente especialista na legislação que se aplica",
-      "Fora da base, o agente recusa e explica por quê, em vez de inventar uma resposta",
+      "Respostas com a <b>resposta direta primeiro</b>, a lei explicada em linguagem simples e cada afirmação com a fonte numerada",
     ],
     stack: ["Agentes de IA", "Base de conhecimento", "Orquestração entre agentes"],
-    links: [["Conversar com os agentes", "demos/agentes-ia/", true]],
-    log: ["pergunta: o que muda em 2027?", "fonte: LC 214/2025 ✓", "contrato de doação recebido", "→ agente de incentivos", "pergunta fora da base: recusada", "parecer rascunhado"],
+    links: [["Ver uma conversa real", "demos/agentes-ia/", true]],
+    log: ["pergunta: Simples tem crédito de CBS?", "fonte: LC 214/2025, art. 41 ✓", "resposta direta + base legal", "contrato de doação recebido", "→ agente especialista", "fora da base: não responde"],
   },
   {
     id: "lucas", title: "Lucas Calaza", short: "Sobre mim", place: "QG do Lucas", color: "#ffc93d", lat: 54, lon: -42, build: "house", about: true,
