@@ -136,6 +136,8 @@
   .lede { font-size: 17px; line-height: 1.6; color: var(--ivory); margin-top: 18px; }
   .lede b { color: var(--gold); font-weight: 500; }
   .shot { margin: 22px 0 8px; padding: 6px; border: 1px solid var(--line); border-radius: 2px; }
+  .shot > div.g { aspect-ratio: auto; background: #1f1f1f; }
+  .shot > div.g img { height: auto; object-fit: contain; }
   .shot > div { aspect-ratio: 16 / 10; overflow: hidden; background: #0a0e22; }
   .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
   .shot pre { height: 100%; display: grid; place-items: center; font-family: var(--mono); font-size: 11.5px; line-height: 1.7; color: var(--gold); white-space: pre; padding: 14px; overflow: hidden; }
@@ -408,14 +410,19 @@ const AREAS = [
     id: "consultores", title: "Consultores de IA", short: "Agentes de IA", place: "Central dos Consultores", color: "#7fd8ff", lat: -16, lon: 170, build: "callcenter",
     robots: [["ÁUREA", "responde sobre a Reforma"], ["DOM", "faz a triagem de doações"]],
     tags: [["Agentes de IA"], ["Conhecimento travado"]],
-    lede: "Dois agentes de IA que respondem dúvidas de temas específicos usando só uma base de conhecimento fechada, sempre com a fonte.",
+    lede: "Agentes de IA que respondem dúvidas de temas específicos usando só uma base de conhecimento fechada, sempre com a fonte. Abaixo, uma conversa real com o Consultor Reforma Tributária.",
+    gallery: [
+      ["assets/img/agente-reforma-1.jpg", "Pergunta sobre crédito de CBS no Simples Nacional e a resposta direta do agente"],
+      ["assets/img/agente-reforma-2.jpg", "Base legal explicada em linguagem simples, com as fontes numeradas"],
+      ["assets/img/agente-reforma-3.jpg", "Opção pelo regime regular e o alerta sobre a porta de saída"],
+    ],
     points: [
       "<b>Consultor Reforma Tributária:</b> responde sobre CBS, IBS e Imposto Seletivo com base na LC 214/2025 e nas notas técnicas, e analisa contratos com fornecedores: valida o valor líquido, calcula o preço a partir de 2027 e redige pareceres",
       "<b>Consultor de Doações:</b> faz a análise de primeiro nível dos contratos de doação e encaminha cada caso para o agente especialista na legislação que se aplica",
       "Respostas com a <b>resposta direta primeiro</b>, a lei explicada em linguagem simples e cada afirmação com a fonte numerada",
     ],
     stack: ["Agentes de IA", "Base de conhecimento", "Orquestração entre agentes"],
-    links: [["Ver uma conversa real", "demos/agentes-ia/", true]],
+    links: [],
     log: ["pergunta: Simples tem crédito de CBS?", "fonte: LC 214/2025, art. 41 ✓", "resposta direta + base legal", "contrato de doação recebido", "→ agente especialista", "fora da base: não responde"],
   },
   {
@@ -584,7 +591,8 @@ function fillPanel(a) {
   const no = pad2(AREAS.indexOf(a) + 1);
   panel.style.setProperty("--c", a.color);
   const tags = a.tags.map(([t, k]) => `<span class="${k || ""}">${esc(t)}</span>`).join("");
-  const shot = a.img
+  const gal = a.gallery ? a.gallery.map(([src, alt], i) => `<figure class="shot"><div class="g"><img src="${src}" alt="${esc(alt)}"></div></figure><div class="cap">Print ${i + 1} de ${a.gallery.length} · ${esc(alt)}</div>`).join("") : "";
+  const shot = gal ? gal : a.img
     ? `<figure class="shot"><div><img src="${a.img}" alt="${esc(a.alt)}" style="object-position:${a.imgPos || "top center"}"></div></figure><div class="cap">Prancha ${no} · captura de tela${a.links.length ? " · abra a prévia para testar" : ""}</div>`
     : a.proto ? `<div class="proto" id="proto"></div><div class="cap">Prancha ${no} · protótipo interativo</div>` : "";
   const pts = a.points.map((t) => `<li><span>${t}</span></li>`).join("");
