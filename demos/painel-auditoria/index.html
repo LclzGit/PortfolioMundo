@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel de Auditoria das Obrigações · prévia</title>
+<style>
+  /* Layout: filter row on top, two charts side by side, detail table below. */
+  :root {
+    color-scheme: light;
+    --page: #f4f5f2;
+    --surface: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --muted: #898781;
+    --grid: #e1e0d9;
+    --axis: #c3c2b7;
+    --ring: rgba(11, 11, 11, .10);
+    --series-1: #2a78d6;
+    --series-1-hi: #1c5cab;
+    --accent: #0e7c86;
+    --chip: #eef3fb;
+    --warn: #b06f00;
+    --crit: #d03b3b;
+    --good: #0a7f0a;
+    --info: #52514e;
+    --sans: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+      --grid: #2c2c2a; --axis: #383835; --ring: rgba(255, 255, 255, .10);
+      --series-1: #3987e5; --series-1-hi: #86b6ef; --accent: #4cc6cf; --chip: #1d2a3d;
+      --warn: #fab219; --crit: #e66767; --good: #0ca30c; --info: #c3c2b7;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --ring: rgba(255, 255, 255, .10);
+    --series-1: #3987e5; --series-1-hi: #86b6ef; --accent: #4cc6cf; --chip: #1d2a3d;
+    --warn: #fab219; --crit: #e66767; --good: #0ca30c; --info: #c3c2b7;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--page); color: var(--ink); font: 14px/1.45 var(--sans); padding: 20px clamp(16px, 3vw, 32px) 40px; }
+  header { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: flex-end; justify-content: space-between; margin-bottom: 18px; }
+  h1 { margin: 0; font-size: clamp(20px, 2.4vw, 26px); font-weight: 700; letter-spacing: -.01em; text-wrap: balance; }
+  .sub { color: var(--ink-2); margin-top: 4px; font-size: 13px; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; background: var(--chip); color: var(--accent); margin-left: 8px; vertical-align: 3px; }
+  .filters { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: flex-end; background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; }
+  .filters label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--ink-2); }
+  select { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--axis); border-radius: 6px; padding: 6px 8px; min-width: 130px; }
+  fieldset { border: 0; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  legend { font-size: 12px; color: var(--ink-2); margin-bottom: 4px; padding: 0; float: left; width: 100%; }
+  .chk { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink); border: 1px solid var(--ring); border-radius: 999px; padding: 4px 10px; cursor: pointer; user-select: none; }
+  .chk input { accent-color: var(--series-1); margin: 0; }
+  .reset { font: inherit; font-size: 13px; color: var(--series-1); background: none; border: 0; cursor: pointer; padding: 6px 4px; }
+  .reset:hover, .reset:focus-visible { text-decoration: underline; outline: none; }
+  .active-filter { font-size: 12px; color: var(--ink-2); }
+  .active-filter b { color: var(--ink); }
+  .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 16px; margin-bottom: 16px; }
+  .card { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+  .card h2 { margin: 0 0 2px; font-size: 15px; font-weight: 650; }
+  .card .hint { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  .stat { display: flex; gap: 28px; flex-wrap: wrap; margin-bottom: 16px; }
+  .stat div { background: var(--surface); border: 1px solid var(--ring); border-radius: 10px; padding: 12px 16px; min-width: 150px; }
+  .stat span { display: block; font-size: 12px; color: var(--ink-2); }
+  .stat b { font-size: 24px; font-weight: 700; }
+  svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .bar { fill: var(--series-1); cursor: pointer; }
+  .bar:hover, .bar:focus { fill: var(--series-1-hi); outline: none; }
+  .bar.dim { opacity: .35; }
+  .lbl { fill: var(--ink-2); font-size: 11px; }
+  .hbars { display: grid; gap: 6px; }
+  .hrow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 10px; align-items: center; font-size: 12.5px; }
+  .hl { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }
+  .ht { display: flex; align-items: center; gap: 6px; min-width: 0; }
+  .hb { display: block; height: 18px; border-radius: 0 4px 4px 0; background: var(--series-1); }
+  .hb:hover, .hb:focus { background: var(--series-1-hi); }
+  .hv { font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  @media (max-width: 520px) { .hrow { grid-template-columns: 1fr; gap: 2px; } .hl { text-align: left; } }
+  .val { fill: var(--ink); font-size: 11.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .gridline { stroke: var(--grid); stroke-width: 1; }
+  .baseline { stroke: var(--axis); stroke-width: 1; }
+  .tip { position: fixed; pointer-events: none; z-index: 10; background: var(--surface); color: var(--ink); border: 1px solid var(--ring); border-radius: 8px; padding: 8px 10px; font-size: 12px; box-shadow: 0 6px 20px rgba(0, 0, 0, .18); max-width: 280px; opacity: 0; transition: opacity .1s; }
+  .tip.on { opacity: 1; }
+  .tip strong { display: block; font-size: 15px; font-variant-numeric: tabular-nums; }
+  .table-wrap { overflow-x: auto; max-height: 460px; overflow-y: auto; border-top: 1px solid var(--grid); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { position: sticky; top: 0; background: var(--surface); text-align: left; font-weight: 600; color: var(--ink-2); padding: 8px 10px; border-bottom: 1px solid var(--axis); white-space: nowrap; cursor: pointer; }
+  th[aria-sort="descending"]::after { content: " ▼"; font-size: 9px; }
+  th[aria-sort="ascending"]::after { content: " ▲"; font-size: 9px; }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td.msg { min-width: 320px; color: var(--ink-2); }
+  td.act { min-width: 200px; }
+  tfoot td { font-weight: 700; border-top: 1px solid var(--axis); position: sticky; bottom: 0; background: var(--surface); }
+  .diag { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; font-weight: 600; }
+  .diag i { font-style: normal; font-size: 11px; width: 16px; height: 16px; border-radius: 50%; display: inline-grid; place-items: center; color: #fff; }
+  .d-Erro i { background: var(--crit); } .d-Erro { color: var(--crit); }
+  .d-Advertência i { background: var(--warn); } .d-Advertência { color: var(--warn); }
+  .d-Benefício i { background: var(--good); } .d-Benefício { color: var(--good); }
+  .d-Relatório i { background: var(--muted); } .d-Relatório { color: var(--info); }
+  .demo { position: fixed; right: 12px; bottom: 12px; z-index: 20; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; background: rgba(15, 20, 40, .85); color: #fff; padding: 7px 10px; border-radius: 6px; pointer-events: none; }
+  @media (max-width: 860px) { .grid { grid-template-columns: 1fr; } }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Painel de Auditoria das Obrigações <span class="badge">dados fictícios</span></h1>
+    <div class="sub">Apontamentos das regras de auditoria nos arquivos fiscais e contábeis entregues, por obrigação, regra e diagnóstico.</div>
+  </div>
+</header>
+
+<form class="filters" id="filters" onsubmit="return false">
+  <label>Ano<select id="f-ano"><option value="">Todos</option><option>2024</option><option>2025</option></select></label>
+  <label>Empresa<select id="f-emp"><option value="">Todas</option></select></label>
+  <fieldset id="f-diag"><legend>Diagnóstico</legend></fieldset>
+  <button type="button" class="reset" id="reset">Limpar filtros</button>
+  <span class="active-filter" id="active"></span>
+</form>
+
+<div class="stat">
+  <div><span>Apontamentos</span><b id="s-total">0</b></div>
+  <div><span>Erros</span><b id="s-erro">0</b></div>
+  <div><span>Regras com apontamento</span><b id="s-regras">0</b></div>
+</div>
+
+<div class="grid">
+  <section class="card">
+    <h2>Apontamentos por obrigação</h2>
+    <div class="hint">Clique numa barra para filtrar o painel.</div>
+    <div id="c-obr"></div>
+  </section>
+  <section class="card">
+    <h2>Regras com mais apontamentos</h2>
+    <div class="hint">As 10 maiores no recorte atual. Clique para filtrar.</div>
+    <div id="c-regra"></div>
+  </section>
+</div>
+
+<section class="card">
+  <h2>Detalhe por regra</h2>
+  <div class="hint" id="t-hint"></div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th data-k="ano">Ano</th><th data-k="diag">Diagnóstico</th><th data-k="regra">Regra</th><th data-k="qtd" aria-sort="descending">Quantidade</th><th data-k="msg">Erro / advertência</th><th data-k="acao">Ação recomendada</th></tr></thead>
+      <tbody id="t-body"></tbody>
+      <tfoot><tr><td colspan="3">Total</td><td class="n" id="t-total">0</td><td colspan="2"></td></tr></tfoot>
+    </table>
+  </div>
+</section>
+
+<div class="tip" id="tip" role="status"></div>
+<div class="demo">Prévia para demonstração</div>
+
+<script>
+/* ---------- Dados fictícios (gerados de forma determinística) ---------- */
+function rng(seed) { return () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+const R = rng(2026);
+const EMPRESAS = ["Empresa Alfa", "Empresa Beta", "Empresa Gama"];
+const OBRIG = ["EFD Contribuições", "SPED ICMS/IPI", "ECD", "DCTFWeb × PER/DCOMP", "DCTF × PER/DCOMP"];
+const DIAGS = ["Erro", "Advertência", "Benefício", "Relatório"];
+const ICON = { "Erro": "!", "Advertência": "!", "Benefício": "✓", "Relatório": "i" };
+// [código, obrigação, diagnóstico, título, mensagem, ação, peso]
+const REGRAS = [
+  ["R-3923", 0, "Advertência", "Cadastro: código de serviço do item não informado", "Itens de serviço escriturados sem o código da lista de serviços. Sem ele não é possível validar a natureza do crédito.", "Completar o código de serviço no cadastro de itens", 60],
+  ["R-3781", 0, "Advertência", "Cadastro: ausência do detalhamento da receita", "Receitas informadas sem o detalhamento por natureza, o que impede conferir a alíquota aplicada.", "Revisar o mapeamento de naturezas de receita", 9],
+  ["R-3883", 1, "Advertência", "Cadastro: unidade de medida divergente", "A unidade de medida do item difere da unidade usada nos documentos de entrada.", "Padronizar as unidades no cadastro de itens", 5],
+  ["R-3855", 1, "Advertência", "Escrituração: variação de preço acima do esperado", "Preço unitário do item variou mais de 40% em relação à média do período.", "Conferir notas com variação e justificar", 4],
+  ["R-3846", 0, "Erro", "Escrituração: NCM fora da lista de crédito", "Itens com NCM que não dá direito a crédito foram escriturados como creditáveis.", "Estornar o crédito e corrigir a parametrização", 3.6],
+  ["R-2389", 1, "Advertência", "Cadastro: tipo de item ativo imobilizado sem bem vinculado", "Itens classificados como imobilizado não têm o bem correspondente no controle patrimonial.", "Vincular os itens ao cadastro de bens", 3.2],
+  ["R-2706", 2, "Advertência", "Sistema: razão social do declarante divergente", "A razão social no arquivo difere da cadastrada no registro de abertura.", "Atualizar o cadastro do declarante", 3],
+  ["R-2390", 1, "Advertência", "Cadastro: tipo de item uso e consumo com crédito", "Itens de uso e consumo aparecem com crédito de ICMS.", "Revisar o tipo de item e o CFOP de entrada", 2.6],
+  ["R-2468", 0, "Relatório", "Sistema: validação de movimentação por período", "Relatório de conferência da movimentação mensal por estabelecimento.", "Apenas acompanhar", 2.4],
+  ["R-3830", 1, "Erro", "Sistema: ausência de escrituração de documentos referenciados", "Operações de devolução e retorno sem o documento de origem escriturado.", "Ajustar o parâmetro de escrituração das devoluções", 2],
+  ["R-2599", 1, "Advertência", "Cadastro: NCM indevido em outras destinações", "Divergência entre a tabela de IPI vigente e o NCM cadastrado para embalagens, uso e consumo e imobilizado.", "Testar não informar NCM no cadastro desse item", 1.6],
+  ["R-1204", 2, "Erro", "Escrituração: lançamento sem contrapartida", "Lançamentos contábeis com débito sem crédito correspondente na mesma data.", "Corrigir os lançamentos e regerar o arquivo", 1.2],
+  ["R-1310", 2, "Advertência", "Plano de contas: conta sem mapeamento referencial", "Contas analíticas sem vínculo com o plano referencial.", "Completar o mapeamento referencial", 1.1],
+  ["R-4410", 0, "Benefício", "Crédito: insumos com possível direito a crédito", "Despesas classificadas sem crédito que podem se enquadrar como insumo.", "Avaliar o aproveitamento do crédito", 1],
+  ["R-4415", 1, "Benefício", "Crédito: ICMS de ativo não apropriado", "Parcelas de crédito de ativo imobilizado não apropriadas no período.", "Apropriar as parcelas pendentes", .8],
+  ["R-5021", 3, "Erro", "Conciliação: débito declarado sem pagamento", "Débitos informados sem pagamento ou compensação vinculada.", "Conferir guias e compensações do período", .5],
+  ["R-5022", 3, "Advertência", "Conciliação: compensação sem crédito disponível", "Compensações declaradas acima do saldo de crédito.", "Revisar o saldo de crédito utilizado", .3],
+  ["R-5101", 4, "Erro", "Conciliação: valor declarado diverge do pago", "Diferença entre o valor declarado e o efetivamente recolhido.", "Retificar a declaração ou complementar o pagamento", .25],
+  ["R-5102", 4, "Relatório", "Conciliação: resumo de débitos por código de receita", "Relatório de conferência por código de receita.", "Apenas acompanhar", .15],
+  ["R-4520", 0, "Benefício", "Receita: alíquota zero aplicável não utilizada", "Receitas tributadas que podem ter alíquota zero pela natureza do item.", "Avaliar a aplicação da alíquota zero", .4],
+];
+const ROWS = [];
+REGRAS.forEach(([cod, ob, dg, tit, msg, acao, peso]) => {
+  [2024, 2025].forEach((ano) => EMPRESAS.forEach((emp, ei) => {
+    const base = peso * 3800 * (ei === 0 ? 1.4 : ei === 1 ? .9 : .5) * (ano === 2025 ? 1.08 : 1);
+    const q = Math.round(base * (.6 + R() * .8));
+    if (q > 0) ROWS.push({ cod, regra: `${cod} · ${tit}`, obrig: OBRIG[ob], diag: dg, ano, emp, qtd: q, msg, acao });
+  }));
+});
+
+/* ---------- Estado e filtros ---------- */
+const S = { ano: "", emp: "", diags: new Set(DIAGS), obrig: "", regra: "", sort: ["qtd", -1] };
+const $ = (s) => document.querySelector(s);
+const fmt = (n) => n.toLocaleString("pt-BR");
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+EMPRESAS.forEach((e) => { const o = document.createElement("option"); o.textContent = e; $("#f-emp").appendChild(o); });
+DIAGS.forEach((d) => {
+  const l = document.createElement("label"); l.className = "chk";
+  l.innerHTML = `<input type="checkbox" checked value="${d}" id="dg-${d}"><span></span>`;
+  l.querySelector("span").textContent = d;
+  $("#f-diag").appendChild(l);
+});
+$("#f-ano").addEventListener("change", (e) => { S.ano = e.target.value; render(); });
+$("#f-emp").addEventListener("change", (e) => { S.emp = e.target.value; render(); });
+$("#f-diag").addEventListener("change", (e) => { e.target.checked ? S.diags.add(e.target.value) : S.diags.delete(e.target.value); render(); });
+$("#reset").addEventListener("click", () => {
+  Object.assign(S, { ano: "", emp: "", obrig: "", regra: "", diags: new Set(DIAGS) });
+  $("#f-ano").value = ""; $("#f-emp").value = ""; document.querySelectorAll("#f-diag input").forEach((i) => (i.checked = true));
+  render();
+});
+document.querySelectorAll("th[data-k]").forEach((th) => th.addEventListener("click", () => {
+  const k = th.dataset.k; S.sort = [k, S.sort[0] === k ? -S.sort[1] : (k === "qtd" ? -1 : 1)]; render();
+}));
+
+function base(skip) {
+  return ROWS.filter((r) => (!S.ano || r.ano == S.ano) && (!S.emp || r.emp === S.emp) && S.diags.has(r.diag)
+    && (skip === "obrig" || !S.obrig || r.obrig === S.obrig) && (skip === "regra" || !S.regra || r.regra === S.regra));
+}
+function sum(rows, key) { const m = new Map(); rows.forEach((r) => m.set(r[key], (m.get(r[key]) || 0) + r.qtd)); return m; }
+
+/* ---------- Tooltip ---------- */
+const tip = $("#tip");
+function showTip(e, value, label) {
+  tip.innerHTML = `<strong>${fmt(value)}</strong><span></span>`; tip.querySelector("span").textContent = label;
+  const r = e.target.getBoundingClientRect ? e.target.getBoundingClientRect() : { left: e.clientX, top: e.clientY, width: 0 };
+  const x = e.clientX ?? r.left + r.width / 2, y = e.clientY ?? r.top;
+  tip.style.left = Math.min(innerWidth - 290, x + 12) + "px"; tip.style.top = (y + 14) + "px"; tip.classList.add("on");
+}
+const hideTip = () => tip.classList.remove("on");
+
+/* ---------- Gráficos ---------- */
+function niceMax(v) { const p = Math.pow(10, Math.floor(Math.log10(v || 1))); return Math.ceil(v / p) * p; }
+function columns(el, data, selected, onPick) {
+  const W = 520, H = 280, L = 8, B = 58, T = 22;
+  const max = niceMax(Math.max(...data.map((d) => d[1]), 1));
+  const bw = (W - L * 2) / data.length, w = Math.min(64, bw * .62);
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Apontamentos por obrigação">`;
+  for (let i = 1; i <= 4; i++) { const y = H - B - (H - B - T) * i / 4; s += `<line class="gridline" x1="${L}" x2="${W - L}" y1="${y}" y2="${y}"/>`; }
+  data.forEach(([k, v], i) => {
+    const h = Math.max(v ? 2 : 0, (H - B - T) * v / max), x = L + bw * i + (bw - w) / 2, y = H - B - h, r = Math.min(4, h / 2);
+    const dim = selected && selected !== k ? " dim" : "";
+    s += `<path class="bar${dim}" tabindex="0" data-k="${esc(k)}" data-v="${v}" d="M${x},${H - B} V${y + r} Q${x},${y} ${x + r},${y} H${x + w - r} Q${x + w},${y} ${x + w},${y + r} V${H - B} Z"/>`;
+    s += `<text class="val" x="${x + w / 2}" y="${y - 6}" text-anchor="middle">${fmt(v)}</text>`;
+    const words = k.split(" "), lines = []; let cur = "";
+    words.forEach((wd) => { if ((cur + " " + wd).trim().length > 13) { lines.push(cur.trim()); cur = wd; } else cur += " " + wd; }); lines.push(cur.trim());
+    lines.slice(0, 3).forEach((ln, j) => (s += `<text class="lbl" x="${x + w / 2}" y="${H - B + 16 + j * 13}" text-anchor="middle">${esc(ln)}</text>`));
+  });
+  s += `<line class="baseline" x1="${L}" x2="${W - L}" y1="${H - B}" y2="${H - B}"/></svg>`;
+  el.innerHTML = s; wire(el, onPick);
+}
+function rowsChart(el, data, selected, onPick) {
+  const max = Math.max(...data.map((d) => d[1]), 1);
+  el.innerHTML = `<div class="hbars" role="list">${data.map(([k, v]) => `<div class="hrow" role="listitem">
+      <span class="hl" title="${esc(k)}">${esc(k)}</span>
+      <span class="ht"><span class="bar hb${selected && selected !== k ? " dim" : ""}" tabindex="0" data-k="${esc(k)}" data-v="${v}" style="width:${Math.max(.5, v / max * 100)}%"></span><span class="hv">${fmt(v)}</span></span>
+    </div>`).join("")}</div>`;
+  wire(el, onPick);
+}
+function wire(el, onPick) {
+  el.querySelectorAll(".bar").forEach((b) => {
+    const k = b.dataset.k, v = +b.dataset.v;
+    b.addEventListener("pointermove", (e) => showTip(e, v, k));
+    b.addEventListener("pointerleave", hideTip);
+    b.addEventListener("focus", () => { const r = b.getBoundingClientRect(); showTip({ clientX: r.right, clientY: r.top, target: b }, v, k); });
+    b.addEventListener("blur", hideTip);
+    b.addEventListener("click", () => { hideTip(); onPick(k); });
+    b.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onPick(k); } });
+  });
+}
+
+/* ---------- Render ---------- */
+function render() {
+  const rows = base();
+  const total = rows.reduce((a, r) => a + r.qtd, 0);
+  $("#s-total").textContent = fmt(total);
+  $("#s-erro").textContent = fmt(rows.filter((r) => r.diag === "Erro").reduce((a, r) => a + r.qtd, 0));
+  $("#s-regras").textContent = new Set(rows.map((r) => r.cod)).size;
+
+  const ob = sum(base("obrig"), "obrig");
+  columns($("#c-obr"), OBRIG.map((o) => [o, ob.get(o) || 0]), S.obrig, (k) => { S.obrig = S.obrig === k ? "" : k; render(); });
+  const rg = [...sum(base("regra"), "regra")].sort((a, b) => b[1] - a[1]).slice(0, 10);
+  rowsChart($("#c-regra"), rg, S.regra, (k) => { S.regra = S.regra === k ? "" : k; render(); });
+
+  const act = [S.obrig && `obrigação <b>${esc(S.obrig)}</b>`, S.regra && `regra <b>${esc(S.regra.split(" · ")[0])}</b>`].filter(Boolean);
+  $("#active").innerHTML = act.length ? "Filtrando por " + act.join(" e ") : "";
+
+  // detail table aggregated by ano + regra
+  const agg = new Map();
+  rows.forEach((r) => { const k = r.ano + r.cod; const a = agg.get(k) || { ...r, qtd: 0 }; a.qtd += r.qtd; agg.set(k, a); });
+  const [sk, dir] = S.sort;
+  const list = [...agg.values()].sort((a, b) => (a[sk] > b[sk] ? 1 : a[sk] < b[sk] ? -1 : 0) * dir);
+  $("#t-body").innerHTML = list.map((r) => `<tr><td>${r.ano}</td><td><span class="diag d-${r.diag}"><i aria-hidden="true">${ICON[r.diag]}</i>${r.diag}</span></td><td>${esc(r.regra)}</td><td class="n">${fmt(r.qtd)}</td><td class="msg">${esc(r.msg)}</td><td class="act">${esc(r.acao)}</td></tr>`).join("")
+    || `<tr><td colspan="6">Nenhum apontamento para esse recorte.</td></tr>`;
+  $("#t-total").textContent = fmt(total);
+  $("#t-hint").textContent = `${list.length} linhas. Clique no cabeçalho para ordenar.`;
+  document.querySelectorAll("th[data-k]").forEach((th) => th.setAttribute("aria-sort", th.dataset.k === sk ? (dir < 0 ? "descending" : "ascending") : "none"));
+}
+render();
+</script>
+</body>
+</html>

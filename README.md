@@ -15,6 +15,7 @@ Capa interativa do portfólio. É um pequeno planeta 3D em low-poly onde robôs 
 
 - **Nada de código-fonte.** O site não mostra trechos de código nem links para repositórios. Os projetos aparecem só como capturas de tela, protótipos para testar ou o app publicado.
 - **Prévias sem marca de empresa.** As calculadoras em `demos/` são cópias das versões reais sem logo, fonte, nome e cores da empresa onde foram usadas, com o selo "Prévia para demonstração".
+- **Painéis de BI com dados fictícios.** Os painéis em `demos/painel-*` recriam em HTML os dashboards originais. Empresas, pessoas, sistemas, códigos de regra e números são inventados.
 - **Só marcas próprias.** Aparecem apenas os meus projetos (ReformaPro, IRCSPro, Daemon Bar e os demais). Nomes e logos de outras empresas ficam de fora, inclusive nas imagens e no protótipo do jogo.
 
 | Área | Projeto | Robôs |
@@ -26,6 +27,8 @@ Capa interativa do portfólio. É um pequeno planeta 3D em low-poly onde robôs 
 | Torre de Recepção | SNNFSe (protótipo: caixa de notas) | SINAL, NSU |
 | Correio das Notas | Painel de NFs (protótipo: painel por analista) | ROTA |
 | Fortaleza Firewall | Daemon Bar (protótipo jogável) | FIREWALL, SCANNER, PATCHER |
+| Observatório Fiscal | Painel de Auditoria das Obrigações (BI em HTML, dados fictícios) | LUPA, ÍNDEX |
+| Torre do Fechamento | Painel de Performance do Fechamento (BI em HTML, dados fictícios) | TIC-TAC, META |
 | QG do Lucas | Sobre mim | (o humano) |
 | Sala de descanso | Área comum | quem estiver na pausa |
 
