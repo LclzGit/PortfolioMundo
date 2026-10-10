@@ -6,7 +6,7 @@ Capa interativa do portfólio. É um pequeno planeta 3D em low-poly onde robôs 
 
 - **Visual:** tema de atlas celeste, com azul-noite e detalhes dourados, títulos em serifa clássica e etiquetas em fonte mono. Cada área tem número e coordenadas, e o canto da tela mostra a coordenada do centro da vista.
 - **Robôs:** são redondinhos e flutuam com um jatinho. Têm rosto de tela, olhos que piscam, bochechas e sorriso.
-- **Interação:** arraste o globo para girar e use a roda do mouse ou a pinça para dar zoom.
+- **Interação:** arraste o planeta para girar e use a roda do mouse ou a pinça para dar zoom.
 - **Descanso:** os robôs vão a pé até a sala de descanso para recarregar e depois voltam ao trabalho.
 - **Abrir um projeto:** ao clicar numa área, num robô ou no nome dela, a câmera voa até lá e abre o painel do projeto. Ele tem uma captura de tela ou um **protótipo interativo com dados fictícios**, a descrição e os robôs da área.
 - **Voltar:** pelo botão, pela tecla Esc, com um clique fora ou pelo voltar do navegador.
