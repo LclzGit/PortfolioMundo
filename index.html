@@ -3,151 +3,144 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ecossistema de Agentes</title>
-<meta name="description" content="Capa de portfólio: um ecossistema de agentes de IA trabalhando em projetos ao vivo.">
+<title>Lucas Calaza — Estúdio</title>
+<meta name="description" content="Lucas Calaza — portfólio. Um estúdio de oito agentes trabalhando ao vivo.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #07080d;
-    --bg-2: #0d0f18;
-    --panel: rgba(255,255,255,0.035);
-    --line: rgba(255,255,255,0.08);
-    --text: #e8eaf2;
-    --muted: #8a8fa6;
-    --dim: #4a4f66;
-    --accent: #7c5cff;
-    --ok: #3ddc97;
-    --sans: "Space Grotesk", system-ui, sans-serif;
-    --mono: "JetBrains Mono", ui-monospace, monospace;
+    --paper: #efece4;
+    --paper-2: #e6e2d7;
+    --ink: #121212;
+    --ink-2: #5b5852;
+    --orange: #ff4f00;
+    --blue: #1d3bff;
+    --yellow: #ffc400;
+    --rule: 2px solid var(--ink);
+    --display: "Archivo", "Arial Narrow", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, monospace;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { height: 100%; }
+  html, body { background: var(--paper); color: var(--ink); }
   body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    overflow-x: hidden;
+    font-family: var(--display);
     -webkit-font-smoothing: antialiased;
-  }
-  body::before {
-    content: ""; position: fixed; inset: 0; pointer-events: none;
-    background:
-      radial-gradient(60% 50% at 70% 45%, rgba(124,92,255,0.14), transparent 70%),
-      radial-gradient(40% 40% at 15% 90%, rgba(61,220,151,0.07), transparent 70%);
-  }
-  body::after {
-    content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .5;
-    background-image:
-      linear-gradient(var(--line) 1px, transparent 1px),
-      linear-gradient(90deg, var(--line) 1px, transparent 1px);
-    background-size: 48px 48px;
-    mask-image: radial-gradient(70% 70% at 60% 45%, #000 20%, transparent 80%);
-    -webkit-mask-image: radial-gradient(70% 70% at 60% 45%, #000 20%, transparent 80%);
-  }
-
-  .wrap {
-    position: relative; z-index: 1;
+    overflow-x: hidden;
     min-height: 100vh;
-    display: grid;
-    grid-template-rows: auto 1fr;
-    padding: 24px clamp(16px, 4vw, 56px) 32px;
-    max-width: 1500px; margin: 0 auto;
+    display: flex; flex-direction: column;
+  }
+  /* paper grain */
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 5; opacity: .22; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  header {
-    display: flex; justify-content: space-between; align-items: center; gap: 16px;
-    font-family: var(--mono); font-size: 12px; color: var(--muted);
-    letter-spacing: .02em;
-  }
-  .brand { display: flex; align-items: center; gap: 10px; color: var(--text); }
-  .brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 12px var(--ok); animation: blink 2s infinite; }
-  .hdr-right { display: flex; gap: 20px; align-items: center; }
-  .hdr-right span b { color: var(--text); font-weight: 500; }
-  @keyframes blink { 50% { opacity: .35; } }
+  .page { flex: 1; display: flex; flex-direction: column; padding: 0 clamp(16px, 2.6vw, 40px); }
 
-  main {
-    display: grid;
-    grid-template-columns: minmax(320px, 0.85fr) 1.15fr;
-    gap: clamp(24px, 4vw, 64px);
-    align-items: center;
-    padding-top: 24px;
+  /* top bar */
+  .bar {
+    display: grid; grid-template-columns: 1fr auto auto auto; gap: 28px; align-items: center;
+    border-bottom: var(--rule); padding: 14px 0 12px;
+    font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .04em;
   }
+  .bar .rec::before { content: ""; display: inline-block; width: 8px; height: 8px; background: var(--orange); border-radius: 50%; margin-right: 8px; vertical-align: 1px; animation: blink 1.2s steps(2) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
 
-  .eyebrow { font-family: var(--mono); font-size: 12px; color: var(--accent); letter-spacing: .14em; text-transform: uppercase; margin-bottom: 18px; }
+  /* hero */
+  .hero {
+    display: grid; grid-template-columns: 1fr minmax(260px, 340px); gap: clamp(16px, 3vw, 48px);
+    align-items: end; padding: clamp(14px, 2vw, 26px) 0 clamp(14px, 2vw, 22px);
+    border-bottom: var(--rule);
+  }
   h1 {
-    font-size: clamp(42px, 6vw, 84px);
-    line-height: .95; letter-spacing: -0.035em; font-weight: 700;
+    font-weight: 900; font-stretch: 72%;
+    font-size: clamp(64px, 12.4vw, 196px);
+    line-height: .8; letter-spacing: -0.02em; text-transform: uppercase;
   }
-  h1 .grad {
-    background: linear-gradient(100deg, #fff 10%, #b9a8ff 55%, #6ee7c0 100%);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
+  h1 .l2 { display: block; padding-left: .55em; }
+  h1 .dot { color: var(--orange); }
+  .side { font-family: var(--mono); font-size: 13px; line-height: 1.5; }
+  .side .tag { font-family: var(--display); font-size: clamp(18px, 1.6vw, 22px); font-weight: 600; font-stretch: 90%; line-height: 1.2; margin-bottom: 18px; }
+  .side .tag em { font-style: normal; background: var(--yellow); padding: 0 4px; }
+  .kv { display: grid; grid-template-columns: auto 1fr; border-top: 1px solid var(--ink); }
+  .kv > * { border-bottom: 1px solid var(--ink); padding: 6px 0; }
+  .kv > * { display: flex; align-items: center; min-height: 32px; }
+  .kv dt { text-transform: uppercase; color: var(--ink-2); font-size: 11px; padding-right: 16px; }
+  .kv dd { justify-content: flex-end; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .flap { display: inline-flex; gap: 1px; }
+  .flap span { display: inline-block; min-width: .62em; text-align: center; background: var(--ink); color: var(--paper); padding: 1px 0; font-size: 12px; }
+  .flap span.sp { background: transparent; }
+
+  /* stations */
+  .floor {
+    flex: 1;
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-left: var(--rule);
+    margin: clamp(14px, 2vw, 22px) 0;
   }
-  .lead { margin-top: 20px; color: var(--muted); font-size: clamp(15px, 1.3vw, 18px); line-height: 1.55; max-width: 46ch; }
-  .lead b { color: var(--text); font-weight: 500; }
-
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; margin-top: 32px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
-  .stat { background: var(--bg-2); padding: 14px 16px; }
-  .stat .n { font-size: 26px; font-weight: 500; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
-  .stat .l { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 2px; }
-
-  .term {
-    margin-top: 20px; border: 1px solid var(--line); border-radius: 14px; background: rgba(10,11,18,.85);
-    backdrop-filter: blur(6px); overflow: hidden;
+  .st {
+    position: relative;
+    border-right: var(--rule); border-bottom: var(--rule);
+    padding: 14px 16px 14px;
+    display: grid; grid-template-rows: auto 1fr auto auto auto; gap: 6px;
+    min-height: 196px;
+    background: var(--paper);
+    transition: background .25s;
   }
-  .term-hd { display: flex; align-items: center; gap: 6px; padding: 10px 14px; border-bottom: 1px solid var(--line); font-family: var(--mono); font-size: 11px; color: var(--muted); }
-  .term-hd i { width: 9px; height: 9px; border-radius: 50%; background: #2a2d3d; display: inline-block; }
-  .term-hd .t { margin-left: 8px; }
-  .term-hd .live { margin-left: auto; color: var(--ok); }
-  #log { list-style: none; height: 200px; overflow: hidden; padding: 10px 14px; font-family: var(--mono); font-size: 12px; line-height: 1.75; display: flex; flex-direction: column; justify-content: flex-end; }
-  #log li { line-height: 22px; min-height: 22px; flex-shrink: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; animation: in .35s ease-out; color: var(--muted); }
-  #log li .ts { color: var(--dim); margin-right: 8px; }
-  #log li .ag { font-weight: 500; margin-right: 6px; }
-  #log li .ok { color: var(--ok); }
-  @keyframes in { from { opacity: 0; transform: translateY(6px); } }
+  .st:nth-child(-n+4) { border-top: var(--rule); }
+  .st.flash { background: var(--paper-2); }
+  .st.hub { background: var(--ink); color: var(--paper); }
+  .st.hub .role, .st.hub .meta { color: #a9a59b; }
+  .st.hub .track { background: #333; }
+  .st.hub .track i { background: var(--orange); }
 
-  main > * { min-width: 0; }
-  .stage { position: relative; aspect-ratio: 1 / 1; width: 100%; max-width: 760px; justify-self: center; }
-  .stage svg { width: 100%; height: 100%; overflow: visible; }
-  .edge { stroke: rgba(255,255,255,0.09); stroke-width: 1; fill: none; }
-  .edge.peer { stroke-dasharray: 2 5; stroke: rgba(255,255,255,0.07); }
-  .orbit { fill: none; stroke: rgba(255,255,255,0.05); stroke-dasharray: 1 6; }
-  .orbit.spin { transform-origin: 400px 400px; animation: spin 120s linear infinite; }
+  .st-top { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 11px; text-transform: uppercase; }
+  .state { padding: 2px 6px; border: 1px solid currentColor; letter-spacing: .04em; }
+  .state.done { background: var(--orange); border-color: var(--orange); color: #fff; }
+  .state.review { background: var(--yellow); border-color: var(--yellow); color: var(--ink); }
+
+  .who { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
+  .who h3 { font-weight: 900; font-stretch: 75%; font-size: clamp(28px, 2.6vw, 40px); line-height: .9; text-transform: uppercase; letter-spacing: -0.01em; }
+  .role { font-family: var(--mono); font-size: 11px; color: var(--ink-2); text-transform: uppercase; margin-top: 4px; }
+  .shape { width: 58px; height: 58px; flex: none; }
+  .shape g { transform-origin: 50% 50%; transform-box: fill-box; }
+  .st.working .shape g { animation: var(--anim, spin) 6s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes bob { 50% { transform: translateY(-5px); } }
+  @keyframes squash { 50% { transform: scale(1.12, .86); } }
+  @keyframes swing { 25% { transform: rotate(14deg); } 75% { transform: rotate(-14deg); } }
 
-  .node .halo { opacity: .0; transition: opacity .4s; }
-  .node.busy .halo { opacity: 1; animation: pulse 1.8s ease-out infinite; transform-box: fill-box; transform-origin: center; }
-  @keyframes pulse { from { transform: scale(.85); opacity: .6; } to { transform: scale(1.5); opacity: 0; } }
-  .node .core { fill: #0e1019; stroke-width: 1.5; }
-  .node .mono { font-family: var(--mono); font-size: 15px; font-weight: 500; text-anchor: middle; dominant-baseline: central; }
-  .node .name { font-family: var(--sans); font-size: 14px; font-weight: 700; letter-spacing: .08em; fill: var(--text); text-anchor: middle; }
-  .node .role { font-family: var(--mono); font-size: 10.5px; fill: var(--muted); text-anchor: middle; }
-  .node .task { font-family: var(--mono); font-size: 10px; fill: #61667f; text-anchor: middle; }
-  .node .bar-bg { fill: rgba(255,255,255,0.07); }
-  .node { cursor: default; }
-  .node:hover .core { fill: #151827; }
+  .task { font-family: var(--mono); font-size: 12.5px; line-height: 1.35; min-height: 2.7em; }
+  .task::before { content: "> "; color: var(--orange); }
+  .caret { display: inline-block; width: .55em; height: 1.05em; background: currentColor; vertical-align: -2px; margin-left: 1px; animation: blink 1s steps(2) infinite; }
+  .track { height: 8px; background: var(--paper-2); border: 1px solid currentColor; }
+  .st.hub .track { border-color: #555; }
+  .track i { display: block; height: 100%; width: 0; background: var(--ink); }
+  .meta { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--ink-2); text-transform: uppercase; font-variant-numeric: tabular-nums; }
+  .handoff { position: absolute; right: 14px; bottom: 34px; font-family: var(--mono); font-size: 11px; background: var(--blue); color: #fff; padding: 2px 6px; opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s; pointer-events: none; }
+  .handoff.on { opacity: 1; transform: none; }
 
-  .hub .core { fill: #120f22; stroke: var(--accent); stroke-width: 2; }
-  .hub .ring { fill: none; stroke: var(--accent); stroke-opacity: .35; }
-  .hub .ring.r2 { stroke-dasharray: 3 8; transform-origin: 400px 400px; animation: spin 30s linear infinite reverse; }
+  /* ticker */
+  .ticker { background: var(--orange); color: var(--ink); border-top: var(--rule); overflow: hidden; height: 40px; position: relative; }
+  .ticker-row { position: absolute; left: 0; top: 0; height: 100%; display: flex; align-items: center; white-space: nowrap; will-change: transform; }
+  .ticker-row span { font-family: var(--mono); font-size: 13px; font-weight: 500; text-transform: uppercase; padding: 0 22px; }
+  .ticker-row span::before { content: "■"; margin-right: 22px; font-size: 9px; vertical-align: 2px; }
+  .ticker-row b { font-weight: 500; background: var(--ink); color: var(--orange); padding: 1px 5px; margin-right: 6px; }
 
-  .project-chip {
-    position: absolute; left: 50%; bottom: -6px; transform: translateX(-50%);
-    font-family: var(--mono); font-size: 11px; color: var(--muted);
-    border: 1px solid var(--line); background: rgba(13,15,24,.8); border-radius: 999px; padding: 7px 14px; white-space: nowrap;
+  @media (max-width: 1100px) {
+    .floor { grid-template-columns: repeat(2, 1fr); }
+    .st:nth-child(-n+4) { border-top: none; }
+    .st:nth-child(-n+2) { border-top: var(--rule); }
+    .hero { grid-template-columns: 1fr; }
+    .bar { grid-template-columns: 1fr auto; }
+    .bar .opt { display: none; }
   }
-  .project-chip b { color: var(--text); font-weight: 500; }
-
-  @media (max-width: 980px) {
-    main { grid-template-columns: 1fr; }
-    .stage { order: -1; max-width: 560px; }
-    .hdr-right .opt { display: none; }
-  }
-  @media (max-width: 520px) {
-    .stats .n { font-size: 20px; }
-    #log { font-size: 11px; height: 160px; }
-    .node .task { display: none; }
+  @media (max-width: 560px) {
+    .floor { grid-template-columns: 1fr; }
+    .st:nth-child(2) { border-top: none; }
+    .st { min-height: 0; }
+    h1 .l2 { padding-left: .3em; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -155,269 +148,225 @@
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <div class="brand"><span class="dot"></span><span>workingagents<span style="color:var(--dim)">/ecossistema</span></span></div>
-    <div class="hdr-right">
-      <span class="opt">uptime <b id="uptime">00:00:00</b></span>
-      <span><b id="online">8</b> agentes online</span>
-      <span class="opt" id="clock">--:--</span>
+<div class="page">
+  <div class="bar">
+    <span>Lucas Calaza / Portfólio <span id="year"></span></span>
+    <span class="opt">Estúdio · 1 humano + 8 agentes</span>
+    <span class="opt" id="clock">--:--:--</span>
+    <span class="rec">Ao vivo</span>
+  </div>
+
+  <section class="hero">
+    <h1 id="name"></h1>
+    <div class="side">
+      <p class="tag">Eu dirijo um estúdio onde <em>oito agentes</em> desenham, programam, testam e publicam, e todos estão trabalhando agora.</p>
+      <dl class="kv">
+        <dt>Projeto em pauta</dt><dd><span class="flap" id="project"></span></dd>
+        <dt>Tarefas entregues</dt><dd id="s-tasks">0</dd>
+        <dt>Commits hoje</dt><dd id="s-commits">0</dd>
+        <dt>Turno</dt><dd id="uptime">00:00:00</dd>
+      </dl>
     </div>
-  </header>
+  </section>
 
-  <main>
-    <section>
-      <p class="eyebrow">// portfólio · <span id="year"></span></p>
-      <h1 id="hero-name"><span class="grad">Seu Nome</span></h1>
-      <p class="lead" id="hero-lead">
-        Eu não trabalho sozinho. Projeto, construo e coloco no ar produtos digitais
-        com um <b>time de 8 agentes de IA</b> que eu mesmo orquestro — cada um com
-        sua especialidade, todos rodando agora mesmo.
-      </p>
-
-      <div class="stats">
-        <div class="stat"><div class="n" id="s-tasks">0</div><div class="l">tarefas concluídas</div></div>
-        <div class="stat"><div class="n" id="s-commits">0</div><div class="l">commits hoje</div></div>
-        <div class="stat"><div class="n" id="s-msgs">0</div><div class="l">mensagens trocadas</div></div>
-      </div>
-
-      <div class="term" aria-live="off">
-        <div class="term-hd"><i></i><i></i><i></i><span class="t">atlas — logs</span><span class="live">● ao vivo</span></div>
-        <ul id="log"></ul>
-      </div>
-    </section>
-
-    <div class="stage">
-      <svg id="net" viewBox="0 0 800 800" role="img" aria-label="Rede de agentes de IA trocando tarefas entre si">
-        <defs>
-          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="3" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-          <radialGradient id="hubGlow">
-            <stop offset="0" stop-color="#7c5cff" stop-opacity=".45"/>
-            <stop offset="1" stop-color="#7c5cff" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <circle class="orbit spin" cx="400" cy="400" r="270"/>
-        <circle class="orbit" cx="400" cy="400" r="150"/>
-        <g id="edges"></g>
-        <g id="packets"></g>
-        <g id="nodes"></g>
-      </svg>
-      <div class="project-chip">projeto ativo: <b id="project">—</b></div>
-    </div>
-  </main>
+  <section class="floor" id="floor" aria-label="Agentes trabalhando"></section>
 </div>
 
+<div class="ticker" aria-hidden="true"><div class="ticker-row" id="ticker"></div></div>
+
 <script>
-/* ============================================================
-   CONFIGURE AQUI — seu nome, frase e projetos
-   ============================================================ */
+/* ===================== CONFIGURE AQUI ===================== */
 const CONFIG = {
-  name: "Seu Nome",
-  projects: ["Portfólio v3", "App Fintech “Cofre”", "Dashboard E-commerce", "API de Agendamentos"],
+  first: "Lucas",
+  last: "Calaza",
+  projects: ["COFRE APP", "LOJA NUVEM", "AGENDA API", "PORTFOLIO V3", "PAINEL KPI"],
 };
 
+// shape: circle | square | triangle | quarter | diamond | half | bars | ring
 const AGENTS = [
-  { id: "nova",     name: "NOVA",     mono: "Nv", role: "frontend",       color: "#5cc8ff",
-    tasks: ["componentizando o header", "animando a landing page", "ajustando layout mobile", "migrando para Tailwind", "criando dark mode", "otimizando Core Web Vitals"] },
-  { id: "forge",    name: "FORGE",    mono: "Fg", role: "backend · api",  color: "#ff9f5c",
-    tasks: ["criando rota POST /orders", "modelando schema do banco", "escrevendo migrations", "cacheando consultas no Redis", "integrando gateway de pagamento", "refatorando auth com JWT"] },
-  { id: "pixel",    name: "PIXEL",    mono: "Px", role: "ui · design",     color: "#ff6fb5",
-    tasks: ["gerando paleta de cores", "desenhando ícones", "prototipando onboarding", "revisando tipografia", "exportando assets do Figma", "testando contraste AA"] },
-  { id: "oracle",   name: "ORACLE",   mono: "Or", role: "dados · analytics", color: "#ffd84d",
-    tasks: ["analisando funil de conversão", "treinando modelo de churn", "limpando dataset de vendas", "montando dashboard de KPIs", "rodando teste A/B", "prevendo demanda semanal"] },
-  { id: "sentinel", name: "SENTINEL", mono: "St", role: "qa · segurança",  color: "#3ddc97",
-    tasks: ["rodando 214 testes e2e", "auditando dependências", "fuzzing no endpoint /login", "revisando PR #42", "checando OWASP top 10", "medindo cobertura de testes"] },
-  { id: "orbit",    name: "ORBIT",    mono: "Ob", role: "devops · cloud",  color: "#a98bff",
-    tasks: ["subindo build no CI", "deploy em staging", "configurando CDN", "escalando containers", "rotacionando secrets", "monitorando latência p95"] },
-  { id: "echo",     name: "ECHO",     mono: "Ec", role: "conteúdo · seo",  color: "#7ef0e0",
-    tasks: ["escrevendo copy da home", "otimizando meta tags", "traduzindo para EN/ES", "rascunhando post do blog", "gerando alt-text", "revisando microcopy"] },
+  { name: "Atlas",    role: "Orquestração",       shape: "ring",     color: "#ff4f00", anim: "spin", hub: true,
+    tasks: ["planejando a sprint da semana", "quebrando épico em tarefas", "priorizando o backlog", "revisando entregas do time", "sincronizando com o Lucas"] },
+  { name: "Nova",     role: "Frontend",           shape: "circle",   color: "#1d3bff", anim: "bob",
+    tasks: ["componentizando o header", "animando a landing page", "ajustando layout mobile", "criando o dark mode", "otimizando Core Web Vitals"] },
+  { name: "Forge",    role: "Backend · API",      shape: "square",   color: "#121212", anim: "spin",
+    tasks: ["criando rota POST /orders", "modelando o schema do banco", "escrevendo migrations", "cacheando consultas no Redis", "integrando gateway de pagamento"] },
+  { name: "Pixel",    role: "Design de interface", shape: "triangle", color: "#ff4f00", anim: "swing",
+    tasks: ["desenhando o onboarding", "montando a paleta de cores", "redesenhando os ícones", "revisando a tipografia", "testando contraste AA"] },
+  { name: "Oracle",   role: "Dados · Analytics",  shape: "quarter",  color: "#ffc400", anim: "spin",
+    tasks: ["analisando o funil de conversão", "treinando modelo de churn", "limpando o dataset de vendas", "montando painel de KPIs", "lendo o teste A/B"] },
+  { name: "Sentinel", role: "QA · Segurança",     shape: "diamond",  color: "#1d3bff", anim: "squash",
+    tasks: ["rodando 214 testes e2e", "auditando dependências", "fuzzing no endpoint /login", "revisando o PR #42", "medindo cobertura de testes"] },
+  { name: "Orbit",    role: "DevOps · Cloud",     shape: "half",     color: "#121212", anim: "spin",
+    tasks: ["subindo build no CI", "fazendo deploy em staging", "configurando a CDN", "escalando containers", "monitorando latência p95"] },
+  { name: "Echo",     role: "Conteúdo · SEO",     shape: "bars",     color: "#ff4f00", anim: "bob",
+    tasks: ["escrevendo a copy da home", "otimizando meta tags", "traduzindo para EN/ES", "rascunhando post do blog", "gerando alt-text das imagens"] },
 ];
-const HUB = { id: "atlas", name: "ATLAS", mono: "AT", role: "orquestrador", color: "#7c5cff" };
+/* ========================================================== */
 
-/* ============================================================ */
-const NS = "http://www.w3.org/2000/svg";
-const C = 400, R = 270;
-const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const $ = (s) => document.querySelector(s);
-const el = (tag, attrs = {}, parent) => {
-  const e = document.createElementNS(NS, tag);
-  for (const k in attrs) e.setAttribute(k, attrs[k]);
-  if (parent) parent.appendChild(e);
-  return e;
-};
-const pick = (a) => a[Math.floor(Math.random() * a.length)];
+const $ = (s, r = document) => r.querySelector(s);
+const pick = (a, not) => { let v; do { v = a[Math.floor(Math.random() * a.length)]; } while (a.length > 1 && v === not); return v; };
 const rand = (a, b) => a + Math.random() * (b - a);
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const pad = (n) => String(n).padStart(2, "0");
 
-// Hero text
-$("#hero-name").innerHTML = `<span class="grad">${CONFIG.name}</span>`;
 $("#year").textContent = new Date().getFullYear();
-$("#online").textContent = AGENTS.length + 1;
-$("#hero-lead").innerHTML = $("#hero-lead").innerHTML.replace(/time de \d+/, `time de ${AGENTS.length + 1}`);
+$("#name").innerHTML = `${CONFIG.first}<span class="l2">${CONFIG.last}<span class="dot">.</span></span>`;
 
-// Layout
-AGENTS.forEach((a, i) => {
-  const ang = -Math.PI / 2 + (i / AGENTS.length) * Math.PI * 2;
-  a.x = C + Math.cos(ang) * R;
-  a.y = C + Math.sin(ang) * R;
-  a.progress = 0; a.busy = false; a.task = "aguardando…";
-});
-HUB.x = C; HUB.y = C;
-const byId = Object.fromEntries([HUB, ...AGENTS].map((a) => [a.id, a]));
-
-// Edges
-const edgesG = $("#edges");
-AGENTS.forEach((a, i) => {
-  el("line", { class: "edge", x1: C, y1: C, x2: a.x, y2: a.y }, edgesG);
-  const b = AGENTS[(i + 1) % AGENTS.length];
-  el("line", { class: "edge peer", x1: a.x, y1: a.y, x2: b.x, y2: b.y }, edgesG);
-});
-
-// Hub node
-const nodesG = $("#nodes");
-{
-  const g = el("g", { class: "node hub busy" }, nodesG);
-  el("circle", { cx: C, cy: C, r: 110, fill: "url(#hubGlow)" }, g);
-  el("circle", { class: "ring", cx: C, cy: C, r: 72 }, g);
-  el("circle", { class: "ring r2", cx: C, cy: C, r: 86 }, g);
-  el("circle", { class: "core", cx: C, cy: C, r: 54 }, g);
-  const t = el("text", { class: "mono", x: C, y: C - 8, fill: HUB.color, style: "font-size:20px" }, g); t.textContent = HUB.mono;
-  const n = el("text", { class: "name", x: C, y: C + 16, style: "font-size:11px" }, g); n.textContent = HUB.name;
-  const r = el("text", { class: "role", x: C, y: C + 104 }, g); r.textContent = HUB.role;
+function shapeSVG(kind, c) {
+  const s = {
+    circle:   `<circle cx="30" cy="30" r="26" fill="${c}"/>`,
+    square:   `<rect x="7" y="7" width="46" height="46" fill="${c}"/>`,
+    triangle: `<polygon points="30,4 56,52 4,52" fill="${c}"/>`,
+    quarter:  `<path d="M6 54 V6 A48 48 0 0 1 54 54 Z" fill="${c}"/>`,
+    diamond:  `<polygon points="30,3 57,30 30,57 3,30" fill="${c}"/>`,
+    half:     `<path d="M4 40 A26 26 0 0 1 56 40 Z" fill="${c}"/><rect x="4" y="46" width="52" height="6" fill="${c}"/>`,
+    bars:     `<rect x="6" y="8" width="10" height="44" fill="${c}"/><rect x="25" y="20" width="10" height="32" fill="${c}"/><rect x="44" y="32" width="10" height="20" fill="${c}"/>`,
+    ring:     `<circle cx="30" cy="30" r="22" fill="none" stroke="${c}" stroke-width="8"/><circle cx="30" cy="8" r="6" fill="#efece4"/>`,
+  }[kind];
+  return `<svg class="shape" viewBox="0 0 60 60" aria-hidden="true"><g>${s}</g></svg>`;
 }
 
-// Agent nodes
-AGENTS.forEach((a) => {
-  const g = el("g", { class: "node" }, nodesG);
-  const below = a.y >= C - 10;
-  el("circle", { class: "halo", cx: a.x, cy: a.y, r: 34, fill: "none", stroke: a.color, "stroke-width": 1.5 }, g);
-  el("circle", { class: "core", cx: a.x, cy: a.y, r: 30, stroke: a.color }, g);
-  const m = el("text", { class: "mono", x: a.x, y: a.y, fill: a.color }, g); m.textContent = a.mono;
-  const ly = below ? a.y + 52 : a.y - 92;
-  const nm = el("text", { class: "name", x: a.x, y: ly }, g); nm.textContent = a.name;
-  const rl = el("text", { class: "role", x: a.x, y: ly + 15 }, g); rl.textContent = a.role;
-  el("rect", { class: "bar-bg", x: a.x - 40, y: ly + 23, width: 80, height: 3, rx: 1.5 }, g);
-  a.barEl = el("rect", { x: a.x - 40, y: ly + 23, width: 0, height: 3, rx: 1.5, fill: a.color }, g);
-  a.taskEl = el("text", { class: "task", x: a.x, y: ly + 40 }, g);
-  a.taskEl.textContent = a.task;
-  a.g = g;
-  const title = el("title", {}, g); title.textContent = `${a.name} — ${a.role}`;
+// Build stations
+const floor = $("#floor");
+AGENTS.forEach((a, i) => {
+  const el = document.createElement("article");
+  el.className = "st working" + (a.hub ? " hub" : "");
+  el.style.setProperty("--anim", a.anim);
+  el.innerHTML = `
+    <div class="st-top"><span>${pad(i)}</span><span class="state">Trabalhando</span></div>
+    <div class="who"><div><h3>${a.name}</h3><p class="role">${a.role}</p></div>${shapeSVG(a.shape, a.color)}</div>
+    <p class="task"><span class="txt"></span><span class="caret"></span></p>
+    <div class="track"><i></i></div>
+    <div class="meta"><span class="proj"></span><span class="pct">0%</span></div>
+    <span class="handoff"></span>`;
+  floor.appendChild(el);
+  Object.assign(a, {
+    el, stateEl: $(".state", el), txtEl: $(".txt", el), barEl: $(".track i", el),
+    pctEl: $(".pct", el), projEl: $(".proj", el), hoEl: $(".handoff", el),
+    progress: 0, typed: 0, phase: "idle",
+  });
 });
-
-// Packets
-const packetsG = $("#packets");
-const packets = [];
-function send(from, to, color) {
-  const dot = el("circle", { r: 3.5, fill: color, filter: "url(#glow)" }, packetsG);
-  packets.push({ from, to, t: 0, speed: rand(0.6, 0.9), dot });
-  stats.msgs++;
-}
+const hub = AGENTS[0];
+const crew = AGENTS.slice(1);
 
 // Stats
-const stats = { tasks: 128, commits: 17, msgs: 2041 };
-const statEls = { tasks: $("#s-tasks"), commits: $("#s-commits"), msgs: $("#s-msgs") };
-const shown = { tasks: 0, commits: 0, msgs: 0 };
+const stats = { tasks: 1284, commits: 17 };
+const shown = { tasks: stats.tasks - 40, commits: 0 };
 
-// Log
-const logEl = $("#log");
-function log(agent, html) {
-  const li = document.createElement("li");
-  const ts = new Date().toLocaleTimeString("pt-BR", { hour12: false });
-  li.innerHTML = `<span class="ts">${ts}</span><span class="ag" style="color:${agent.color}">${agent.name}</span>${html}`;
-  logEl.appendChild(li);
-  while (logEl.children.length > 12) logEl.firstChild.remove();
+// Split-flap project board
+const flapEl = $("#project");
+const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+let project = "";
+function setProject(text) {
+  project = text;
+  const len = Math.max(text.length, 10);
+  flapEl.innerHTML = "";
+  [...text.padEnd(len, " ")].forEach((ch, i) => {
+    const s = document.createElement("span");
+    if (ch === " ") { s.className = "sp"; s.innerHTML = "&nbsp;"; flapEl.appendChild(s); return; }
+    flapEl.appendChild(s);
+    if (reduce) { s.textContent = ch; return; }
+    let n = 6 + i * 2;
+    const t = setInterval(() => {
+      s.textContent = --n <= 0 ? ch : GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+      if (n <= 0) clearInterval(t);
+    }, 45);
+  });
+  AGENTS.forEach((a) => (a.projEl.textContent = text));
+  push(`<b>ATLAS</b>abriu sprint: ${text}`);
 }
 
-// Project rotation
-let projIdx = 0;
-function nextProject() {
-  const p = CONFIG.projects[projIdx++ % CONFIG.projects.length];
-  $("#project").textContent = p;
-  log(HUB, `abriu sprint no projeto <b style="color:var(--text)">${p}</b>`);
+// Ticker
+const tickerEl = $("#ticker");
+let tickX = 0;
+const queue = [];
+function push(html) { queue.push(html); }
+function fillTicker() {
+  while (tickerEl.scrollWidth + tickX < innerWidth * 2) {
+    const s = document.createElement("span");
+    const a = pick(crew);
+    s.innerHTML = queue.shift() || `<b>${a.name}</b>${pick(a.tasks)}`;
+    tickerEl.appendChild(s);
+  }
 }
 
 // Agent lifecycle
-function assign(a) {
-  a.task = pick(a.tasks);
-  a.progress = 0;
-  a.busy = true;
-  a.rate = rand(0.07, 0.18);
-  a.taskEl.textContent = a.task.length > 26 ? a.task.slice(0, 25) + "…" : a.task;
-  a.g.classList.add("busy");
-  send(HUB, a, HUB.color);
-  log(HUB, `→ delegou para ${a.name}: ${a.task}`);
+function start(a) {
+  a.task = pick(a.tasks, a.task);
+  a.phase = "work";
+  a.progress = 0; a.typed = 0;
+  a.rate = rand(0.06, 0.14);
+  a.el.classList.add("working");
+  a.stateEl.className = "state"; a.stateEl.textContent = "Trabalhando";
 }
-function complete(a) {
-  a.busy = false;
-  a.g.classList.remove("busy");
-  a.taskEl.textContent = "✓ " + (a.task.length > 24 ? a.task.slice(0, 23) + "…" : a.task);
-  send(a, HUB, a.color);
-  stats.tasks++;
-  if (Math.random() < 0.55) stats.commits++;
-  log(a, `<span class="ok">✓</span> ${a.task}`);
-  // occasional peer handoff
-  if (Math.random() < 0.4) {
-    const i = AGENTS.indexOf(a);
-    const peer = AGENTS[(i + (Math.random() < 0.5 ? 1 : AGENTS.length - 1)) % AGENTS.length];
-    setTimeout(() => { send(a, peer, a.color); log(a, `↔ passou contexto para ${peer.name}`); }, 600);
-  }
-  setTimeout(() => assign(a), rand(1500, 4000));
+function finish(a) {
+  a.phase = "review";
+  a.stateEl.className = "state review"; a.stateEl.textContent = "Em revisão";
+  setTimeout(() => {
+    a.phase = "done";
+    a.el.classList.remove("working");
+    a.stateEl.className = "state done"; a.stateEl.textContent = "Entregue";
+    stats.tasks++;
+    if (Math.random() < 0.6) stats.commits++;
+    push(`<b>${a.name}</b>entregou: ${a.task}`);
+    if (!a.hub && Math.random() < 0.45) handoff(a, pick(crew, a));
+    setTimeout(() => start(a), rand(1800, 3500));
+  }, rand(900, 1600));
+}
+function handoff(from, to) {
+  to.hoEl.textContent = `← contexto de ${from.name}`;
+  to.hoEl.classList.add("on"); to.el.classList.add("flash");
+  setTimeout(() => { to.hoEl.classList.remove("on"); to.el.classList.remove("flash"); }, 2200);
+  push(`<b>${from.name}</b>passou contexto para ${to.name}`);
 }
 
-// Main loop
+// Loop
 let last = performance.now();
 function frame(now) {
-  const dt = Math.min(0.05, (now - last) / 1000);
-  last = now;
-
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
   AGENTS.forEach((a) => {
-    if (!a.busy) return;
+    if (a.phase !== "work") return;
     a.progress = Math.min(1, a.progress + a.rate * dt);
-    a.barEl.setAttribute("width", (80 * a.progress).toFixed(1));
-    if (a.progress >= 1) complete(a);
+    a.typed = Math.min(a.task.length, a.typed + dt * 22);
+    a.txtEl.textContent = a.task.slice(0, Math.floor(a.typed));
+    a.barEl.style.width = (a.progress * 100).toFixed(1) + "%";
+    a.pctEl.textContent = Math.floor(a.progress * 100) + "%";
+    if (a.progress >= 1) finish(a);
   });
-
-  for (let i = packets.length - 1; i >= 0; i--) {
-    const p = packets[i];
-    p.t += p.speed * dt;
-    const k = p.t < 1 ? 1 - Math.pow(1 - p.t, 2) : 1;
-    p.dot.setAttribute("cx", p.from.x + (p.to.x - p.from.x) * k);
-    p.dot.setAttribute("cy", p.from.y + (p.to.y - p.from.y) * k);
-    if (p.t >= 1) { p.dot.remove(); packets.splice(i, 1); }
-  }
-
   for (const k in shown) {
-    shown[k] += (stats[k] - shown[k]) * Math.min(1, dt * 4);
-    statEls[k].textContent = Math.round(shown[k]).toLocaleString("pt-BR");
+    shown[k] += (stats[k] - shown[k]) * Math.min(1, dt * 3);
+    $("#s-" + k).textContent = Math.round(shown[k]).toLocaleString("pt-BR");
   }
+  tickX -= dt * 70;
+  const first = tickerEl.firstElementChild;
+  if (first && first.offsetWidth < -tickX) { tickX += first.offsetWidth; first.remove(); }
+  fillTicker();
+  tickerEl.style.transform = `translateX(${tickX}px)`;
   requestAnimationFrame(frame);
 }
 
-// Clock / uptime
-const start = Date.now() - 1000 * 60 * 60 * 3 - 1000 * 60 * 27;
+// Clock
+const shiftStart = Date.now() - (3 * 3600 + 27 * 60) * 1000;
 function tick() {
-  const s = Math.floor((Date.now() - start) / 1000);
-  const pad = (n) => String(n).padStart(2, "0");
+  const s = Math.floor((Date.now() - shiftStart) / 1000);
   $("#uptime").textContent = `${pad(Math.floor(s / 3600))}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`;
-  $("#clock").textContent = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+  $("#clock").textContent = new Date().toLocaleTimeString("pt-BR", { hour12: false });
 }
 
 // Boot
 tick(); setInterval(tick, 1000);
-nextProject(); setInterval(nextProject, 45000);
-AGENTS.forEach((a, i) => {
-  a.progress = Math.random() * 0.7;
-  a.task = pick(a.tasks);
-  a.busy = true; a.rate = rand(0.07, 0.18);
-  a.taskEl.textContent = a.task.length > 26 ? a.task.slice(0, 25) + "…" : a.task;
-  a.g.classList.add("busy");
-  a.barEl.setAttribute("width", (80 * a.progress).toFixed(1));
-});
+let pi = 0;
+setProject(CONFIG.projects[pi++]);
+setInterval(() => setProject(CONFIG.projects[pi++ % CONFIG.projects.length]), 40000);
+AGENTS.forEach((a) => { start(a); a.progress = rand(0.05, 0.8); a.typed = a.task.length; });
+fillTicker();
 if (reduce) {
-  for (const k in stats) statEls[k].textContent = stats[k].toLocaleString("pt-BR");
-  AGENTS.slice(0, 5).forEach((a) => log(a, `<span class="ok">✓</span> ${pick(a.tasks)}`));
+  AGENTS.forEach((a) => {
+    a.txtEl.textContent = a.task;
+    a.barEl.style.width = Math.round(a.progress * 100) + "%";
+    a.pctEl.textContent = Math.round(a.progress * 100) + "%";
+  });
+  for (const k in stats) $("#s-" + k).textContent = stats[k].toLocaleString("pt-BR");
 } else {
   requestAnimationFrame(frame);
 }
