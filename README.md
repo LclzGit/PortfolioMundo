@@ -14,14 +14,15 @@ Capa interativa do portfólio. É um pequeno planeta 3D em low-poly onde robôs 
 ## Regras de conteúdo
 
 - **Nada de código-fonte.** O site não mostra trechos de código nem links para repositórios. Os projetos aparecem só como capturas de tela, protótipos para testar ou o app publicado.
+- **Prévias sem marca de empresa.** As calculadoras em `demos/` são cópias das versões reais sem logo, fonte, nome e cores da empresa onde foram usadas, com o selo "Prévia para demonstração".
 - **Só marcas próprias.** Aparecem apenas os meus projetos (ReformaPro, IRCSPro, Daemon Bar e os demais). Nomes e logos de outras empresas ficam de fora, inclusive nas imagens e no protótipo do jogo.
 
 | Área | Projeto | Robôs |
 |---|---|---|
 | Biblioteca das Leis | ReformaPro | LEX, NORMA |
 | Arquivo do IR | IRCSPro | IRIS |
-| Fábrica de Preços | Calculadora da Reforma Tributária | PRISMA, CBS-9 |
-| Balança do ICMS | Calculadora & Apuração DIFAL (protótipo: simulador) | DELTA |
+| Fábrica de Preços | Calculadora da Reforma Tributária (prévia em `demos/`) | PRISMA, CBS-9 |
+| Balança do ICMS | Calculadora & Apuração DIFAL (prévias em `demos/`) | DELTA |
 | Torre de Recepção | SNNFSe (protótipo: caixa de notas) | SINAL, NSU |
 | Correio das Notas | Painel de NFs (protótipo: painel por analista) | ROTA |
 | Fortaleza Firewall | Daemon Bar (protótipo jogável) | FIREWALL, SCANNER, PATCHER |

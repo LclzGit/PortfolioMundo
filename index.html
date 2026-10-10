@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lucas Calaza · Planeta</title>
-<meta name="description" content="Lucas Calaza: um planeta onde robôs trabalham nos meus projetos reais. Arraste o globo e clique numa área para abrir o projeto.">
+<meta name="description" content="Lucas Calaza: um planeta onde robôs trabalham nos meus projetos reais. Arraste o planeta e clique numa área para abrir o projeto.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Martian+Mono:wght@300;400&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
@@ -232,7 +232,7 @@
     <div class="eyebrow">Atlas de projetos · 2026</div>
     <h1>Lucas <em>Calaza</em></h1>
     <div class="rule"></div>
-    <p>Um pequeno planeta onde meus <b>robôs</b> tocam os <b>meus projetos reais</b>. Gire o globo, aproxime e escolha um destino.</p>
+    <p>Um pequeno planeta onde meus <b>robôs</b> tocam os <b>meus projetos reais</b>. Gire o planeta, aproxime e escolha um destino.</p>
   </div>
   <div class="readout">
     <div class="coord"><span>Centro da vista</span><b id="coord">—</b></div>
@@ -303,14 +303,15 @@ const AREAS = [
       "Decompõe o preço atual em cada tributo embutido e projeta a transição com o novo preço e a redução obtida",
       "Composição de tributos editável: extinto → CBS, extinto → IBS ou mantido (CPRB, INSS)",
       "<b>Leitura de notas fiscais</b> (NF-e e NFS-e), com consolidação de várias notas e exportação em PDF",
+      "Modo <b>Conferir proposta</b>: compara o bruto proposto pelo fornecedor com o bruto justo pós-reforma",
     ],
     stack: ["JavaScript", "Leitura de NF-e/NFS-e", "Página única"],
-    img: "assets/img/calc-reforma.jpg", alt: "Calculadora da Reforma Tributária com a composição de tributos editável",
-    links: [],
+    img: "assets/img/calc-reforma.jpg", alt: "Calculadora da Reforma Tributária com os parâmetros da operação e a composição de tributos",
+    links: [["Abrir prévia", "demos/calculadora-reforma/", true]],
     log: ["decompondo preço de 2026", "PIS/COFINS → CBS (2027)", "ICMS/ISS → IBS (2029–33)", "CPRB: mantida", "somando 12 notas", "projeção 2033 pronta"],
   },
   {
-    id: "difal", title: "Calculadora & Apuração DIFAL", short: "DIFAL", place: "Balança do ICMS", color: "#ff6b6b", lat: -50, lon: 14, build: "scale", proto: "difal",
+    id: "difal", title: "Calculadora & Apuração DIFAL", short: "DIFAL", place: "Balança do ICMS", color: "#ff6b6b", lat: -50, lon: 14, build: "scale",
     robots: [["DELTA", "calcula item a item"]],
     tags: [["Calculadora"], ["Uso interno", "warn"]],
     lede: "Ferramentas para calcular e apurar o diferencial de alíquota do ICMS a partir das notas fiscais.",
@@ -320,7 +321,8 @@ const AREAS = [
       "Tela de apuração para consolidar o período",
     ],
     stack: ["JavaScript", "NF-e", "ICMS"],
-    links: [],
+    img: "assets/img/difal.jpg", alt: "Calculadora DIFAL com a operação e os itens por NCM",
+    links: [["Abrir calculadora", "demos/calculadora-difal/", true], ["Abrir apuração", "demos/apuracao-difal/"]],
     log: ["lote de 38 notas", "item 3: produtos + IPI + frete", "NCM fora da base: ignorado", "ICMS destino − origem", "FCP aplicado", "apuração 08/2026 fechada"],
   },
   {
@@ -364,7 +366,7 @@ const AREAS = [
     ],
     stack: ["JavaScript", "Canvas", "Pixel art", "Game design"],
     img: "assets/img/daemonbar.jpg", imgPos: "top center", alt: "Daemon Bar v1.27: esquadrão em pixel art enfrentando vírus na barra de tarefas",
-    links: [["Jogar protótipo", "demos/daemon-bar/", true]],
+    links: [["Jogar prévia", "demos/daemon-bar/", true]],
     log: ["setor C:\\TEMP · fase 1-3", "worm eliminado +12 KB", "SCANNER: trojan à vista", "loot: módulo Zero-Day", "chefe: RANSOMWARE", "economia de 168 h ok"],
   },
   {
@@ -534,7 +536,7 @@ function fillPanel(a) {
   panel.style.setProperty("--c", a.color);
   const tags = a.tags.map(([t, k]) => `<span class="${k || ""}">${esc(t)}</span>`).join("");
   const shot = a.img
-    ? `<figure class="shot"><div><img src="${a.img}" alt="${esc(a.alt)}" style="object-position:${a.imgPos || "top center"}"></div></figure><div class="cap">Prancha ${no} · captura de tela</div>`
+    ? `<figure class="shot"><div><img src="${a.img}" alt="${esc(a.alt)}" style="object-position:${a.imgPos || "top center"}"></div></figure><div class="cap">Prancha ${no} · captura de tela${a.links.length ? " · abra a prévia para testar" : ""}</div>`
     : a.proto ? `<div class="proto" id="proto"></div><div class="cap">Prancha ${no} · protótipo interativo</div>` : "";
   const pts = a.points.map((t) => `<li><span>${t}</span></li>`).join("");
   const tl = a.timeline ? `<div class="sec">Cronologia</div><ol class="timeline">${a.timeline.map(([w, t]) => `<li><span class="when">${w}</span><span>${t}</span></li>`).join("")}</ol>` : "";
