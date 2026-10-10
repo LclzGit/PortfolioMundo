@@ -184,6 +184,37 @@
     .lbl .s { display: none; }
     .lbl .t { font-size: 14px; }
   }
+  /* prototypes */
+  .proto { margin: 22px 0 8px; border: 1px solid var(--line); border-radius: 2px; padding: 16px; background: #090d22; }
+  .pt-head { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; font-family: var(--mono); font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+  .pt-head span:last-child { color: var(--dim); }
+  .pt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
+  .proto label { display: flex; flex-direction: column; gap: 5px; font-size: 12px; color: var(--muted); min-width: 0; }
+  .proto input, .proto select { font: 400 13px var(--mono); color: var(--ivory); background: #0f1534; border: 1px solid var(--line-2); border-radius: 2px; padding: 8px 9px; width: 100%; min-width: 0; }
+  .proto input:focus, .proto select:focus { outline: none; border-color: var(--gold); }
+  .pt-out { margin-top: 14px; border-top: 1px solid var(--line-2); display: grid; }
+  .pt-out div { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; border-bottom: 1px dashed var(--line-2); font-size: 13px; color: var(--muted); }
+  .pt-out b { font-family: var(--mono); font-weight: 400; color: var(--ivory); font-variant-numeric: tabular-nums; }
+  .pt-out .big b { font-family: var(--serif); font-size: 26px; color: var(--gold); }
+  .pt-note { margin-top: 10px; font-size: 12px; color: var(--dim); line-height: 1.5; }
+  .pt-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .pt-btn { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; padding: 9px 13px; background: var(--gold); color: var(--night); border-radius: 2px; }
+  .pt-btn:hover, .pt-btn:focus-visible { background: var(--ivory); outline: none; }
+  .pt-inline { flex-direction: row !important; align-items: center; gap: 8px !important; }
+  .pt-inline select { width: auto; }
+  .pt-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { font-family: var(--mono); font-size: 10px; padding: 3px 7px; border-radius: 2px; white-space: nowrap; }
+  .chip.ok { background: rgba(143, 214, 58, .14); color: #b5e57a; }
+  .chip.warn { background: rgba(255, 201, 61, .14); color: #ffd877; }
+  .chip.bad { background: rgba(255, 107, 107, .16); color: #ff9c9c; }
+  .pt-table { overflow-x: auto; }
+  .pt-table table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  .pt-table th { text-align: left; font-family: var(--mono); font-weight: 400; font-size: 9.5px; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); padding: 6px 8px 6px 0; border-bottom: 1px solid var(--line-2); }
+  .pt-table td { padding: 7px 8px 7px 0; border-bottom: 1px dashed var(--line-2); color: var(--ivory); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .pt-table .r { text-align: right; }
+  .pt-table tr.new td { animation: rowIn .6s ease-out; }
+  @keyframes rowIn { from { background: rgba(232, 195, 126, .12); } }
+  @media (max-width: 420px) { .pt-grid { grid-template-columns: 1fr; } }
   @media (prefers-reduced-motion: reduce) {
     .panel, .lbl, .dock, .dock button::after { transition: none; }
   }
@@ -235,93 +266,90 @@
 const AREAS = [
   {
     id: "reformapro", title: "ReformaPro", place: "Biblioteca das Leis", color: "#2ec4b6", lat: 18, lon: 4, build: "library",
-    robots: [["LEX", "indexa artigos"], ["NORMA", "baixa do Planalto"]],
+    robots: [["LEX", "indexa artigos"], ["NORMA", "busca a fonte oficial"]],
     tags: [["Destaque"], ["Plataforma de estudo"]],
     lede: "Plataforma de estudos da Reforma Tributária brasileira (IBS, CBS e Imposto Seletivo) que roda 100% no navegador.",
     points: [
       "<b>1.902 artigos</b> da LC 214/2025, LC 227/2026 e Regulamentos do CBS e do IBS, mais as Notas Técnicas da NFS-e",
       "Busca ranqueada por relevância, mapa da estrutura (Livro › Título › Capítulo) e leitor com anotações salvas no navegador",
-      "Pipeline em Python que baixa a legislação do Planalto, monta o índice e guarda versões datadas, acionado por GitHub Actions",
+      "Base atualizada automaticamente a partir da publicação oficial, com versões datadas",
     ],
-    stack: ["HTML/CSS/JS puro", "Python", "BeautifulSoup", "GitHub Actions", "GitHub Pages"],
+    stack: ["HTML/CSS/JS", "Python", "Atualização automática", "Site estático"],
     img: "assets/img/reformapro.jpg", alt: "Tela inicial do ReformaPro com os módulos Busca, Mapa e Leitor",
-    links: [["Abrir app", "https://lclzgit.github.io/reformapro/", true], ["Código", "https://github.com/LclzGit/reformapro"]],
-    log: ["GET planalto.gov.br/lcp214 200", "parse LC 214/2025 ✓", "indexando art. 138 · IBS", "nt007.json atualizado", "versão 2026-10-10 salva", "GitHub Action: build ✓", "busca 'split payment' 0,8 ms", "1.902 artigos no índice"],
+    links: [["Abrir app", "https://lclzgit.github.io/reformapro/", true]],
+    log: ["baixando LC 214/2025 da fonte oficial", "indexando art. 138 · IBS", "Nota Técnica 007 atualizada", "versão de 10/10/2026 salva", "busca 'split payment' em 0,8 ms", "1.902 artigos no índice"],
   },
   {
     id: "ircspro", title: "IRCSPro", place: "Arquivo do IR", color: "#6aa6ff", lat: 44, lon: 58, build: "archive",
-    robots: [["IRIS", "lê PDFs de normas"]],
+    robots: [["IRIS", "lê normas em PDF"]],
     tags: [["Plataforma de estudo"]],
-    lede: "Plataforma de estudos da legislação do Imposto de Renda (IRPF/IRPJ/IRRF) e da CSLL, construída sobre o framework do ReformaPro.",
+    lede: "Plataforma de estudos da legislação do Imposto de Renda (IRPF/IRPJ/IRRF) e da CSLL, construída sobre a mesma base do ReformaPro.",
     points: [
       "<b>1.113 artigos</b> de 14 normas: CF/88, CTN, DL 1.598/77, Leis 9.249, 9.430, 12.973 e outras",
-      "Pipeline PDF oficial → JSON → data.js com PyMuPDF",
-      "Anotações exportáveis em JSON, com namespace próprio para não colidir com o ReformaPro",
+      "Textos extraídos dos PDFs oficiais e organizados por Livro, Título e Capítulo",
+      "Anotações pessoais exportáveis, separadas das do ReformaPro",
     ],
-    stack: ["JavaScript", "Python", "PyMuPDF"],
+    stack: ["JavaScript", "Python", "Extração de PDF"],
     img: "assets/img/ircspro.jpg", alt: "Tela inicial do IRCSPro listando as normas indexadas",
-    links: [["Abrir app", "https://lclzgit.github.io/irpro/", true], ["Código", "https://github.com/LclzGit/IRPRO"]],
-    log: ["PyMuPDF: DL 1.598/77 p.12", "pdf_to_json → data/*.json", "build_data.py → data.js ✓", "Lei 9.430 · art. 44 ok", "14 normas carregadas", "chaves irp_ no localStorage", "busca: 'lucro presumido'"],
+    links: [["Abrir app", "https://lclzgit.github.io/irpro/", true]],
+    log: ["lendo DL 1.598/77 · p. 12", "Lei 9.430 · art. 44 ok", "14 normas carregadas", "mapa Livro › Título › Capítulo", "busca: 'lucro presumido'"],
   },
   {
     id: "calc-reforma", title: "Calculadora da Reforma Tributária", short: "Calc. Reforma", place: "Fábrica de Preços", color: "#ff9a3d", lat: -14, lon: 52, build: "factory",
     robots: [["PRISMA", "decompõe preços"], ["CBS-9", "projeta 2026–2033"]],
-    tags: [["Calculadora"], ["Código privado", "warn"]],
+    tags: [["Calculadora"], ["Uso interno", "warn"]],
     lede: "Projeta o impacto do IBS/CBS (EC 132/2023) sobre um contrato ou operação, ano a ano, de 2026 a 2033.",
     points: [
       "Decompõe o preço atual em cada tributo embutido e projeta a transição com o novo preço e a redução obtida",
       "Composição de tributos editável: extinto → CBS, extinto → IBS ou mantido (CPRB, INSS)",
-      "<b>Leitor de XML</b> de NF-e (modelo 55) e NFS-e (ABRASF), com consolidação de várias notas e exportação em PDF",
+      "<b>Leitura de notas fiscais</b> (NF-e e NFS-e), com consolidação de várias notas e exportação em PDF",
     ],
-    stack: ["JavaScript", "Parsing de XML", "Single-file"],
+    stack: ["JavaScript", "Leitura de NF-e/NFS-e", "Página única"],
     img: "assets/img/calc-reforma.jpg", alt: "Calculadora da Reforma Tributária com a composição de tributos editável",
     links: [],
-    log: ["decompondo preço de 2026", "PIS/COFINS → CBS (2027)", "ICMS/ISS → IBS (2029–33)", "CPRB: mantida", "lendo NF-e modelo 55", "somar todas: 12 notas", "projeção 2033 pronta"],
+    log: ["decompondo preço de 2026", "PIS/COFINS → CBS (2027)", "ICMS/ISS → IBS (2029–33)", "CPRB: mantida", "somando 12 notas", "projeção 2033 pronta"],
   },
   {
-    id: "difal", title: "Calculadora & Apuração DIFAL", short: "DIFAL", place: "Balança do ICMS", color: "#ff6b6b", lat: -50, lon: 14, build: "scale",
+    id: "difal", title: "Calculadora & Apuração DIFAL", short: "DIFAL", place: "Balança do ICMS", color: "#ff6b6b", lat: -50, lon: 14, build: "scale", proto: "difal",
     robots: [["DELTA", "calcula item a item"]],
     tags: [["Calculadora"], ["Uso interno", "warn"]],
-    lede: "Ferramentas para calcular e apurar o diferencial de alíquota do ICMS a partir dos XMLs das notas.",
+    lede: "Ferramentas para calcular e apurar o diferencial de alíquota do ICMS a partir das notas fiscais.",
     points: [
-      "Cálculo <b>item a item</b> lendo NF-e em lote: produtos, IPI, frete, despesas, descontos, ST e FCP",
+      "Cálculo <b>item a item</b> com as notas em lote: produtos, IPI, frete, despesas, descontos, ST e FCP",
       "Regras por NCM (itens que não integram a base) e controle de versões das regras de cálculo",
       "Tela de apuração para consolidar o período",
     ],
-    stack: ["JavaScript", "NF-e XML", "ICMS"],
-    glyph: "<NFe>\n  <det nItem=\"1\">\n    vProd + vIPI + vFrete − vDesc\n    → base DIFAL\n    → ICMS destino − ICMS origem\n  </det>\n</NFe>",
+    stack: ["JavaScript", "NF-e", "ICMS"],
     links: [],
-    log: ["lote: 38 XMLs de NF-e", "item 3: vProd+vIPI+vFrete", "NCM 21069090 fora da base", "ICMS dest − ICMS orig", "FCP aplicado", "apuração 08/2026 fechada"],
+    log: ["lote de 38 notas", "item 3: produtos + IPI + frete", "NCM fora da base: ignorado", "ICMS destino − origem", "FCP aplicado", "apuração 08/2026 fechada"],
   },
   {
-    id: "snnfse", title: "SNNFSe Python", short: "SNNFSe", place: "Torre de Recepção", color: "#8fd63a", lat: 16, lon: 128, build: "tower",
-    robots: [["SINAL", "baixa por NSU"], ["NSU", "organiza eventos"]],
-    tags: [["Automação & APIs"]],
-    lede: "Integração com a API de distribuição do Sistema Nacional da NFS-e para baixar e organizar as notas da empresa.",
+    id: "snnfse", title: "SNNFSe", short: "SNNFSe", place: "Torre de Recepção", color: "#8fd63a", lat: 16, lon: 128, build: "tower", proto: "snnfse",
+    robots: [["SINAL", "busca notas novas"], ["NSU", "organiza eventos"]],
+    tags: [["Automação"]],
+    lede: "Integração com o Sistema Nacional da NFS-e que baixa e organiza as notas de serviço da empresa.",
     points: [
-      "Autenticação com <b>certificado digital A1</b> (PFX → mTLS) e ingestão incremental por NSU",
-      "Tratamento dos eventos do leiaute nacional (cancelamento, substituição, análise fiscal) com pastas por situação",
-      "Exporta planilha Excel e gera a <b>DANFSe em PDF</b> com QR Code",
+      "Conexão segura com <b>certificado digital A1</b> e busca só das notas novas desde a última execução",
+      "Trata cancelamentos, substituições e análises fiscais, separando as notas por situação",
+      "Gera uma planilha consolidada e a <b>DANFSe em PDF</b> com QR Code",
     ],
-    stack: ["Python", "requests", "cryptography", "openpyxl", "ReportLab"],
-    glyph: "$ python src/ingest.py\n✓ certificado A1 carregado (mTLS)\n↓ NSU 1042 … 1187  (146 docs)\n  e101101  Cancelamento   → Cancelada/\n  e105102  Substituição   → Substituida/\n✓ notas.xlsx · 146 DANFSe (PDF)",
-    links: [["Código", "https://github.com/LclzGit/Snnfse-python", true]],
-    log: ["certificado A1 → mTLS ✓", "↓ NSU 1042 … 1187", "e101101 Cancelamento", "→ Cancelada/", "notas.xlsx +146 linhas", "DANFSe PDF + QR Code ✓"],
+    stack: ["Python", "Certificado A1", "Planilhas", "PDF"],
+    links: [],
+    log: ["certificado A1 validado", "146 notas novas", "1 cancelamento separado", "1 substituição separada", "planilha atualizada", "DANFSe em PDF geradas"],
   },
   {
-    id: "qive", title: "Painel de NFs × Qive", short: "Painel NFs", place: "Correio das Notas", color: "#b67cff", lat: -36, lon: 100, build: "post",
+    id: "painel-nfs", title: "Painel de NFs", short: "Painel NFs", place: "Correio das Notas", color: "#b67cff", lat: -36, lon: 100, build: "post", proto: "painel",
     robots: [["ROTA", "distribui notas"]],
-    tags: [["Automação & APIs"], ["Código privado", "warn"]],
-    lede: "Puxa as NFS-e recebidas pela API da Arquivei/Qive e distribui cada nota para o analista responsável pelo fornecedor.",
+    tags: [["Automação"], ["Uso interno", "warn"]],
+    lede: "Recebe as NFS-e emitidas contra a empresa e distribui cada nota para o analista responsável pelo fornecedor.",
     points: [
-      "Mapeamento de fornecedor (CNPJ) → analista ou grupo de analistas, configurado na própria planilha",
-      "Sinaliza notas vencidas e a vencer e mostra um dashboard com totais por analista",
-      "Notificação por e-mail (SMTP) e execução com um clique no Windows",
+      "Cada fornecedor (CNPJ) é ligado a um analista ou grupo de analistas, configurado na própria planilha",
+      "Sinaliza notas vencidas e a vencer e mostra um painel com totais por analista",
+      "Avisa cada responsável por e-mail e roda com um clique",
     ],
-    stack: ["Python", "API REST", "openpyxl", "SMTP"],
-    glyph: "Arquivei/Qive API\n   ↓  atualizar_painel_qive.py\nPainel_NFs.xlsx\n   ├ Dashboard por analista\n   ├ vencidas · a vencer (7d)\n   └ e-mail para cada responsável",
+    stack: ["Python", "API de notas", "Planilhas", "E-mail"],
     links: [],
-    log: ["GET NFS-e recebidas (ontem)", "41 notas encontradas", "CNPJ → analista: ok", "3 vencidas · 5 a vencer", "Dashboard atualizado", "e-mail → analistas ✓"],
+    log: ["41 notas recebidas ontem", "fornecedor → analista: ok", "3 vencidas · 5 a vencer", "painel atualizado", "e-mails enviados"],
   },
   {
     id: "daemon", title: "Daemon Bar", place: "Fortaleza Firewall", color: "#22c8e5", lat: 14, lon: -104, build: "fort",
@@ -330,28 +358,28 @@ const AREAS = [
     tags: [["Jogo"], ["Protótipo jogável"]],
     lede: "Idle RPG que mora na barra de tarefas. Você é o antivírus: três agentes em pixel art patrulham o seu computador caçando bugs, worms e ransomwares.",
     points: [
-      "Progressão com 5 dificuldades × 3 atos × 10 fases, loot por raridade, gacha de agentes e progresso offline",
-      "Curvas de economia calibradas com um <b>simulador de 168 h</b> escrito em Node.js",
-      "Documentos de balanceamento e plano de lançamento",
+      "Esquadrão com tanque, atirador e suporte, cada agente com retrato e animações próprias em pixel art",
+      "Chefões em arena com tela de preparação, coleção de agentes de ★1 a ★6, oficina de itens e progresso offline",
+      "Economia calibrada com uma <b>simulação de 168 horas</b> de jogo",
     ],
-    stack: ["JavaScript", "Canvas", "Pixel art", "Node.js", "Game design"],
-    img: "assets/img/daemonbar.jpg", imgPos: "bottom center", alt: "Daemon Bar: três agentes em pixel art enfrentando vírus na barra de tarefas",
-    links: [["Jogar protótipo", "demos/daemon-bar/", true], ["Código", "https://github.com/LclzGit/IdleGame"]],
-    log: ["setor C:\\TEMP · fase 1-3", "worm.exe eliminado +12 KB", "SCANNER: trojan à vista", "loot: módulo Zero-Day", "chefe: RANSOMWARE", "sim 168 h: economia ok"],
+    stack: ["JavaScript", "Canvas", "Pixel art", "Game design"],
+    img: "assets/img/daemonbar.jpg", imgPos: "top center", alt: "Daemon Bar v1.27: esquadrão em pixel art enfrentando vírus na barra de tarefas",
+    links: [["Jogar protótipo", "demos/daemon-bar/", true]],
+    log: ["setor C:\\TEMP · fase 1-3", "worm eliminado +12 KB", "SCANNER: trojan à vista", "loot: módulo Zero-Day", "chefe: RANSOMWARE", "economia de 168 h ok"],
   },
   {
     id: "lucas", title: "Lucas Calaza", short: "Sobre mim", place: "QG do Lucas", color: "#ffc93d", lat: 54, lon: -42, build: "house", about: true,
     robots: [],
-    tags: [["Humano"], ["Tributário × código"]],
+    tags: [["Humano"], ["Tributário × tecnologia"]],
     lede: "Trabalho na interseção entre <b>tributação</b> e <b>desenvolvimento</b>. A maior parte dos meus projetos nasceu de um problema real do dia a dia fiscal: estudar uma legislação enorme, calcular um imposto sem errar, ou parar de baixar e distribuir notas fiscais na mão.",
     points: [
-      "Prefiro ferramentas simples de usar e de manter: um único arquivo HTML que qualquer pessoa abre, ou um script Python que roda com um clique",
+      "Prefiro ferramentas simples de usar e de manter: uma página que qualquer pessoa abre, ou uma automação que roda com um clique",
       "Quando o assunto é imposto, os números precisam estar certos, então cada regra de cálculo é conferida com a legislação",
     ],
-    timeline: [["mai 2026", "SNNFSe Python"], ["jun 2026", "ReformaPro"], ["jul 2026", "IRCSPro · Calculadora DIFAL"], ["ago 2026", "Apuração DIFAL"], ["set 2026", "Painel NFs × Qive · Calculadora da Reforma · Daemon Bar"]],
-    stack: ["HTML/CSS/JS", "Python", "Reforma Tributária (IBS/CBS)", "ICMS / DIFAL", "IRPJ / CSLL", "NF-e", "NFS-e nacional"],
-    links: [["GitHub", "https://github.com/LclzGit", true], ["Portfólio completo", "https://lclzgit.github.io/Portf-lio/"]],
-    log: ["revisando PR do LEX", "conferindo regra com a LC", "merge ✓", "café nº 3", "testando leitor de XML", "planejando o próximo projeto"],
+    timeline: [["mai 2026", "SNNFSe"], ["jun 2026", "ReformaPro"], ["jul 2026", "IRCSPro · Calculadora DIFAL"], ["ago 2026", "Apuração DIFAL"], ["set 2026", "Painel de NFs · Calculadora da Reforma · Daemon Bar"]],
+    stack: ["JavaScript", "Python", "Reforma Tributária (IBS/CBS)", "ICMS / DIFAL", "IRPJ / CSLL", "NF-e", "NFS-e nacional"],
+    links: [["Portfólio completo", "https://lclzgit.github.io/Portf-lio/", true]],
+    log: ["revisando o trabalho do LEX", "conferindo regra com a LC", "aprovado ✓", "café nº 3", "testando a leitura de notas", "planejando o próximo projeto"],
   },
   {
     id: "pausa", title: "Sala de descanso", short: "Descanso", place: "Sala de descanso", color: "#ff8fb1", lat: -12, lon: -38, build: "lounge", rest: true,
@@ -398,6 +426,100 @@ function tickLogs(dt) {
 }
 
 /* =========================================================================
+   Protótipos interativos (dados fictícios, só para visualizar e testar)
+   ========================================================================= */
+const brl = (v) => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+const PROTOS = {
+  difal: {
+    html: `
+      <div class="pt-head"><span>Simulador de DIFAL</span><span>protótipo</span></div>
+      <div class="pt-grid">
+        <label>Produtos<input id="pd-prod" type="number" min="0" step="10" value="1000"></label>
+        <label>IPI<input id="pd-ipi" type="number" min="0" step="5" value="50"></label>
+        <label>Frete e despesas<input id="pd-frete" type="number" min="0" step="5" value="80"></label>
+        <label>Desconto<input id="pd-desc" type="number" min="0" step="5" value="30"></label>
+        <label>Alíquota interna (destino) %<input id="pd-int" type="number" min="0" max="40" step="0.5" value="18"></label>
+        <label>Alíquota interestadual %<select id="pd-inter"><option value="4">4%</option><option value="7">7%</option><option value="12" selected>12%</option></select></label>
+      </div>
+      <div class="pt-out">
+        <div><span>Base do DIFAL</span><b id="pd-base">—</b></div>
+        <div><span>Diferença de alíquota</span><b id="pd-dif">—</b></div>
+        <div class="big"><span>DIFAL a recolher</span><b id="pd-val">—</b></div>
+      </div>
+      <p class="pt-note">Cálculo simplificado (base única) para demonstração. Não substitui a apuração.</p>`,
+    init(root) {
+      const ids = ["prod", "ipi", "frete", "desc", "int", "inter"];
+      const run = () => {
+        const v = Object.fromEntries(ids.map((k) => [k, parseFloat(root.querySelector("#pd-" + k).value) || 0]));
+        const base = Math.max(0, v.prod + v.ipi + v.frete - v.desc);
+        const dif = Math.max(0, v.int - v.inter);
+        root.querySelector("#pd-base").textContent = brl(base);
+        root.querySelector("#pd-dif").textContent = dif.toLocaleString("pt-BR") + " p.p.";
+        root.querySelector("#pd-val").textContent = brl(base * dif / 100);
+      };
+      root.addEventListener("input", run); run();
+    },
+  },
+  snnfse: {
+    html: `
+      <div class="pt-head"><span>Caixa de notas de serviço</span><span>protótipo · dados fictícios</span></div>
+      <div class="pt-bar">
+        <button type="button" class="pt-btn" id="ps-sync">Buscar notas novas</button>
+        <span class="pt-chips"><span class="chip ok" id="ps-n">0 normais</span><span class="chip warn" id="ps-s">0 substituídas</span><span class="chip bad" id="ps-c">0 canceladas</span></span>
+      </div>
+      <div class="pt-table"><table><thead><tr><th>Nº</th><th>Prestador</th><th class="r">Valor</th><th>Situação</th></tr></thead><tbody id="ps-rows"></tbody></table></div>
+      <p class="pt-note">Cada busca traz só o que chegou desde a última. Os nomes e valores são inventados.</p>`,
+    init(root) {
+      const names = ["Alfa Consultoria", "Beta Sistemas", "Gama Limpeza", "Delta Engenharia", "Ômega Treinamentos", "Sigma Transportes", "Kappa Design", "Lambda Jurídico"];
+      let no = 1042; const rows = [];
+      const cnt = { ok: 0, warn: 0, bad: 0 };
+      const body = root.querySelector("#ps-rows");
+      const add = (n) => {
+        for (let i = 0; i < n; i++) {
+          const r = Math.random(), st = r < 0.75 ? ["ok", "Normal"] : r < 0.88 ? ["warn", "Substituída"] : ["bad", "Cancelada"];
+          cnt[st[0]]++;
+          rows.unshift(`<tr class="new"><td>${++no}</td><td>${names[Math.floor(Math.random() * names.length)]}</td><td class="r">${brl(300 + Math.round(Math.random() * 9500))}</td><td><span class="chip ${st[0]}">${st[1]}</span></td></tr>`);
+        }
+        body.innerHTML = rows.slice(0, 7).join("");
+        root.querySelector("#ps-n").textContent = `${cnt.ok} normais`;
+        root.querySelector("#ps-s").textContent = `${cnt.warn} substituídas`;
+        root.querySelector("#ps-c").textContent = `${cnt.bad} canceladas`;
+      };
+      root.querySelector("#ps-sync").addEventListener("click", () => add(2 + Math.floor(Math.random() * 4)));
+      add(4);
+    },
+  },
+  painel: {
+    html: `
+      <div class="pt-head"><span>Painel de notas por analista</span><span>protótipo · dados fictícios</span></div>
+      <div class="pt-bar">
+        <label class="pt-inline">Analista <select id="pp-who"><option value="">Todos</option><option>Ana</option><option>Bruno</option><option>Carla</option></select></label>
+        <span class="pt-chips"><span class="chip bad" id="pp-late">0 vencidas</span><span class="chip warn" id="pp-soon">0 a vencer</span><span class="chip ok" id="pp-ok">0 no prazo</span></span>
+      </div>
+      <div class="pt-table"><table><thead><tr><th>Fornecedor</th><th>Analista</th><th>Vencimento</th><th>Status</th></tr></thead><tbody id="pp-rows"></tbody></table></div>
+      <p class="pt-note">Na versão real, cada analista recebe por e-mail só as notas dos seus fornecedores.</p>`,
+    init(root) {
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      const data = [["Alfa Consultoria", "Ana", -3], ["Beta Sistemas", "Bruno", 2], ["Gama Limpeza", "Ana", 12], ["Delta Engenharia", "Carla", -1], ["Ômega Treinamentos", "Bruno", 5], ["Sigma Transportes", "Carla", 20], ["Kappa Design", "Ana", 6], ["Lambda Jurídico", "Bruno", 30]];
+      const run = () => {
+        const who = root.querySelector("#pp-who").value;
+        const c = { bad: 0, warn: 0, ok: 0 };
+        root.querySelector("#pp-rows").innerHTML = data.filter((d) => !who || d[1] === who).map(([f, a, dd]) => {
+          const k = dd < 0 ? ["bad", "Vencida"] : dd <= 7 ? ["warn", "A vencer"] : ["ok", "No prazo"];
+          c[k[0]]++;
+          const d = new Date(today); d.setDate(d.getDate() + dd);
+          return `<tr><td>${f}</td><td>${a}</td><td>${d.toLocaleDateString("pt-BR")}</td><td><span class="chip ${k[0]}">${k[1]}</span></td></tr>`;
+        }).join("");
+        root.querySelector("#pp-late").textContent = `${c.bad} vencidas`;
+        root.querySelector("#pp-soon").textContent = `${c.warn} a vencer`;
+        root.querySelector("#pp-ok").textContent = `${c.ok} no prazo`;
+      };
+      root.querySelector("#pp-who").addEventListener("change", run); run();
+    },
+  },
+};
+
+/* =========================================================================
    Painel do projeto
    ========================================================================= */
 const panel = $("#panel"), pScroll = $("#p-scroll");
@@ -411,9 +533,9 @@ function fillPanel(a) {
   const no = pad2(AREAS.indexOf(a) + 1);
   panel.style.setProperty("--c", a.color);
   const tags = a.tags.map(([t, k]) => `<span class="${k || ""}">${esc(t)}</span>`).join("");
-  const shotInner = a.img ? `<img src="${a.img}" alt="${esc(a.alt)}" style="object-position:${a.imgPos || "top center"}">`
-    : a.glyph ? `<pre aria-hidden="true">${esc(a.glyph)}</pre>` : "";
-  const shot = shotInner ? `<figure class="shot"><div>${shotInner}</div></figure><div class="cap">Prancha ${no} · ${a.img ? "captura de tela" : "esquema"}</div>` : "";
+  const shot = a.img
+    ? `<figure class="shot"><div><img src="${a.img}" alt="${esc(a.alt)}" style="object-position:${a.imgPos || "top center"}"></div></figure><div class="cap">Prancha ${no} · captura de tela</div>`
+    : a.proto ? `<div class="proto" id="proto"></div><div class="cap">Prancha ${no} · protótipo interativo</div>` : "";
   const pts = a.points.map((t) => `<li><span>${t}</span></li>`).join("");
   const tl = a.timeline ? `<div class="sec">Cronologia</div><ol class="timeline">${a.timeline.map(([w, t]) => `<li><span class="when">${w}</span><span>${t}</span></li>`).join("")}</ol>` : "";
   const stack = a.stack.length ? `<div class="sec">Ferramentas</div><div class="stack">${a.stack.map((t) => `<span>${esc(t)}</span>`).join("")}</div>` : "";
@@ -428,6 +550,7 @@ function fillPanel(a) {
     <ol class="pts">${pts}</ol>
     ${tl}${stack}${links}
     <div class="crew"><div class="sec">${crewTitle}</div><ul id="crew"></ul><ul class="log" id="plog"></ul></div>`;
+  if (a.proto) { const el = $("#proto"); el.innerHTML = PROTOS[a.proto].html; PROTOS[a.proto].init(el); }
   pScroll.scrollTop = 0;
   current = a;
   renderCrew(); renderLog();
@@ -857,7 +980,7 @@ function buildWorld() {
   const toGlobeVec = (area, v) => v.clone().applyQuaternion(area.group.quaternion);
 
   /* ---- arcs + data packets between projects ---- */
-  const LINKS = [["reformapro", "ircspro"], ["ircspro", "reformapro"], ["snnfse", "calc-reforma"], ["qive", "calc-reforma"], ["calc-reforma", "difal"], ["difal", "lucas"], ["daemon", "lucas"], ["reformapro", "lucas"], ["snnfse", "qive"], ["lucas", "pausa"]];
+  const LINKS = [["reformapro", "ircspro"], ["ircspro", "reformapro"], ["snnfse", "calc-reforma"], ["painel-nfs", "calc-reforma"], ["calc-reforma", "difal"], ["difal", "lucas"], ["daemon", "lucas"], ["reformapro", "lucas"], ["snnfse", "painel-nfs"], ["lucas", "pausa"]];
   const packets = [];
   LINKS.forEach(([from, to], i) => {
     const a = byId[from].dir, b = byId[to].dir, ang = a.angleTo(b);

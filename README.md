@@ -1,42 +1,35 @@
 # Lucas Calaza: o planeta dos robôs
 
-Capa interativa do portfólio. É um pequeno planeta 3D em low-poly onde robôs trabalham nos **meus projetos reais**.
+Capa interativa do portfólio. É um pequeno planeta 3D em low-poly onde robôs trabalham nos **meus projetos**.
 
-- **Visual:** tema de atlas celeste, com azul-noite e detalhes dourados. Os títulos usam **Gloock** (serifada clássica), o texto usa **Schibsted Grotesk** e as coordenadas e etiquetas usam **Martian Mono**. Cada área tem número e coordenadas, e o canto da tela mostra a coordenada do centro da vista enquanto você gira.
-- **Robôs:** são redondinhos e flutuam com um jatinho. Têm rosto de tela, olhos que piscam, bochechas e sorriso, e os do Daemon Bar usam capacete com visor.
-- **Arraste** o globo para girar (com inércia). Use a **roda do mouse** ou **pinça** para dar zoom.
-- Cada projeto é uma área com o seu prédio e os seus robôs trabalhando. Por exemplo, a biblioteca do ReformaPro tem um livro girando, a fábrica da Calculadora da Reforma solta fumaça e moedas, e a torre do SNNFSe emite sinais.
-- Na **sala de descanso** os robôs recarregam a bateria nos pads ou sentam nos bancos (com "zzz"). De tempos em tempos, um robô larga o trabalho e atravessa o planeta a pé até lá. Quando passa por cima da água, ele flutua.
-- Pacotes de dados viajam em arcos entre os projetos que se conversam.
-- **Clique numa área, num robô ou no nome dela**: a câmera voa até lá e abre o painel do projeto, com captura de tela, descrição, stack, links, quem está trabalhando e o log ao vivo. Para voltar, use **← Voltar ao planeta**, a tecla **Esc**, um clique fora ou o **voltar do navegador**. **‹ ›** (ou as setas do teclado) passam de uma área para outra.
-- A barra de baixo lista todas as áreas e funciona como atalho.
+## Como funciona
+
+- **Visual:** tema de atlas celeste, com azul-noite e detalhes dourados, títulos em serifa clássica e etiquetas em fonte mono. Cada área tem número e coordenadas, e o canto da tela mostra a coordenada do centro da vista.
+- **Robôs:** são redondinhos e flutuam com um jatinho. Têm rosto de tela, olhos que piscam, bochechas e sorriso.
+- **Interação:** arraste o globo para girar e use a roda do mouse ou a pinça para dar zoom.
+- **Descanso:** os robôs vão a pé até a sala de descanso para recarregar e depois voltam ao trabalho.
+- **Abrir um projeto:** ao clicar numa área, num robô ou no nome dela, a câmera voa até lá e abre o painel do projeto. Ele tem uma captura de tela ou um **protótipo interativo com dados fictícios**, a descrição e os robôs da área.
+- **Voltar:** pelo botão, pela tecla Esc, com um clique fora ou pelo voltar do navegador.
+
+## Regras de conteúdo
+
+- **Nada de código-fonte.** O site não mostra trechos de código nem links para repositórios. Os projetos aparecem só como capturas de tela, protótipos para testar ou o app publicado.
+- **Só marcas próprias.** Aparecem apenas os meus projetos (ReformaPro, IRCSPro, Daemon Bar e os demais). Nomes e logos de outras empresas ficam de fora, inclusive nas imagens e no protótipo do jogo.
 
 | Área | Projeto | Robôs |
 |---|---|---|
 | Biblioteca das Leis | ReformaPro | LEX, NORMA |
 | Arquivo do IR | IRCSPro | IRIS |
 | Fábrica de Preços | Calculadora da Reforma Tributária | PRISMA, CBS-9 |
-| Balança do ICMS | Calculadora & Apuração DIFAL | DELTA |
-| Torre de Recepção | SNNFSe Python | SINAL, NSU |
-| Correio das Notas | Painel de NFs × Qive | ROTA |
-| Fortaleza Firewall | Daemon Bar | FIREWALL, SCANNER, PATCHER |
+| Balança do ICMS | Calculadora & Apuração DIFAL (protótipo: simulador) | DELTA |
+| Torre de Recepção | SNNFSe (protótipo: caixa de notas) | SINAL, NSU |
+| Correio das Notas | Painel de NFs (protótipo: painel por analista) | ROTA |
+| Fortaleza Firewall | Daemon Bar (protótipo jogável) | FIREWALL, SCANNER, PATCHER |
 | QG do Lucas | Sobre mim | (o humano) |
 | Sala de descanso | Área comum | quem estiver na pausa |
 
-Cada área tem um link direto, por exemplo `index.html#/reformapro`.
+## Usar e editar
 
-## Usar
+É um site estático: `index.html` com as pastas `assets/` e `demos/`. Não precisa de build, basta publicar em qualquer hospedagem de site estático.
 
-O site é o `index.html` com as pastas `assets/` (capturas de tela) e `demos/` (o protótipo jogável do Daemon Bar). O 3D usa [three.js](https://threejs.org/) 0.128 carregado de um CDN. Não tem build: basta publicar no GitHub Pages ou abrir no navegador. Se o navegador não tiver WebGL, a barra de áreas e os painéis continuam funcionando.
-
-## Editar
-
-Tudo fica no array `AREAS`, no início do `<script>`. Cada item tem:
-
-- os textos do projeto: `title`, `lede`, `points`, `stack`, `links` e `img`;
-- a posição no planeta: `lat` e `lon`;
-- o tipo de prédio: `build`;
-- os robôs da área: `robots`;
-- as linhas do log: `log`.
-
-Os textos vieram do repositório [Portf-lio](https://github.com/LclzGit/Portf-lio).
+Para editar, tudo fica no array `AREAS`, no início do `<script>`, e os protótipos ficam em `PROTOS`.
