@@ -29,6 +29,7 @@ Capa interativa do portfólio. É um pequeno planeta 3D em low-poly onde robôs 
 | Fortaleza Firewall | Daemon Bar (protótipo jogável) | FIREWALL, SCANNER, PATCHER |
 | Observatório Fiscal | Painel de Auditoria das Obrigações (BI em HTML, dados fictícios) | LUPA, ÍNDEX |
 | Torre do Fechamento | Painel de Performance do Fechamento (BI em HTML, dados fictícios) | TIC-TAC, META |
+| Central dos Consultores | Agentes de IA: Consultor Reforma Tributária e Consultor de Doações (chat simulado) | ÁUREA, DOM |
 | QG do Lucas | Sobre mim | (o humano) |
 | Sala de descanso | Área comum | quem estiver na pausa |
 

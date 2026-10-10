@@ -112,7 +112,7 @@
 
   /* ---------- project panel ---------- */
   .panel {
-    position: fixed; z-index: 5; top: 18px; right: 18px; bottom: 18px; width: min(480px, calc(100vw - 36px));
+    position: fixed; z-index: 5; top: 18px; right: 18px; bottom: 18px; width: var(--pw);
     background: var(--panel); color: var(--ivory);
     border: 1px solid var(--line); border-radius: 4px;
     backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
@@ -169,6 +169,11 @@
   .loading.done { opacity: 0; }
   .nogl { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); z-index: 2; max-width: 360px; text-align: center; color: var(--muted); line-height: 1.6; }
 
+  :root { --pw: min(400px, calc(100vw - 36px)); }
+  /* with a panel open, the area index moves into the free space left of the panel */
+  @media (min-width: 761px) {
+    body.focused .dock { left: 18px; transform: none; max-width: calc(100vw - var(--pw) - 54px); }
+  }
   .hud > div:first-child, .hint { transition: opacity .4s; }
   body.focused .hud > div:first-child, body.focused .hint { opacity: 0; }
 
@@ -398,6 +403,20 @@ const AREAS = [
     img: "assets/img/bi-fechamento.jpg", alt: "Painel de Performance do Fechamento com dados fictícios",
     links: [["Abrir painel", "demos/painel-fechamento/", true]],
     log: ["D-1: 12 processos abertos", "folha concluída antes", "conciliação com atraso", "performance: 93%", "meta: 95%", "cobrando o último dia útil"],
+  },
+  {
+    id: "consultores", title: "Consultores de IA", short: "Agentes de IA", place: "Central dos Consultores", color: "#7fd8ff", lat: -16, lon: 170, build: "callcenter",
+    robots: [["ÁUREA", "responde sobre a Reforma"], ["DOM", "faz a triagem de doações"]],
+    tags: [["Agentes de IA"], ["Conhecimento travado"]],
+    lede: "Dois agentes de IA que respondem dúvidas de temas específicos usando só uma base de conhecimento fechada, sempre com a fonte.",
+    points: [
+      "<b>Consultor Reforma Tributária:</b> responde sobre CBS, IBS e Imposto Seletivo com base na legislação e nas notas técnicas, e analisa contratos com fornecedores: valida o valor líquido, estima o preço a partir de 2027 e redige pareceres",
+      "<b>Consultor de Doações:</b> faz a análise de primeiro nível dos contratos de doação e encaminha cada caso para o agente especialista na legislação que se aplica",
+      "Fora da base, o agente recusa e explica por quê, em vez de inventar uma resposta",
+    ],
+    stack: ["Agentes de IA", "Base de conhecimento", "Orquestração entre agentes"],
+    links: [["Conversar com os agentes", "demos/agentes-ia/", true]],
+    log: ["pergunta: o que muda em 2027?", "fonte: LC 214/2025 ✓", "contrato de doação recebido", "→ agente de incentivos", "pergunta fora da base: recusada", "parecer rascunhado"],
   },
   {
     id: "lucas", title: "Lucas Calaza", short: "Sobre mim", place: "QG do Lucas", color: "#ffc93d", lat: 54, lon: -42, build: "house", about: true,
@@ -981,6 +1000,31 @@ function buildWorld() {
         checks.forEach((b, i) => { b.position.y = 0.11 + Math.max(0, Math.sin(t * 2 - i)) * 0.15; });
       });
     },
+    callcenter(g, c) {
+      add(g, Box(1.6, 0.9, 1.1), mat(0xf1f4fb), 0, 0.45, -0.4);
+      add(g, Box(1.7, 0.1, 1.2), mat(c), 0, 0.95, -0.4);
+      add(g, Box(0.4, 0.6, 0.05), mat(0x2b3150), 0, 0.3, 0.16);
+      add(g, Cyl(0.03, 0.03, 0.7, 6), mat(0x8a93ad), 0.55, 1.35, -0.5);
+      const tip = add(g, Ball(0.08, 1), glow(c), 0.55, 1.72, -0.5);
+      // two floating speech bubbles that take turns
+      const mk = (col, x, flip) => {
+        const b = new T.Group(); b.position.set(x, 2, -0.3); g.add(b);
+        const body = add(b, Box(0.9, 0.55, 0.12), mat(col)); body.geometry = new T.BoxGeometry(0.9, 0.55, 0.12);
+        const tail = add(b, new T.ConeGeometry(0.1, 0.22, 4), mat(col), flip ? 0.25 : -0.25, -0.36, 0); tail.rotation.z = Math.PI;
+        const dots = [-0.22, 0, 0.22].map((dx) => add(b, Ball(0.06, 1), mat(0x1b2240), dx, 0, 0.08));
+        return { b, dots };
+      };
+      const A = mk(c, -0.6, false), D = mk(0xff8fb1, 0.65, true);
+      anim.push((t) => {
+        const turn = Math.floor(t / 2) % 2;
+        [A, D].forEach((x, i) => {
+          const on = turn === i;
+          x.b.scale.setScalar(on ? 1 : 0.75); x.b.position.y = 2 + (on ? Math.sin(t * 3) * 0.06 : 0);
+          x.dots.forEach((d, k) => (d.position.y = on ? Math.max(0, Math.sin(t * 8 - k)) * 0.08 : 0));
+        });
+        tip.scale.setScalar(1 + Math.sin(t * 6) * 0.3);
+      });
+    },
     lounge(g, c, a) {
       add(g, Cyl(3.1, 3.2, 0.12, 14), mat(0xd2a476), 0, 0.03, 0);
       // umbrella table
@@ -1057,7 +1101,7 @@ function buildWorld() {
   const toGlobeVec = (area, v) => v.clone().applyQuaternion(area.group.quaternion);
 
   /* ---- arcs + data packets between projects ---- */
-  const LINKS = [["difal", "auditoria"], ["auditoria", "lucas"], ["snnfse", "fechamento"], ["fechamento", "lucas"], ["reformapro", "ircspro"], ["ircspro", "reformapro"], ["snnfse", "calc-reforma"], ["painel-nfs", "calc-reforma"], ["calc-reforma", "difal"], ["difal", "lucas"], ["daemon", "lucas"], ["reformapro", "lucas"], ["snnfse", "painel-nfs"], ["lucas", "pausa"]];
+  const LINKS = [["consultores", "reformapro"], ["consultores", "lucas"], ["difal", "auditoria"], ["auditoria", "lucas"], ["snnfse", "fechamento"], ["fechamento", "lucas"], ["reformapro", "ircspro"], ["ircspro", "reformapro"], ["snnfse", "calc-reforma"], ["painel-nfs", "calc-reforma"], ["calc-reforma", "difal"], ["difal", "lucas"], ["daemon", "lucas"], ["reformapro", "lucas"], ["snnfse", "painel-nfs"], ["lucas", "pausa"]];
   const packets = [];
   LINKS.forEach(([from, to], i) => {
     const a = byId[from].dir, b = byId[to].dir, ang = a.angleTo(b);
@@ -1313,7 +1357,13 @@ function buildWorld() {
     const to = new T.Matrix4().makeBasis(W, S, new T.Vector3().crossVectors(W, S));
     const q1 = new T.Quaternion().setFromRotationMatrix(to.multiply(from.transpose()));
     const wide = innerWidth > 760;
-    tween = { q0: globe.quaternion.clone(), q1, d0: view.dist, d1: wide ? 20 : 27, x0: view.offX, x1: wide ? -2.2 : 0, y0: view.offY, y1: wide ? -7.7 : -5.6, t: 0, dur: reduce ? 0.01 : 1.4 };
+    tween = { q0: globe.quaternion.clone(), q1, d0: view.dist, d1: wide ? 20 : 27, x0: view.offX, x1: wide ? -panelShift(20) : 0, y0: view.offY, y1: wide ? -7.7 : -5.6, t: 0, dur: reduce ? 0.01 : 1.4 };
+  }
+  // world-space x shift that centres the focused area in the space left of the side panel
+  function panelShift(d) {
+    const pw = panel.getBoundingClientRect().width + 36;
+    const visW = 2 * d * Math.tan((camera.fov / 2) * Math.PI / 180) * camera.aspect;
+    return (pw / 2) / innerWidth * visW;
   }
   function unfocus() { tween = { q0: globe.quaternion.clone(), q1: globe.quaternion.clone(), d0: view.dist, d1: baseDist, x0: view.offX, x1: 0, y0: view.offY, y1: 0, t: 0, dur: reduce ? 0.01 : 1.0 }; }
 
