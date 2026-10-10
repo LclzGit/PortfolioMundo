@@ -1,34 +1,26 @@
-# Lucas Calaza: estúdio de agentes
+# Lucas Calaza: escritório de agentes
 
-Capa animada para o portfólio. Mostra um estúdio de 8 agentes trabalhando ao vivo nos projetos do Lucas.
+Capa interativa do portfólio. É um escritório em pixel art: cada mesa é um **projeto real** e tem um agente trabalhando nele, digitando no monitor.
 
-| # | Agente | Função |
-|---|--------|--------|
-| 00 | Atlas | Orquestração (distribui e revisa o trabalho) |
-| 01 | Nova | Frontend |
-| 02 | Forge | Backend · API |
-| 03 | Pixel | Design de interface |
-| 04 | Oracle | Dados · Analytics |
-| 05 | Sentinel | QA · Segurança |
-| 06 | Orbit | DevOps · Cloud |
-| 07 | Echo | Conteúdo · SEO |
+Ao **clicar numa mesa**, a câmera dá zoom no monitor e ele vira a página do projeto, com captura de tela, descrição, stack, links e o log ao vivo do agente. Dá para voltar pelo botão **← Voltar ao escritório**, pela tecla **Esc** ou pelo **voltar do navegador**. Com **◀ ▶** (ou as setas do teclado) você passa de um projeto para o outro.
 
-Cada estação digita a tarefa atual e enche a barra de progresso. Depois passa por "Em revisão" até chegar em "Entregue", e às vezes repassa o contexto para outro agente. O quadro "Projeto em pauta" troca de projeto com efeito de letreiro de aeroporto, e a faixa laranja embaixo rola o log de entregas.
+| Mesa | Agente | Projeto |
+|---|---|---|
+| 01 | LEX | ReformaPro |
+| 02 | IRIS | IRCSPro |
+| 03 | PRISMA | Calculadora da Reforma Tributária |
+| 04 | DELTA | Calculadora & Apuração DIFAL |
+| 05 | SINAL | SNNFSe Python |
+| 06 | ROTA | Painel de NFs × Qive |
+| 07 | FIREWALL | Daemon Bar |
+| 08 | LUCAS | Sobre mim |
+
+Cada projeto também tem um link direto, por exemplo `index.html#/reformapro`.
 
 ## Usar
 
-É um único arquivo, `index.html`, sem build e sem dependências. Basta abrir no navegador ou publicar no GitHub Pages, Vercel ou Netlify.
+O site é o `index.html` com a pasta `assets/` (capturas de tela) e a pasta `demos/` (o protótipo jogável do Daemon Bar). Não tem build: basta abrir no navegador ou publicar no GitHub Pages.
 
-## Personalizar
+## Editar
 
-No topo do `<script>` em `index.html`:
-
-```js
-const CONFIG = {
-  first: "Lucas",
-  last: "Calaza",
-  projects: ["COFRE APP", "LOJA NUVEM", "AGENDA API", "PORTFOLIO V3", "PAINEL KPI"],
-};
-```
-
-No array `AGENTS` você troca o nome, a função, a forma geométrica, a cor e a lista de tarefas de cada agente.
+Os projetos ficam no array `PROJECTS`, no início do `<script>`. Cada item tem o texto do projeto (`title`, `lede`, `points`, `stack`, `links`, `img`), o agente (`agent`, `job`), as cores do personagem (`look`) e as linhas que aparecem no monitor (`log`). Os textos vieram do repositório [Portf-lio](https://github.com/LclzGit/Portf-lio).

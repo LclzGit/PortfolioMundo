@@ -3,144 +3,207 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Lucas Calaza — Estúdio</title>
-<meta name="description" content="Lucas Calaza — portfólio. Um estúdio de oito agentes trabalhando ao vivo.">
+<title>Lucas Calaza · Escritório</title>
+<meta name="description" content="Lucas Calaza: um escritório em pixel art onde agentes trabalham nos meus projetos reais. Clique em uma mesa para abrir o projeto.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&family=Inter+Tight:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --paper: #efece4;
-    --paper-2: #e6e2d7;
-    --ink: #121212;
-    --ink-2: #5b5852;
-    --orange: #ff4f00;
-    --blue: #1d3bff;
-    --yellow: #ffc400;
-    --rule: 2px solid var(--ink);
-    --display: "Archivo", "Arial Narrow", sans-serif;
-    --mono: "IBM Plex Mono", ui-monospace, monospace;
+    --night: #161a2e;
+    --wall: #252c4a;
+    --wall-2: #2c355a;
+    --floor: #3a2c3a;
+    --floor-2: #45343f;
+    --wood: #b5784a;
+    --wood-2: #8a5434;
+    --wood-3: #5e3622;
+    --metal: #3d4566;
+    --bezel: #11131f;
+    --cream: #f5ead2;
+    --cream-2: #bfb59f;
+    --lamp: #ffcf5a;
+    --pixel: "Silkscreen", "Courier New", monospace;
+    --term: "VT323", ui-monospace, monospace;
+    --sans: "Inter Tight", system-ui, sans-serif;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html, body { background: var(--paper); color: var(--ink); }
-  body {
-    font-family: var(--display);
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-    min-height: 100vh;
-    display: flex; flex-direction: column;
-  }
-  /* paper grain */
-  body::before {
-    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 5; opacity: .22; mix-blend-mode: multiply;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
+  html, body { background: var(--night); color: var(--cream); }
+  body { font-family: var(--sans); min-height: 100vh; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  a { color: inherit; }
 
-  .page { flex: 1; display: flex; flex-direction: column; padding: 0 clamp(16px, 2.6vw, 40px); }
-
-  /* top bar */
-  .bar {
-    display: grid; grid-template-columns: 1fr auto auto auto; gap: 28px; align-items: center;
-    border-bottom: var(--rule); padding: 14px 0 12px;
-    font-family: var(--mono); font-size: 12px; text-transform: uppercase; letter-spacing: .04em;
+  /* ---------- office ---------- */
+  .office { min-height: 100vh; display: flex; flex-direction: column; transform-origin: 50% 50%; }
+  .top {
+    display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+    padding: clamp(18px, 3vw, 34px) clamp(16px, 3vw, 40px) clamp(14px, 2vw, 22px);
   }
-  .bar .rec::before { content: ""; display: inline-block; width: 8px; height: 8px; background: var(--orange); border-radius: 50%; margin-right: 8px; vertical-align: 1px; animation: blink 1.2s steps(2) infinite; }
-  @keyframes blink { 50% { opacity: 0; } }
-
-  /* hero */
-  .hero {
-    display: grid; grid-template-columns: 1fr minmax(260px, 340px); gap: clamp(16px, 3vw, 48px);
-    align-items: end; padding: clamp(14px, 2vw, 26px) 0 clamp(14px, 2vw, 22px);
-    border-bottom: var(--rule);
+  .top h1 {
+    font-family: var(--pixel); font-weight: 700; letter-spacing: .02em;
+    font-size: clamp(30px, 5.4vw, 68px); line-height: 1;
+    text-shadow: 4px 4px 0 #000, 4px 4px 0 #000;
   }
-  h1 {
-    font-weight: 900; font-stretch: 72%;
-    font-size: clamp(64px, 12.4vw, 196px);
-    line-height: .8; letter-spacing: -0.02em; text-transform: uppercase;
-  }
-  h1 .l2 { display: block; padding-left: .55em; }
-  h1 .dot { color: var(--orange); }
-  .side { font-family: var(--mono); font-size: 13px; line-height: 1.5; }
-  .side .tag { font-family: var(--display); font-size: clamp(18px, 1.6vw, 22px); font-weight: 600; font-stretch: 90%; line-height: 1.2; margin-bottom: 18px; }
-  .side .tag em { font-style: normal; background: var(--yellow); padding: 0 4px; }
-  .kv { display: grid; grid-template-columns: auto 1fr; border-top: 1px solid var(--ink); }
-  .kv > * { border-bottom: 1px solid var(--ink); padding: 6px 0; }
-  .kv > * { display: flex; align-items: center; min-height: 32px; }
-  .kv dt { text-transform: uppercase; color: var(--ink-2); font-size: 11px; padding-right: 16px; }
-  .kv dd { justify-content: flex-end; font-weight: 500; font-variant-numeric: tabular-nums; }
-  .flap { display: inline-flex; gap: 1px; }
-  .flap span { display: inline-block; min-width: .62em; text-align: center; background: var(--ink); color: var(--paper); padding: 1px 0; font-size: 12px; }
-  .flap span.sp { background: transparent; }
+  .top h1 span { color: var(--lamp); }
+  .top p { margin-top: 10px; color: var(--cream-2); font-size: clamp(14px, 1.3vw, 17px); max-width: 52ch; }
+  .top p b { color: var(--cream); font-weight: 600; }
+  .hud { font-family: var(--term); font-size: 20px; line-height: 1.1; text-align: right; color: var(--cream-2); }
+  .hud b { color: var(--lamp); font-weight: 400; }
 
-  /* stations */
-  .floor {
+  .room {
     flex: 1;
     display: grid; grid-template-columns: repeat(4, 1fr);
-    border-left: var(--rule);
-    margin: clamp(14px, 2vw, 22px) 0;
+    gap: 0;
+    border-top: 4px solid #000; border-bottom: 4px solid #000;
+    background: #000;
   }
-  .st {
-    position: relative;
-    border-right: var(--rule); border-bottom: var(--rule);
-    padding: 14px 16px 14px;
-    display: grid; grid-template-rows: auto 1fr auto auto auto; gap: 6px;
-    min-height: 196px;
-    background: var(--paper);
-    transition: background .25s;
+
+  .station {
+    position: relative; display: block; width: 100%; text-align: left;
+    container-type: inline-size;
+    background:
+      linear-gradient(to bottom, transparent 82%, #000 82%, #000 calc(82% + 4px), transparent calc(82% + 4px)),
+      repeating-linear-gradient(90deg, var(--floor) 0 22px, var(--floor-2) 22px 24px) bottom / 100% 18% no-repeat,
+      repeating-linear-gradient(0deg, var(--wall) 0 6px, var(--wall-2) 6px 8px);
+    outline: 2px solid #000;
+    min-height: 0;
+    padding: 0;
+    transition: filter .2s;
   }
-  .st:nth-child(-n+4) { border-top: var(--rule); }
-  .st.flash { background: var(--paper-2); }
-  .st.hub { background: var(--ink); color: var(--paper); }
-  .st.hub .role, .st.hub .meta { color: #a9a59b; }
-  .st.hub .track { background: #333; }
-  .st.hub .track i { background: var(--orange); }
+  .station:hover, .station:focus-visible { filter: brightness(1.12); }
+  .station:focus-visible { outline: 4px solid var(--lamp); outline-offset: -4px; z-index: 2; }
 
-  .st-top { display: flex; justify-content: space-between; align-items: center; font-family: var(--mono); font-size: 11px; text-transform: uppercase; }
-  .state { padding: 2px 6px; border: 1px solid currentColor; letter-spacing: .04em; }
-  .state.done { background: var(--orange); border-color: var(--orange); color: #fff; }
-  .state.review { background: var(--yellow); border-color: var(--yellow); color: var(--ink); }
+  .rig { position: relative; width: 100%; aspect-ratio: 5 / 4; }
+  .rig > * { position: absolute; }
 
-  .who { display: flex; justify-content: space-between; align-items: flex-end; gap: 10px; }
-  .who h3 { font-weight: 900; font-stretch: 75%; font-size: clamp(28px, 2.6vw, 40px); line-height: .9; text-transform: uppercase; letter-spacing: -0.01em; }
-  .role { font-family: var(--mono); font-size: 11px; color: var(--ink-2); text-transform: uppercase; margin-top: 4px; }
-  .shape { width: 58px; height: 58px; flex: none; }
-  .shape g { transform-origin: 50% 50%; transform-box: fill-box; }
-  .st.working .shape g { animation: var(--anim, spin) 6s linear infinite; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  @keyframes bob { 50% { transform: translateY(-5px); } }
-  @keyframes squash { 50% { transform: scale(1.12, .86); } }
-  @keyframes swing { 25% { transform: rotate(14deg); } 75% { transform: rotate(-14deg); } }
+  /* monitor */
+  .monitor {
+    left: 36%; width: 60%; top: 14%; height: 52%;
+    background: var(--bezel);
+    box-shadow: 0 0 0 3px #000, 0 0 40px -6px var(--c);
+    padding: 5px 5px 9px;
+  }
+  .monitor::after { /* stand */
+    content: ""; position: absolute; left: 42%; width: 16%; top: 100%; height: 7%;
+    background: var(--metal); box-shadow: 0 0 0 2px #000;
+  }
+  .screen {
+    position: relative; width: 100%; height: 100%; overflow: hidden;
+    background: #0b0e17;
+    font-family: var(--term); color: var(--c);
+    font-size: clamp(10px, 4.6cqw, 17px); line-height: 1.02;
+    padding: 4px 6px;
+    display: flex; flex-direction: column;
+  }
+  .screen::after { /* scanlines */
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.28) 0 1px, transparent 1px 3px);
+  }
+  .scr-hd { display: flex; justify-content: space-between; color: #0b0e17; background: var(--c); padding: 0 4px; margin: -4px -6px 4px; }
+  .lines { list-style: none; flex: 1; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; }
+  .lines li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: .55; }
+  .lines li:last-child { opacity: 1; }
+  .lines li:last-child::after { content: "█"; animation: blink 1s steps(2) infinite; }
+  .scr-bar { height: 4px; background: rgba(255,255,255,.12); margin-top: 4px; }
+  .scr-bar i { display: block; height: 100%; width: 0; background: var(--c); }
+  @keyframes blink { 50% { opacity: 0; } }
 
-  .task { font-family: var(--mono); font-size: 12.5px; line-height: 1.35; min-height: 2.7em; }
-  .task::before { content: "> "; color: var(--orange); }
-  .caret { display: inline-block; width: .55em; height: 1.05em; background: currentColor; vertical-align: -2px; margin-left: 1px; animation: blink 1s steps(2) infinite; }
-  .track { height: 8px; background: var(--paper-2); border: 1px solid currentColor; }
-  .st.hub .track { border-color: #555; }
-  .track i { display: block; height: 100%; width: 0; background: var(--ink); }
-  .meta { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 11px; color: var(--ink-2); text-transform: uppercase; font-variant-numeric: tabular-nums; }
-  .handoff { position: absolute; right: 14px; bottom: 34px; font-family: var(--mono); font-size: 11px; background: var(--blue); color: #fff; padding: 2px 6px; opacity: 0; transform: translateY(4px); transition: opacity .2s, transform .2s; pointer-events: none; }
-  .handoff.on { opacity: 1; transform: none; }
+  /* desk */
+  .desk { left: 20%; right: 2%; top: 70%; height: 5%; background: var(--wood); box-shadow: 0 0 0 3px #000, inset 0 -4px 0 var(--wood-2); }
+  .leg { top: 75%; bottom: 0; width: 4%; background: var(--wood-3); box-shadow: 0 0 0 2px #000; }
+  .leg.l { left: 24%; } .leg.r { right: 6%; }
+  .kbd { left: 31%; width: 20%; top: 67.2%; height: 2.8%; background: #c9cbd6; box-shadow: 0 0 0 2px #000; }
+  .mug { right: 4%; top: 61%; width: 5%; height: 9%; background: var(--mug, #e8e3d6); box-shadow: 0 0 0 2px #000; }
+  .mug::after { content: ""; position: absolute; left: 100%; top: 25%; width: 60%; height: 45%; border: 2px solid #000; border-left: 0; }
+  .steam { right: 5%; top: 47%; width: 3%; height: 12%; opacity: .5; background: repeating-linear-gradient(0deg, var(--cream) 0 3px, transparent 3px 6px); animation: steam 2s steps(3) infinite; }
+  @keyframes steam { 50% { transform: translateY(-4px); opacity: .2; } }
+  .agent { left: 1%; bottom: 0; height: 64%; image-rendering: pixelated; }
 
-  /* ticker */
-  .ticker { background: var(--orange); color: var(--ink); border-top: var(--rule); overflow: hidden; height: 40px; position: relative; }
-  .ticker-row { position: absolute; left: 0; top: 0; height: 100%; display: flex; align-items: center; white-space: nowrap; will-change: transform; }
-  .ticker-row span { font-family: var(--mono); font-size: 13px; font-weight: 500; text-transform: uppercase; padding: 0 22px; }
-  .ticker-row span::before { content: "■"; margin-right: 22px; font-size: 9px; vertical-align: 2px; }
-  .ticker-row b { font-weight: 500; background: var(--ink); color: var(--orange); padding: 1px 5px; margin-right: 6px; }
+  .plate {
+    position: relative; display: flex; justify-content: space-between; align-items: baseline; gap: 8px;
+    padding: 10px 12px 12px; background: #0f1222; border-top: 3px solid #000;
+  }
+  .plate b { font-family: var(--pixel); font-weight: 700; font-size: clamp(15px, 7cqw, 22px); color: var(--c); letter-spacing: .03em; }
+  .plate span { font-size: clamp(11px, 4.4cqw, 14px); color: var(--cream-2); text-align: right; }
+  .open-hint {
+    position: absolute; right: 8px; top: 8px; font-family: var(--term); font-size: 18px;
+    background: var(--lamp); color: #000; padding: 0 6px; box-shadow: 3px 3px 0 #000;
+    opacity: 0; transform: translateY(-4px); transition: opacity .15s, transform .15s;
+  }
+  .station:hover .open-hint, .station:focus-visible .open-hint { opacity: 1; transform: none; }
+
+  .foot { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 12px clamp(16px, 3vw, 40px) 18px; font-family: var(--term); font-size: 19px; color: var(--cream-2); }
+  .foot a { color: var(--lamp); }
+
+  /* ---------- detail (zoomed monitor) ---------- */
+  .detail {
+    position: fixed; inset: 0; z-index: 20;
+    background: #0b0e17; color: var(--cream);
+    border: clamp(8px, 1.4vw, 16px) solid var(--bezel);
+    box-shadow: inset 0 0 0 3px #000;
+    display: flex; flex-direction: column;
+    overflow: hidden;
+  }
+  .detail[hidden] { display: none; }
+  .detail::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px); }
+  .d-bar {
+    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    background: var(--c); color: #0b0e17; padding: 6px 10px;
+    font-family: var(--term); font-size: 20px;
+  }
+  .d-bar .who { margin-right: auto; }
+  .d-btn { display: inline-flex; align-items: center; gap: 6px; background: #0b0e17; color: var(--c); padding: 2px 10px; font-family: var(--term); font-size: 20px; box-shadow: 3px 3px 0 rgba(0,0,0,.45); }
+  .d-btn:hover, .d-btn:focus-visible { background: #000; outline: none; }
+  .d-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 rgba(0,0,0,.45); }
+  .d-scroll { flex: 1; overflow-y: auto; }
+  .d-body {
+    display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(20px, 3vw, 44px);
+    padding: clamp(18px, 3vw, 44px); max-width: 1320px; margin: 0 auto;
+  }
+  .d-media { display: flex; flex-direction: column; gap: 14px; }
+  .d-shot { border: 3px solid var(--c); box-shadow: 6px 6px 0 #000; background: #000; aspect-ratio: 16 / 10; overflow: hidden; }
+  .d-shot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+  .d-shot pre { height: 100%; display: grid; place-items: center; font-family: var(--term); font-size: clamp(16px, 1.8vw, 24px); color: var(--c); line-height: 1.25; padding: 20px; white-space: pre; overflow: hidden; }
+  .d-log { border: 2px dashed rgba(255,255,255,.18); padding: 10px 12px; font-family: var(--term); font-size: 19px; color: var(--c); min-height: 132px; }
+  .d-log .lbl { color: var(--cream-2); }
+  .d-log ul { list-style: none; }
+  .d-log li { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .d-info { display: flex; flex-direction: column; gap: 16px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tag { font-family: var(--term); font-size: 18px; padding: 0 8px; border: 2px solid var(--c); color: var(--c); }
+  .tag.solid { background: var(--c); color: #0b0e17; }
+  .tag.warn { border-color: var(--lamp); color: var(--lamp); }
+  .d-info h2 { font-family: var(--pixel); font-weight: 700; font-size: clamp(28px, 3.4vw, 46px); line-height: 1.05; color: var(--cream); text-shadow: 3px 3px 0 #000; }
+  .d-info .lede { font-size: clamp(16px, 1.4vw, 19px); line-height: 1.55; color: var(--cream); }
+  .d-info ul.pts { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .d-info ul.pts li { position: relative; padding-left: 22px; color: var(--cream-2); line-height: 1.5; }
+  .d-info ul.pts li::before { content: ""; position: absolute; left: 2px; top: .55em; width: 9px; height: 9px; background: var(--c); }
+  .d-info ul.pts b { color: var(--cream); font-weight: 600; }
+  .stack { display: flex; flex-wrap: wrap; gap: 6px; }
+  .stack span { font-size: 13px; padding: 3px 9px; background: rgba(255,255,255,.07); color: var(--cream-2); }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+  .act { font-family: var(--pixel); font-weight: 600; font-size: 17px; text-decoration: none; padding: 8px 16px; border: 3px solid var(--c); color: var(--c); box-shadow: 4px 4px 0 #000; }
+  .act.go { background: var(--c); color: #0b0e17; }
+  .act:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 #000; }
+  .act:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 #000; }
+  .timeline { list-style: none; border-left: 3px solid var(--c); }
+  .timeline li { padding: 0 0 12px 16px; position: relative; }
+  .timeline li::before { content: ""; position: absolute; left: -8px; top: 6px; width: 13px; height: 13px; background: var(--c); box-shadow: 0 0 0 3px #0b0e17; }
+  .timeline .when { font-family: var(--term); font-size: 18px; color: var(--cream-2); }
 
   @media (max-width: 1100px) {
-    .floor { grid-template-columns: repeat(2, 1fr); }
-    .st:nth-child(-n+4) { border-top: none; }
-    .st:nth-child(-n+2) { border-top: var(--rule); }
-    .hero { grid-template-columns: 1fr; }
-    .bar { grid-template-columns: 1fr auto; }
-    .bar .opt { display: none; }
+    .room { grid-template-columns: repeat(2, 1fr); }
   }
-  @media (max-width: 560px) {
-    .floor { grid-template-columns: 1fr; }
-    .st:nth-child(2) { border-top: none; }
-    .st { min-height: 0; }
-    h1 .l2 { padding-left: .3em; }
+  @media (max-width: 860px) {
+    .d-body { grid-template-columns: 1fr; }
+    .d-bar .who { display: none; }
+    .d-bar #prev { margin-left: auto; }
+    .hud { text-align: left; }
+  }
+  @media (max-width: 420px) {
+    .plate { flex-direction: column; gap: 2px; }
+    .plate span { text-align: left; }
   }
   @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -148,228 +211,443 @@
 </style>
 </head>
 <body>
-<div class="page">
-  <div class="bar">
-    <span>Lucas Calaza / Portfólio <span id="year"></span></span>
-    <span class="opt">Estúdio · 1 humano + 8 agentes</span>
-    <span class="opt" id="clock">--:--:--</span>
-    <span class="rec">Ao vivo</span>
-  </div>
 
-  <section class="hero">
-    <h1 id="name"></h1>
-    <div class="side">
-      <p class="tag">Eu dirijo um estúdio onde <em>oito agentes</em> desenham, programam, testam e publicam, e todos estão trabalhando agora.</p>
-      <dl class="kv">
-        <dt>Projeto em pauta</dt><dd><span class="flap" id="project"></span></dd>
-        <dt>Tarefas entregues</dt><dd id="s-tasks">0</dd>
-        <dt>Commits hoje</dt><dd id="s-commits">0</dd>
-        <dt>Turno</dt><dd id="uptime">00:00:00</dd>
-      </dl>
+<div class="office" id="office">
+  <header class="top">
+    <div>
+      <h1>LUCAS <span>CALAZA</span></h1>
+      <p>Este é o meu escritório. Cada mesa é um <b>projeto real</b> com um agente trabalhando nele agora. <b>Clique numa mesa</b> para entrar no projeto.</p>
     </div>
-  </section>
+    <div class="hud">
+      <div><b id="clock">--:--</b></div>
+      <div>7 projetos · 9 agentes</div>
+    </div>
+  </header>
 
-  <section class="floor" id="floor" aria-label="Agentes trabalhando"></section>
+  <main class="room" id="room" aria-label="Mesas do escritório"></main>
+
+  <footer class="foot">
+    <span>tributário × código · 2026</span>
+    <a href="https://github.com/LclzGit" target="_blank" rel="noopener">github.com/LclzGit ↗</a>
+  </footer>
 </div>
 
-<div class="ticker" aria-hidden="true"><div class="ticker-row" id="ticker"></div></div>
+<section class="detail" id="detail" role="dialog" aria-modal="true" aria-labelledby="d-title" hidden>
+  <div class="d-bar">
+    <button class="d-btn" id="back" type="button">← Voltar ao escritório</button>
+    <span class="who" id="d-who"></span>
+    <button class="d-btn" id="prev" type="button" aria-label="Projeto anterior">◀</button>
+    <button class="d-btn" id="next" type="button" aria-label="Próximo projeto">▶</button>
+  </div>
+  <div class="d-scroll" id="d-scroll">
+    <div class="d-body">
+      <div class="d-media">
+        <div class="d-shot" id="d-shot"></div>
+        <div class="d-log"><span class="lbl" id="d-log-lbl"></span><ul id="d-log"></ul></div>
+      </div>
+      <div class="d-info" id="d-info"></div>
+    </div>
+  </div>
+</section>
 
 <script>
-/* ===================== CONFIGURE AQUI ===================== */
-const CONFIG = {
-  first: "Lucas",
-  last: "Calaza",
-  projects: ["COFRE APP", "LOJA NUVEM", "AGENDA API", "PORTFOLIO V3", "PAINEL KPI"],
-};
-
-// shape: circle | square | triangle | quarter | diamond | half | bars | ring
-const AGENTS = [
-  { name: "Atlas",    role: "Orquestração",       shape: "ring",     color: "#ff4f00", anim: "spin", hub: true,
-    tasks: ["planejando a sprint da semana", "quebrando épico em tarefas", "priorizando o backlog", "revisando entregas do time", "sincronizando com o Lucas"] },
-  { name: "Nova",     role: "Frontend",           shape: "circle",   color: "#1d3bff", anim: "bob",
-    tasks: ["componentizando o header", "animando a landing page", "ajustando layout mobile", "criando o dark mode", "otimizando Core Web Vitals"] },
-  { name: "Forge",    role: "Backend · API",      shape: "square",   color: "#121212", anim: "spin",
-    tasks: ["criando rota POST /orders", "modelando o schema do banco", "escrevendo migrations", "cacheando consultas no Redis", "integrando gateway de pagamento"] },
-  { name: "Pixel",    role: "Design de interface", shape: "triangle", color: "#ff4f00", anim: "swing",
-    tasks: ["desenhando o onboarding", "montando a paleta de cores", "redesenhando os ícones", "revisando a tipografia", "testando contraste AA"] },
-  { name: "Oracle",   role: "Dados · Analytics",  shape: "quarter",  color: "#ffc400", anim: "spin",
-    tasks: ["analisando o funil de conversão", "treinando modelo de churn", "limpando o dataset de vendas", "montando painel de KPIs", "lendo o teste A/B"] },
-  { name: "Sentinel", role: "QA · Segurança",     shape: "diamond",  color: "#1d3bff", anim: "squash",
-    tasks: ["rodando 214 testes e2e", "auditando dependências", "fuzzing no endpoint /login", "revisando o PR #42", "medindo cobertura de testes"] },
-  { name: "Orbit",    role: "DevOps · Cloud",     shape: "half",     color: "#121212", anim: "spin",
-    tasks: ["subindo build no CI", "fazendo deploy em staging", "configurando a CDN", "escalando containers", "monitorando latência p95"] },
-  { name: "Echo",     role: "Conteúdo · SEO",     shape: "bars",     color: "#ff4f00", anim: "bob",
-    tasks: ["escrevendo a copy da home", "otimizando meta tags", "traduzindo para EN/ES", "rascunhando post do blog", "gerando alt-text das imagens"] },
+/* =========================================================================
+   Projetos (dados reais, do portfólio) + o agente que trabalha em cada um
+   ========================================================================= */
+const PROJECTS = [
+  {
+    id: "reformapro", title: "ReformaPro", color: "#2ec4b6",
+    agent: "LEX", job: "indexa a legislação", look: { hair: "#2b1d16", skin: "#e0a679", shirt: "#2ec4b6", pants: "#2a2f4a" },
+    tags: [["Destaque", "solid"], ["Plataforma de estudo"]],
+    lede: "Plataforma de estudos da Reforma Tributária brasileira (IBS, CBS e Imposto Seletivo) que roda 100% no navegador.",
+    points: [
+      "<b>1.902 artigos</b> da LC 214/2025, LC 227/2026 e Regulamentos do CBS e do IBS, mais as Notas Técnicas da NFS-e",
+      "Busca ranqueada por relevância, mapa da estrutura (Livro › Título › Capítulo) e leitor com anotações salvas no navegador",
+      "Pipeline em Python que baixa a legislação do Planalto, monta o índice e guarda versões datadas, acionado por GitHub Actions",
+    ],
+    stack: ["HTML/CSS/JS puro", "Python", "BeautifulSoup", "GitHub Actions", "GitHub Pages"],
+    img: "assets/img/reformapro.jpg", alt: "Tela inicial do ReformaPro com os módulos Busca, Mapa e Leitor",
+    links: [["Abrir app", "https://lclzgit.github.io/reformapro/", true], ["Código", "https://github.com/LclzGit/reformapro"]],
+    log: ["GET planalto.gov.br/lcp214 200", "parse LC 214/2025 ✓", "indexando art. 138 · IBS", "nt007.json atualizado", "versão 2026-10-10 salva", "GitHub Action: build ✓", "busca 'split payment' 0,8ms", "1.902 artigos no índice", "anexo separado do artigo ✓"],
+  },
+  {
+    id: "ircspro", title: "IRCSPro", color: "#7fb3ff",
+    agent: "IRIS", job: "lê PDFs de normas", look: { hair: "#c4472d", skin: "#f1c29b", shirt: "#7fb3ff", pants: "#30303a" },
+    tags: [["Plataforma de estudo"]],
+    lede: "Plataforma de estudos da legislação do Imposto de Renda (IRPF/IRPJ/IRRF) e da CSLL, construída sobre o framework do ReformaPro.",
+    points: [
+      "<b>1.113 artigos</b> de 14 normas: CF/88, CTN, DL 1.598/77, Leis 9.249, 9.430, 12.973 e outras",
+      "Pipeline PDF oficial → JSON → data.js com PyMuPDF",
+      "Anotações exportáveis em JSON, com namespace próprio para não colidir com o ReformaPro",
+    ],
+    stack: ["JavaScript", "Python", "PyMuPDF"],
+    img: "assets/img/ircspro.jpg", alt: "Tela inicial do IRCSPro listando as normas indexadas",
+    links: [["Abrir app", "https://lclzgit.github.io/irpro/", true], ["Código", "https://github.com/LclzGit/IRPRO"]],
+    log: ["PyMuPDF: DL 1.598/77 p.12", "pdf_to_json → data/*.json", "build_data.py → data.js ✓", "Lei 9.430 · art. 44 ok", "14 normas carregadas", "chaves irp_ no localStorage", "mapa Livro › Título › Cap.", "busca: 'lucro presumido'"],
+  },
+  {
+    id: "calc-reforma", title: "Calculadora da Reforma Tributária", short: "Calc. Reforma", color: "#ff9f43",
+    agent: "PRISMA", job: "decompõe preços", look: { hair: "#1b1b22", skin: "#9c6644", shirt: "#ff9f43", pants: "#3a2a4a" },
+    tags: [["Calculadora"], ["Código privado", "warn"]],
+    lede: "Projeta o impacto do IBS/CBS (EC 132/2023) sobre um contrato ou operação, ano a ano, de 2026 a 2033.",
+    points: [
+      "Decompõe o preço atual em cada tributo embutido e projeta a transição com o novo preço e a redução obtida",
+      "Composição de tributos editável: extinto → CBS, extinto → IBS ou mantido (CPRB, INSS)",
+      "<b>Leitor de XML</b> de NF-e (modelo 55) e NFS-e (ABRASF), com consolidação de várias notas e exportação em PDF",
+    ],
+    stack: ["JavaScript", "Parsing de XML", "Single-file"],
+    img: "assets/img/calc-reforma.jpg", alt: "Calculadora da Reforma Tributária com a composição de tributos editável",
+    links: [],
+    log: ["decompondo preço de 2026", "PIS/COFINS → CBS (2027)", "ICMS/ISS → IBS (2029–33)", "CPRB: mantida", "lendo NF-e modelo 55", "NFS-e ABRASF: ISS ok", "somar todas: 12 notas", "projeção 2033 pronta", "exportando PDF"],
+  },
+  {
+    id: "difal", title: "Calculadora & Apuração DIFAL", short: "DIFAL", color: "#ff6b6b",
+    agent: "DELTA", job: "calcula item a item", look: { hair: "#e8d27a", skin: "#f3c7a0", shirt: "#ff6b6b", pants: "#2a3346" },
+    tags: [["Calculadora"], ["Uso interno", "warn"]],
+    lede: "Ferramentas para calcular e apurar o diferencial de alíquota do ICMS a partir dos XMLs das notas.",
+    points: [
+      "Cálculo <b>item a item</b> lendo NF-e em lote: produtos, IPI, frete, despesas, descontos, ST e FCP",
+      "Regras por NCM (itens que não integram a base) e controle de versões das regras de cálculo",
+      "Tela de apuração para consolidar o período",
+    ],
+    stack: ["JavaScript", "NF-e XML", "ICMS"],
+    glyph: "<NFe>\n  <det nItem=\"1\">\n    vProd + vIPI + vFrete − vDesc\n    → base DIFAL\n    → ICMS destino − ICMS origem\n  </det>\n</NFe>",
+    links: [],
+    log: ["lote: 38 XMLs de NF-e", "item 3: vProd+vIPI+vFrete", "− vDesc → base DIFAL", "NCM 21069090 fora da base", "ICMS dest − ICMS orig", "FCP aplicado", "regras V1.2 ✓", "apuração 08/2026 fechada"],
+  },
+  {
+    id: "snnfse", title: "SNNFSe Python", short: "SNNFSe", color: "#a3e635",
+    agent: "SINAL", job: "baixa notas por NSU", look: { hair: "#3a2a1e", skin: "#c68a5e", shirt: "#a3e635", pants: "#283040" },
+    tags: [["Automação & APIs"]],
+    lede: "Integração com a API de distribuição do Sistema Nacional da NFS-e para baixar e organizar as notas da empresa.",
+    points: [
+      "Autenticação com <b>certificado digital A1</b> (PFX → mTLS) e ingestão incremental por NSU",
+      "Tratamento dos eventos do leiaute nacional (cancelamento, substituição, análise fiscal) com pastas por situação",
+      "Exporta planilha Excel e gera a <b>DANFSe em PDF</b> com QR Code",
+    ],
+    stack: ["Python", "requests", "cryptography", "openpyxl", "ReportLab"],
+    glyph: "$ python src/ingest.py\n✓ certificado A1 carregado (mTLS)\n↓ NSU 1042 … 1187  (146 docs)\n  e101101  Cancelamento   → Cancelada/\n  e105102  Substituição   → Substituida/\n✓ notas.xlsx · 146 DANFSe (PDF)",
+    links: [["Código", "https://github.com/LclzGit/Snnfse-python"]],
+    log: ["$ python src/ingest.py", "certificado A1 → mTLS ✓", "↓ NSU 1042 … 1187", "e101101 Cancelamento", "→ Cancelada/", "e105102 Substituição", "notas.xlsx +146 linhas", "DANFSe PDF + QR Code ✓"],
+  },
+  {
+    id: "qive", title: "Painel de NFs × Qive", short: "Painel NFs", color: "#c084fc",
+    agent: "ROTA", job: "distribui notas", look: { hair: "#101014", skin: "#7a4e33", shirt: "#c084fc", pants: "#2c2c3c" },
+    tags: [["Automação & APIs"], ["Código privado", "warn"]],
+    lede: "Puxa as NFS-e recebidas pela API da Arquivei/Qive e distribui cada nota para o analista responsável pelo fornecedor.",
+    points: [
+      "Mapeamento de fornecedor (CNPJ) → analista ou grupo de analistas, configurado na própria planilha",
+      "Sinaliza notas vencidas e a vencer e mostra um dashboard com totais por analista",
+      "Notificação por e-mail (SMTP) e execução com um clique no Windows",
+    ],
+    stack: ["Python", "API REST", "openpyxl", "SMTP"],
+    glyph: "Arquivei/Qive API\n   ↓  atualizar_painel_qive.py\nPainel_NFs.xlsx\n   ├ Dashboard por analista\n   ├ vencidas · a vencer (7d)\n   └ e-mail para cada responsável",
+    links: [],
+    log: ["GET NFS-e recebidas (ontem)", "41 notas encontradas", "CNPJ → analista: ok", "[!] 3 vencidas", "[~] 5 a vencer em 7d", "Dashboard atualizado", "e-mail → analistas ✓", "Executar_Atualizacao.bat"],
+  },
+  {
+    id: "daemon", title: "Daemon Bar", color: "#22d3ee",
+    agent: "FIREWALL", job: "caça vírus na barra", look: { helmet: true, hair: "#4b5577", skin: "#4b5577", shirt: "#22d3ee", pants: "#222838", visor: "#22d3ee" },
+    tags: [["Jogo"], ["Protótipo jogável", "solid"]],
+    lede: "Idle RPG que mora na barra de tarefas. Você é o antivírus: três agentes em pixel art patrulham o seu computador caçando bugs, worms e ransomwares.",
+    points: [
+      "Progressão com 5 dificuldades × 3 atos × 10 fases, loot por raridade, gacha de agentes e progresso offline",
+      "Curvas de economia calibradas com um <b>simulador de 168 h</b> escrito em Node.js",
+      "Documentos de balanceamento e plano de lançamento",
+    ],
+    stack: ["JavaScript", "Canvas", "Pixel art", "Node.js", "Game design"],
+    img: "assets/img/daemonbar.jpg", imgPos: "bottom center", alt: "Daemon Bar: três agentes em pixel art enfrentando vírus na barra de tarefas",
+    links: [["Jogar protótipo", "demos/daemon-bar/", true], ["Código", "https://github.com/LclzGit/IdleGame"]],
+    log: ["setor C:\\TEMP · fase 1-3", "worm.exe eliminado +12 KB", "SCANNER: trojan à vista", "PATCHER cura o esquadrão", "loot: módulo Zero-Day", "chefe: RANSOMWARE", "+2,4 MB de dados", "sim 168 h: economia ok"],
+  },
+  {
+    id: "lucas", title: "Lucas Calaza", short: "Sobre mim", color: "#ffcf5a", about: true,
+    agent: "LUCAS", job: "revisa tudo", look: { hair: "#2a1a12", skin: "#d39a6a", shirt: "#ffcf5a", pants: "#2b3350", human: true },
+    tags: [["Humano", "solid"], ["Tributário × código"]],
+    lede: "Trabalho na interseção entre <b>tributação</b> e <b>desenvolvimento</b>. A maior parte dos meus projetos nasceu de um problema real do dia a dia fiscal: estudar uma legislação enorme, calcular um imposto sem errar, ou parar de baixar e distribuir notas fiscais na mão.",
+    points: [
+      "Prefiro ferramentas simples de usar e de manter: um único arquivo HTML que qualquer pessoa abre, ou um script Python que roda com um clique",
+      "Quando o assunto é imposto, os números precisam estar certos, então cada regra de cálculo é conferida com a legislação",
+    ],
+    timeline: [["mai 2026", "SNNFSe Python"], ["jun 2026", "ReformaPro"], ["jul 2026", "IRCSPro · Calculadora DIFAL"], ["ago 2026", "Apuração DIFAL"], ["set 2026", "Painel NFs × Qive · Calculadora da Reforma · Daemon Bar"]],
+    stack: ["HTML/CSS/JS", "Python", "Reforma Tributária (IBS/CBS)", "ICMS / DIFAL", "IRPJ / CSLL", "NF-e", "NFS-e nacional"],
+    links: [["GitHub", "https://github.com/LclzGit", true], ["Portfólio completo", "https://lclzgit.github.io/Portf-lio/"]],
+    log: ["revisando PR do LEX", "conferindo regra com a LC", "merge ✓", "café nº 3", "testando o leitor de XML", "planejando o próximo projeto"],
+  },
 ];
-/* ========================================================== */
 
-const $ = (s, r = document) => r.querySelector(s);
-const pick = (a, not) => { let v; do { v = a[Math.floor(Math.random() * a.length)]; } while (a.length > 1 && v === not); return v; };
-const rand = (a, b) => a + Math.random() * (b - a);
+/* =========================================================================
+   Sprites (14 × 20 px, de perfil, olhando para o monitor)
+   h cabelo · s pele · e olho · b camisa · d sombra · p calça · k sapato · c cadeira · v visor
+   ========================================================================= */
+const BODY_A = [
+  "..............",
+  "....hhhhh.....",
+  "...hhhhhhhh...",
+  "...hhhhsss....",
+  "...hhsssses...",
+  "...hhssssss...",
+  "....hsssss....",
+  ".....sss......",
+  "....bbbbb.....",
+  "...bbbbbbb....",
+  "...bbbbddddss.",
+  "...dbbbbbb....",
+  "...dbbbbbb....",
+  "..cdppppppp...",
+  "..cppppppppp..",
+  "..cc......pp..",
+  "..cc......pp..",
+  "..cc......kkk.",
+  "..cccc........",
+  "..c..c........",
+];
+const BODY_B = BODY_A.slice();
+BODY_B[9] = "...bbbbbbddss.";
+BODY_B[10] = "...bbbbbbb....";
+const HELMET = { 1: "....hhhhh.....", 2: "...hhhhhhhh...", 3: "...hhhhhhhh...", 4: "...hhhvvvvv...", 5: "...hhhhhhhh...", 6: "....hhhhhh...." };
+
+function drawAgent(cv, look, frame, blink) {
+  const ctx = cv.getContext("2d");
+  ctx.clearRect(0, 0, 14, 20);
+  const pal = {
+    h: look.hair, s: look.skin, e: blink ? look.skin : "#111", b: look.shirt, d: shade(look.shirt),
+    p: look.pants, k: "#111", c: "#545b7a", v: look.visor || "#fff",
+  };
+  const rows = (frame ? BODY_B : BODY_A).map((r, i) => (look.helmet && HELMET[i]) || r);
+  rows.forEach((row, y) => {
+    for (let x = 0; x < 14; x++) {
+      const ch = row[x];
+      if (!ch || ch === ".") continue;
+      ctx.fillStyle = pal[ch];
+      ctx.fillRect(x, y, 1, 1);
+    }
+  });
+}
+function shade(hex) {
+  const n = parseInt(hex.slice(1), 16);
+  const f = (v) => Math.max(0, Math.floor(v * 0.7));
+  return `rgb(${f(n >> 16)},${f((n >> 8) & 255)},${f(n & 255)})`;
+}
+
+/* =========================================================================
+   Monta o escritório
+   ========================================================================= */
+const $ = (s) => document.querySelector(s);
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const pad = (n) => String(n).padStart(2, "0");
+const rand = (a, b) => a + Math.random() * (b - a);
+const room = $("#room");
+const byId = {};
+let current = null, busy = false;
 
-$("#year").textContent = new Date().getFullYear();
-$("#name").innerHTML = `${CONFIG.first}<span class="l2">${CONFIG.last}<span class="dot">.</span></span>`;
+PROJECTS.forEach((p, i) => {
+  byId[p.id] = p;
+  const st = document.createElement("button");
+  st.type = "button";
+  st.className = "station";
+  st.style.setProperty("--c", p.color);
+  if (p.about) st.style.setProperty("--mug", "#ffcf5a");
+  st.setAttribute("aria-label", `Abrir ${p.title}: agente ${p.agent} ${p.job}`);
+  st.innerHTML = `
+    <div class="rig">
+      <div class="leg l"></div><div class="leg r"></div>
+      <div class="desk"></div>
+      <div class="monitor"><div class="screen">
+        <div class="scr-hd"><span>${(p.short || p.title).toUpperCase()}</span><span>${String(i + 1).padStart(2, "0")}</span></div>
+        <ul class="lines"></ul>
+        <div class="scr-bar"><i></i></div>
+      </div></div>
+      <div class="kbd"></div>
+      <div class="mug"></div>${p.about ? '<div class="steam"></div>' : ""}
+      <canvas class="agent" width="14" height="20"></canvas>
+    </div>
+    <div class="plate"><b>${p.agent}</b><span>${p.job}</span></div>
+    <span class="open-hint">abrir ↵</span>`;
+  st.addEventListener("click", () => open(p.id));
+  room.appendChild(st);
 
-function shapeSVG(kind, c) {
-  const s = {
-    circle:   `<circle cx="30" cy="30" r="26" fill="${c}"/>`,
-    square:   `<rect x="7" y="7" width="46" height="46" fill="${c}"/>`,
-    triangle: `<polygon points="30,4 56,52 4,52" fill="${c}"/>`,
-    quarter:  `<path d="M6 54 V6 A48 48 0 0 1 54 54 Z" fill="${c}"/>`,
-    diamond:  `<polygon points="30,3 57,30 30,57 3,30" fill="${c}"/>`,
-    half:     `<path d="M4 40 A26 26 0 0 1 56 40 Z" fill="${c}"/><rect x="4" y="46" width="52" height="6" fill="${c}"/>`,
-    bars:     `<rect x="6" y="8" width="10" height="44" fill="${c}"/><rect x="25" y="20" width="10" height="32" fill="${c}"/><rect x="44" y="32" width="10" height="20" fill="${c}"/>`,
-    ring:     `<circle cx="30" cy="30" r="22" fill="none" stroke="${c}" stroke-width="8"/><circle cx="30" cy="8" r="6" fill="#efece4"/>`,
-  }[kind];
-  return `<svg class="shape" viewBox="0 0 60 60" aria-hidden="true"><g>${s}</g></svg>`;
-}
-
-// Build stations
-const floor = $("#floor");
-AGENTS.forEach((a, i) => {
-  const el = document.createElement("article");
-  el.className = "st working" + (a.hub ? " hub" : "");
-  el.style.setProperty("--anim", a.anim);
-  el.innerHTML = `
-    <div class="st-top"><span>${pad(i)}</span><span class="state">Trabalhando</span></div>
-    <div class="who"><div><h3>${a.name}</h3><p class="role">${a.role}</p></div>${shapeSVG(a.shape, a.color)}</div>
-    <p class="task"><span class="txt"></span><span class="caret"></span></p>
-    <div class="track"><i></i></div>
-    <div class="meta"><span class="proj"></span><span class="pct">0%</span></div>
-    <span class="handoff"></span>`;
-  floor.appendChild(el);
-  Object.assign(a, {
-    el, stateEl: $(".state", el), txtEl: $(".txt", el), barEl: $(".track i", el),
-    pctEl: $(".pct", el), projEl: $(".proj", el), hoEl: $(".handoff", el),
-    progress: 0, typed: 0, phase: "idle",
+  Object.assign(p, {
+    st, cv: st.querySelector(".agent"), linesEl: st.querySelector(".lines"),
+    barEl: st.querySelector(".scr-bar i"), monitor: st.querySelector(".monitor"),
+    feed: [], li: 0, typing: null, typed: 0, progress: Math.random(), frame: 0, blinkT: rand(1, 5),
   });
+  // pré-carrega 3 linhas
+  for (let k = 0; k < 3; k++) pushLine(p, p.log[p.li++ % p.log.length]);
+  drawAgent(p.cv, p.look, 0, false);
 });
-const hub = AGENTS[0];
-const crew = AGENTS.slice(1);
 
-// Stats
-const stats = { tasks: 1284, commits: 17 };
-const shown = { tasks: stats.tasks - 40, commits: 0 };
+function pushLine(p, text) {
+  p.feed.push(text);
+  if (p.feed.length > 8) p.feed.shift();
+  renderLines(p);
+}
+function renderLines(p) {
+  const shown = p.feed.slice(-5);
+  const html = shown.map((t, i) => {
+    const isLast = i === shown.length - 1 && p.typing;
+    return `<li>${esc(isLast ? t.slice(0, Math.floor(p.typed)) : t)}</li>`;
+  }).join("");
+  p.linesEl.innerHTML = html;
+  if (current === p) $("#d-log").innerHTML = p.feed.slice(-6).map((t, i, a) => `<li>&gt; ${esc(i === a.length - 1 && p.typing ? t.slice(0, Math.floor(p.typed)) : t)}</li>`).join("");
+}
+function esc(s) { return s.replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
 
-// Split-flap project board
-const flapEl = $("#project");
-const GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-let project = "";
-function setProject(text) {
-  project = text;
-  const len = Math.max(text.length, 10);
-  flapEl.innerHTML = "";
-  [...text.padEnd(len, " ")].forEach((ch, i) => {
-    const s = document.createElement("span");
-    if (ch === " ") { s.className = "sp"; s.innerHTML = "&nbsp;"; flapEl.appendChild(s); return; }
-    flapEl.appendChild(s);
-    if (reduce) { s.textContent = ch; return; }
-    let n = 6 + i * 2;
-    const t = setInterval(() => {
-      s.textContent = --n <= 0 ? ch : GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
-      if (n <= 0) clearInterval(t);
-    }, 45);
-  });
-  AGENTS.forEach((a) => (a.projEl.textContent = text));
-  push(`<b>ATLAS</b>abriu sprint: ${text}`);
-}
-
-// Ticker
-const tickerEl = $("#ticker");
-let tickX = 0;
-const queue = [];
-function push(html) { queue.push(html); }
-function fillTicker() {
-  while (tickerEl.scrollWidth + tickX < innerWidth * 2) {
-    const s = document.createElement("span");
-    const a = pick(crew);
-    s.innerHTML = queue.shift() || `<b>${a.name}</b>${pick(a.tasks)}`;
-    tickerEl.appendChild(s);
-  }
-}
-
-// Agent lifecycle
-function start(a) {
-  a.task = pick(a.tasks, a.task);
-  a.phase = "work";
-  a.progress = 0; a.typed = 0;
-  a.rate = rand(0.06, 0.14);
-  a.el.classList.add("working");
-  a.stateEl.className = "state"; a.stateEl.textContent = "Trabalhando";
-}
-function finish(a) {
-  a.phase = "review";
-  a.stateEl.className = "state review"; a.stateEl.textContent = "Em revisão";
-  setTimeout(() => {
-    a.phase = "done";
-    a.el.classList.remove("working");
-    a.stateEl.className = "state done"; a.stateEl.textContent = "Entregue";
-    stats.tasks++;
-    if (Math.random() < 0.6) stats.commits++;
-    push(`<b>${a.name}</b>entregou: ${a.task}`);
-    if (!a.hub && Math.random() < 0.45) handoff(a, pick(crew, a));
-    setTimeout(() => start(a), rand(1800, 3500));
-  }, rand(900, 1600));
-}
-function handoff(from, to) {
-  to.hoEl.textContent = `← contexto de ${from.name}`;
-  to.hoEl.classList.add("on"); to.el.classList.add("flash");
-  setTimeout(() => { to.hoEl.classList.remove("on"); to.el.classList.remove("flash"); }, 2200);
-  push(`<b>${from.name}</b>passou contexto para ${to.name}`);
-}
-
-// Loop
-let last = performance.now();
+/* =========================================================================
+   Loop: digitação, barra de progresso, animação dos agentes
+   ========================================================================= */
+let last = performance.now(), animT = 0;
 function frame(now) {
   const dt = Math.min(0.05, (now - last) / 1000); last = now;
-  AGENTS.forEach((a) => {
-    if (a.phase !== "work") return;
-    a.progress = Math.min(1, a.progress + a.rate * dt);
-    a.typed = Math.min(a.task.length, a.typed + dt * 22);
-    a.txtEl.textContent = a.task.slice(0, Math.floor(a.typed));
-    a.barEl.style.width = (a.progress * 100).toFixed(1) + "%";
-    a.pctEl.textContent = Math.floor(a.progress * 100) + "%";
-    if (a.progress >= 1) finish(a);
+  animT += dt;
+  PROJECTS.forEach((p) => {
+    // digitação
+    if (!p.typing) {
+      p.wait = (p.wait ?? rand(0.4, 2.5)) - dt;
+      if (p.wait <= 0) {
+        p.typing = p.log[p.li++ % p.log.length];
+        p.typed = 0; p.wait = undefined;
+        pushLine(p, p.typing);
+      }
+    } else {
+      const before = Math.floor(p.typed);
+      p.typed += dt * 26;
+      if (Math.floor(p.typed) !== before) renderLines(p);
+      if (p.typed >= p.typing.length) { p.typing = null; renderLines(p); p.wait = rand(0.8, 2.6); }
+    }
+    // progresso
+    p.progress = (p.progress + dt * 0.06) % 1;
+    p.barEl.style.width = (p.progress * 100).toFixed(1) + "%";
+    // sprite
+    p.blinkT -= dt;
+    const blink = p.blinkT < 0;
+    if (p.blinkT < -0.14) p.blinkT = rand(2, 6);
+    const f = p.typing ? Math.floor(animT * 8 + p.st.offsetLeft) % 2 : 0;
+    if (f !== p.frame || blink !== p.blink) { p.frame = f; p.blink = blink; drawAgent(p.cv, p.look, f, blink); }
   });
-  for (const k in shown) {
-    shown[k] += (stats[k] - shown[k]) * Math.min(1, dt * 3);
-    $("#s-" + k).textContent = Math.round(shown[k]).toLocaleString("pt-BR");
+  requestAnimationFrame(frame);
+}
+
+function tick() { $("#clock").textContent = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }); }
+tick(); setInterval(tick, 10000);
+
+/* =========================================================================
+   Zoom para o projeto e volta
+   ========================================================================= */
+const detail = $("#detail");
+const office = $("#office");
+
+function fill(p) {
+  detail.style.setProperty("--c", p.color);
+  $("#d-who").textContent = p.about ? `${p.agent} · o humano do escritório` : `agente ${p.agent} · ${p.job}`;
+  $("#d-log-lbl").textContent = p.about ? "agenda de hoje" : `log ao vivo de ${p.agent}`;
+  const shot = $("#d-shot");
+  if (p.img) shot.innerHTML = `<img src="${p.img}" alt="${p.alt}" style="object-position:${p.imgPos || "top center"}">`;
+  else if (p.glyph) shot.innerHTML = `<pre aria-hidden="true">${esc(p.glyph)}</pre>`;
+  else {
+    const big = document.createElement("canvas"); big.width = 14; big.height = 20;
+    big.style.cssText = "height:80%;image-rendering:pixelated;display:block;margin:auto;position:relative;top:10%";
+    drawAgent(big, p.look, 0, false);
+    shot.innerHTML = ""; shot.style.background = "repeating-linear-gradient(0deg,#252c4a 0 6px,#2c355a 6px 8px)"; shot.appendChild(big);
   }
-  tickX -= dt * 70;
-  const first = tickerEl.firstElementChild;
-  if (first && first.offsetWidth < -tickX) { tickX += first.offsetWidth; first.remove(); }
-  fillTicker();
-  tickerEl.style.transform = `translateX(${tickX}px)`;
-  requestAnimationFrame(frame);
+  if (p.img || p.glyph) shot.style.background = "";
+  const tags = p.tags.map(([t, k]) => `<span class="tag ${k || ""}">${t}</span>`).join("");
+  const pts = p.points.map((t) => `<li>${t}</li>`).join("");
+  const stack = p.stack.map((t) => `<span>${t}</span>`).join("");
+  const links = p.links.map(([t, u, go]) => `<a class="act ${go ? "go" : ""}" href="${u}" target="_blank" rel="noopener">${t} ↗</a>`).join("");
+  const tl = p.timeline ? `<ol class="timeline">${p.timeline.map(([w, t]) => `<li><div class="when">${w}</div>${t}</li>`).join("")}</ol>` : "";
+  $("#d-info").innerHTML = `
+    <div class="tags">${tags}</div>
+    <h2 id="d-title">${p.title}</h2>
+    <p class="lede">${p.lede}</p>
+    <ul class="pts">${pts}</ul>
+    ${tl}
+    <div class="stack">${stack}</div>
+    ${links ? `<div class="actions">${links}</div>` : ""}`;
+  $("#d-scroll").scrollTop = 0;
+  current = p;
+  renderLines(p);
 }
 
-// Clock
-const shiftStart = Date.now() - (3 * 3600 + 27 * 60) * 1000;
-function tick() {
-  const s = Math.floor((Date.now() - shiftStart) / 1000);
-  $("#uptime").textContent = `${pad(Math.floor(s / 3600))}:${pad(Math.floor(s / 60) % 60)}:${pad(s % 60)}`;
-  $("#clock").textContent = new Date().toLocaleTimeString("pt-BR", { hour12: false });
+function rectInset(el) {
+  const r = el.getBoundingClientRect();
+  return `inset(${r.top}px ${innerWidth - r.right}px ${innerHeight - r.bottom}px ${r.left}px)`;
 }
 
-// Boot
-tick(); setInterval(tick, 1000);
-let pi = 0;
-setProject(CONFIG.projects[pi++]);
-setInterval(() => setProject(CONFIG.projects[pi++ % CONFIG.projects.length]), 40000);
-AGENTS.forEach((a) => { start(a); a.progress = rand(0.05, 0.8); a.typed = a.task.length; });
-fillTicker();
-if (reduce) {
-  AGENTS.forEach((a) => {
-    a.txtEl.textContent = a.task;
-    a.barEl.style.width = Math.round(a.progress * 100) + "%";
-    a.pctEl.textContent = Math.round(a.progress * 100) + "%";
-  });
-  for (const k in stats) $("#s-" + k).textContent = stats[k].toLocaleString("pt-BR");
-} else {
-  requestAnimationFrame(frame);
+function open(id, { push = true, animate = true } = {}) {
+  const p = byId[id];
+  if (!p || busy) return;
+  const switching = !detail.hidden;
+  fill(p);
+  if (push) history.pushState({ id }, "", "#/" + id);
+  if (switching) return;
+  detail.hidden = false;
+  document.body.style.overflow = "hidden";
+  office.setAttribute("aria-hidden", "true");
+  $("#back").focus({ preventScroll: true });
+  if (reduce || !animate) return;
+  busy = true;
+  const r = p.monitor.getBoundingClientRect();
+  const or = office.getBoundingClientRect();
+  office.style.transformOrigin = `${r.left + r.width / 2 - or.left}px ${r.top + r.height / 2 - or.top}px`;
+  office.animate([{ transform: "scale(1)", filter: "brightness(1)" }, { transform: "scale(2.4)", filter: "brightness(.4)" }],
+    { duration: 650, easing: "cubic-bezier(.7,0,.2,1)", fill: "forwards" });
+  const a = detail.animate([{ clipPath: rectInset(p.monitor) }, { clipPath: "inset(0px 0px 0px 0px)" }],
+    { duration: 650, easing: "cubic-bezier(.7,0,.2,1)" });
+  detail.querySelector(".d-body").animate([{ opacity: 0, transform: "scale(.96)" }, { opacity: 1, transform: "none" }],
+    { duration: 400, delay: 380, easing: "ease-out", fill: "backwards" });
+  a.onfinish = () => { busy = false; };
 }
+
+function close({ push = true } = {}) {
+  if (detail.hidden || busy) return;
+  const p = current;
+  if (push) history.pushState({}, "", location.pathname + location.search);
+  const done = () => {
+    detail.hidden = true; busy = false; current = null;
+    document.body.style.overflow = "";
+    office.removeAttribute("aria-hidden");
+    office.getAnimations().forEach((x) => x.cancel());
+    p.st.focus({ preventScroll: true });
+  };
+  if (reduce) return done();
+  busy = true;
+  const o = office.animate([{ transform: "scale(2.4)", filter: "brightness(.4)" }, { transform: "scale(1)", filter: "brightness(1)" }],
+    { duration: 600, easing: "cubic-bezier(.7,0,.2,1)", fill: "forwards" });
+  office.getAnimations().forEach((x) => x !== o && x.cancel());
+  const a = detail.animate([{ clipPath: "inset(0px 0px 0px 0px)" }, { clipPath: rectInset(p.monitor) }],
+    { duration: 600, easing: "cubic-bezier(.7,0,.2,1)", fill: "forwards" });
+  a.onfinish = () => { a.cancel(); done(); };
+}
+
+function step(dir) {
+  const i = PROJECTS.indexOf(current);
+  const p = PROJECTS[(i + dir + PROJECTS.length) % PROJECTS.length];
+  history.replaceState({ id: p.id }, "", "#/" + p.id);
+  fill(p);
+  detail.querySelector(".d-body").animate([{ opacity: 0, transform: `translateX(${dir * 24}px)` }, { opacity: 1, transform: "none" }], { duration: 260, easing: "ease-out" });
+}
+
+$("#back").addEventListener("click", () => close());
+$("#prev").addEventListener("click", () => step(-1));
+$("#next").addEventListener("click", () => step(1));
+addEventListener("keydown", (e) => {
+  if (detail.hidden) return;
+  if (e.key === "Escape") close();
+  if (e.key === "ArrowRight") step(1);
+  if (e.key === "ArrowLeft") step(-1);
+});
+addEventListener("popstate", () => {
+  const id = (location.hash.match(/^#\/(.+)$/) || [])[1];
+  if (id && byId[id]) open(id, { push: false });
+  else close({ push: false });
+});
+
+// link direto (ex.: index.html#/reformapro)
+const startId = (location.hash.match(/^#\/(.+)$/) || [])[1];
+if (startId && byId[startId]) open(startId, { push: false, animate: false });
+
+if (!reduce) requestAnimationFrame(frame);
+else PROJECTS.forEach((p) => { p.barEl.style.width = (p.progress * 100) + "%"; });
 </script>
 </body>
 </html>
