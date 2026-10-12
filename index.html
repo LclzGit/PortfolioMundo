@@ -64,6 +64,7 @@
   .readout .coord b { color: var(--gold); }
 
   /* ---------- labels over the globe ---------- */
+  #world, #labels, .lbl, .hud, .dock { -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
   #labels { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
   .lbl {
     position: absolute; left: 0; top: 0; transform-origin: 50% 100%;
@@ -820,7 +821,7 @@ function buildWorld() {
     crown.count = k1; crown2.count = k2;
     globe.add(trunk, crown, crown2);
   }
-  const clouds = new T.Group(); stage.add(clouds);
+  const clouds = new T.Group(); globe.add(clouds); // clouds ride with the planet when it is dragged
   const cloudMat = new T.MeshStandardMaterial({ color: 0xffffff, flatShading: true, roughness: 1, transparent: true, opacity: .92 });
   {
     const cr = rng(5), cm = cloudMat;
@@ -1298,8 +1299,8 @@ function buildWorld() {
       const top = document.querySelector(".hud").getBoundingClientRect().bottom + 8;
       const bottom = document.getElementById("dock").getBoundingClientRect().top - 8;
       const band = Math.max(160, bottom - top);
-      const radiusPx = Math.min(band / 2, w / 2) * 0.86;
-      baseDist = (R * 1.08 * h) / (2 * half * radiusPx);
+      const radiusPx = Math.min(band / 2, w / 2) * 0.92;
+      baseDist = (R * 1.32 * h) / (2 * half * radiusPx);
       const visH = 2 * baseDist * half;
       baseOffY = -((top + bottom) / 2 - h / 2) / h * visH;
     } else {
@@ -1418,7 +1419,7 @@ function buildWorld() {
     }
     camera.position.set(-view.offX, -view.offY, view.dist); camera.lookAt(-view.offX, -view.offY, 0);
     cloudMat.opacity += ((current ? 0 : 0.92) - cloudMat.opacity) * Math.min(1, dt * 4); clouds.visible = cloudMat.opacity > 0.02;
-    clouds.rotation.y += dt * 0.025; clouds.rotation.x = 0.2;
+    clouds.rotation.y += dt * 0.025;
     sat.rotation.y += dt * 0.18; satBody.rotation.x += dt * 0.3; satBlink.visible = Math.sin(time * 6) > 0;
     anim.forEach((f) => f(time));
     packets.forEach((p) => { p.t = (p.t + dt * p.speed) % 1; p.p.position.copy(p.curve.getPoint(p.t)); p.p.rotation.set(time * 2, time * 3, 0); });
