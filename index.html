@@ -188,8 +188,16 @@
     .p-scroll { padding: 20px 20px 26px; }
     .panel.open ~ .dock { opacity: 0; pointer-events: none; }
     body.focused .hud { opacity: 0; }
-    .lbl .s { display: none; }
-    .lbl .t { font-size: 14px; }
+    .hud { padding-top: max(18px, env(safe-area-inset-top)); }
+    .hud h1 { font-size: 38px; margin-top: 8px; }
+    .hud .rule { width: 48px; margin: 10px 0 8px; }
+    .hud p { font-size: 13.5px; max-width: 34ch; }
+    .readout { display: none; }
+    .lbl { padding: 5px 9px 6px; }
+    .lbl .m, .lbl .s { display: none; }
+    .lbl .t { font-size: 13px; margin-top: 0; }
+    .hint { bottom: calc(max(18px, env(safe-area-inset-bottom)) + 54px); font-size: 9px; }
+    .dock button { padding: 10px 12px 9px; font-size: 13px; }
   }
   /* prototypes */
   .proto { margin: 22px 0 8px; border: 1px solid var(--line); border-radius: 2px; padding: 16px; background: #090d22; }
@@ -1278,14 +1286,27 @@ function buildWorld() {
 
   /* ---- camera & interaction ---- */
   const view = { dist: 50, offX: 0, offY: 0 };
-  let baseDist = 50;
+  let baseDist = 50, baseOffY = 0;
+  const isPhone = () => innerWidth <= 760;
   function resize() {
     const w = innerWidth, h = innerHeight;
     renderer.setSize(w, h, false);
     camera.aspect = w / h; camera.updateProjectionMatrix();
     const half = Math.tan((camera.fov / 2) * Math.PI / 180);
-    baseDist = Math.max(R / 0.56, R / (0.8 * camera.aspect)) / half + 2;
-    if (!current && !tween) view.dist = baseDist;
+    if (isPhone()) {
+      // fit the planet in the free band between the title and the area bar, and centre it there
+      const top = document.querySelector(".hud").getBoundingClientRect().bottom + 8;
+      const bottom = document.getElementById("dock").getBoundingClientRect().top - 8;
+      const band = Math.max(160, bottom - top);
+      const radiusPx = Math.min(band / 2, w / 2) * 0.86;
+      baseDist = (R * 1.08 * h) / (2 * half * radiusPx);
+      const visH = 2 * baseDist * half;
+      baseOffY = -((top + bottom) / 2 - h / 2) / h * visH;
+    } else {
+      baseDist = Math.max(R / 0.56, R / (0.8 * camera.aspect)) / half + 2;
+      baseOffY = 0;
+    }
+    if (!current && !tween) { view.dist = baseDist; view.offY = baseOffY; }
   }
   let tween = null, lastInteract = 0;
   addEventListener("resize", resize); resize();
@@ -1298,6 +1319,7 @@ function buildWorld() {
     qx.setFromAxisAngle(AY, dx * k); qy.setFromAxisAngle(AX, dy * k);
     globe.quaternion.premultiply(qx).premultiply(qy);
   }
+  if (matchMedia("(pointer: coarse)").matches) $("#hint").textContent = "Arraste para girar · pince para aproximar";
   canvas.addEventListener("pointerdown", (e) => {
     canvas.setPointerCapture(e.pointerId);
     ptr.pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
@@ -1373,7 +1395,7 @@ function buildWorld() {
     const visW = 2 * d * Math.tan((camera.fov / 2) * Math.PI / 180) * camera.aspect;
     return (pw / 2) / innerWidth * visW;
   }
-  function unfocus() { tween = { q0: globe.quaternion.clone(), q1: globe.quaternion.clone(), d0: view.dist, d1: baseDist, x0: view.offX, x1: 0, y0: view.offY, y1: 0, t: 0, dur: reduce ? 0.01 : 1.0 }; }
+  function unfocus() { tween = { q0: globe.quaternion.clone(), q1: globe.quaternion.clone(), d0: view.dist, d1: baseDist, x0: view.offX, x1: 0, y0: view.offY, y1: baseOffY, t: 0, dur: reduce ? 0.01 : 1.0 }; }
 
   /* ---- loop ---- */
   const wp = new T.Vector3(), nrm = new T.Vector3(), toCam = new T.Vector3();
@@ -1403,13 +1425,21 @@ function buildWorld() {
     allRobots.forEach((r) => updateRobot(r, dt, time));
     tickLogs(dt);
     globe.updateMatrixWorld();
+    // on phones only the few areas facing the camera most get a label, so they don't pile up
+    const phone = isPhone();
+    let cut = 0.2;
+    if (phone) {
+      const fs = AREAS.map((a) => { a.labelAnchor.getWorldPosition(wp); return wp.clone().normalize().dot(toCam.copy(camera.position).sub(wp).normalize()); }).sort((a, b) => b - a);
+      cut = Math.max(0.45, fs[current ? 0 : 3] - 1e-6);
+    }
     AREAS.forEach((a) => {
       a.labelAnchor.getWorldPosition(wp);
       nrm.copy(wp).normalize();
       const facing = nrm.dot(toCam.copy(camera.position).sub(wp).normalize());
       const v = wp.clone().project(camera);
-      const x = (v.x * 0.5 + 0.5) * innerWidth, y = (-v.y * 0.5 + 0.5) * innerHeight;
-      a.lbl.classList.toggle("off", !(facing > 0.2 && v.z < 1));
+      let x = (v.x * 0.5 + 0.5) * innerWidth; const y = (-v.y * 0.5 + 0.5) * innerHeight;
+      if (phone) { const hw = a.lbl.offsetWidth / 2 + 8; x = clamp(x, hw, innerWidth - hw); }
+      a.lbl.classList.toggle("off", !(facing >= cut && v.z < 1));
       const s = clamp(1.3 - view.dist / 90, 0.72, 1.08);
       a.lbl.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px) translate(-50%, -100%) scale(${s.toFixed(3)})`;
       a.lbl.style.zIndex = Math.round(facing * 100);
